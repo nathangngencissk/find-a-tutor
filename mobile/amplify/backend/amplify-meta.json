@@ -1,0 +1,38 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "amplify-findatutor-dev-140023-authRole",
+			"UnauthRoleArn": "arn:aws:iam::601998595272:role/amplify-findatutor-dev-140023-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::601998595272:role/amplify-findatutor-dev-140023-authRole",
+			"Region": "us-east-1",
+			"DeploymentBucketName": "amplify-findatutor-dev-140023-deployment",
+			"UnauthRoleName": "amplify-findatutor-dev-140023-unauthRole",
+			"StackName": "amplify-findatutor-dev-140023",
+			"StackId": "arn:aws:cloudformation:us-east-1:601998595272:stack/amplify-findatutor-dev-140023/e23e0080-b4d5-11eb-bee4-0e08ce19eddf",
+			"AmplifyAppId": "d3smiv6h33r4s"
+		}
+	},
+	"auth": {
+		"findatutor769f3195": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false,
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/amplify-findatutor-dev-140023-deployment/amplify-cfn-templates/auth/findatutor769f3195-cloudformation-template.yml",
+				"logicalId": "authfindatutor769f3195"
+			},
+			"lastPushTimeStamp": "2021-05-14T17:18:32.315Z",
+			"output": {
+				"AppClientSecret": "1pt3aq41tg9lv85h6h6v1s9ofe5gt3oua13ocdcmrp7b1dftp3dm",
+				"UserPoolId": "us-east-1_bJZNUFkda",
+				"AppClientIDWeb": "24qjhhobnui1eeb5e7ki93h631",
+				"AppClientID": "4annv1pifu5k21mc9ktsmgsakd",
+				"IdentityPoolId": "us-east-1:6f667fdd-eeff-48f7-9bf2-801b29e25a52",
+				"IdentityPoolName": "findatutor769f3195_identitypool_769f3195__dev",
+				"UserPoolName": "findatutor769f3195_userpool_769f3195"
+			},
+			"lastPushDirHash": "3RK0do3bACEfGYWUGdkGWAtfsNM="
+		}
+	}
+}
