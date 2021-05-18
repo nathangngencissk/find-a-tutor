@@ -6,6 +6,7 @@ import {
 } from '@aws-amplify/ui-components/loader';
 
 import { createApp } from 'vue'
+import vuetify from './plugins/vuetify'
 import App from './App.vue'
 
 Amplify.configure(aws_exports);
@@ -13,4 +14,6 @@ applyPolyfills().then(() => {
     defineCustomElements(window);
 });
 
-createApp(App).mount('#app')
+const app = createApp(App)
+app.use(vuetify)
+app.mount('#app')
