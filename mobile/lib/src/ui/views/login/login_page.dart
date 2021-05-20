@@ -1,44 +1,49 @@
 import 'package:flutter/material.dart';
 
-import 'auth_credentials.dart';
+import 'package:find_a_tutor/src/utils/auth_credentials.dart';
 
-class SignUpPage extends StatefulWidget {
-  final ValueChanged<SignUpCredentials> didProvideCredentials;
-  final VoidCallback shouldShowLogin;
+class LoginPage extends StatefulWidget {
+  final ValueChanged<LoginCredentials> didProvideCredentials;
+  final VoidCallback shouldShowSignUp;
 
-  SignUpPage({Key key, this.didProvideCredentials, this.shouldShowLogin})
+  LoginPage({Key key, this.didProvideCredentials, this.shouldShowSignUp})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SignUpPageState();
+  State<StatefulWidget> createState() => _LoginPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _LoginPageState extends State<LoginPage> {
+  // 1
   final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // 2
     return Scaffold(
+      // 3
       body: SafeArea(
           minimum: EdgeInsets.symmetric(horizontal: 40),
+          // 4
           child: Stack(children: [
-            // Sign Up Form
-            _signUpForm(),
+            // Login Form
+            _loginForm(),
 
-            // Login Button
+            // 6
+            // Sign Up Button
             Container(
               alignment: Alignment.bottomCenter,
               child: FlatButton(
-                  onPressed: widget.shouldShowLogin,
-                  child: Text('Already have an account? Login.')),
+                  onPressed: widget.shouldShowSignUp,
+                  child: Text('Don\'t have an account? Sign up.')),
             )
           ])),
     );
   }
 
-  Widget _signUpForm() {
+  // 5
+  Widget _loginForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -46,14 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
         TextField(
           controller: _usernameController,
           decoration:
-              InputDecoration(icon: Icon(Icons.person), labelText: 'Username'),
-        ),
-
-        // Email TextField
-        TextField(
-          controller: _emailController,
-          decoration:
-              InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
+              InputDecoration(icon: Icon(Icons.mail), labelText: 'Username'),
         ),
 
         // Password TextField
@@ -65,26 +63,25 @@ class _SignUpPageState extends State<SignUpPage> {
           keyboardType: TextInputType.visiblePassword,
         ),
 
-        // Sign Up Button
+        // Login Button
         FlatButton(
-            onPressed: _signUp,
-            child: Text('Sign Up'),
+            onPressed: _login,
+            child: Text('Login'),
             color: Theme.of(context).accentColor)
       ],
     );
   }
 
-  void _signUp() {
+  // 7
+  void _login() {
     final username = _usernameController.text.trim();
-    final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
     print('username: $username');
-    print('email: $email');
     print('password: $password');
 
     final credentials =
-        SignUpCredentials(username: username, email: email, password: password);
+        LoginCredentials(username: username, password: password);
     widget.didProvideCredentials(credentials);
   }
 }
