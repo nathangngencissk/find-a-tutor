@@ -6,10 +6,6 @@ import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/shared/hex_color.dart';
 
 class HomePage extends StatefulWidget {
-  final VoidCallback shouldLogOut;
-
-  HomePage({Key key, this.shouldLogOut}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }

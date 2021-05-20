@@ -6,6 +6,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:find_a_tutor/src/utils/amplifyconfiguration.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
+import 'package:find_a_tutor/src/ui/shared/navigation_home_screen.dart';
 import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatefulWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: NavigationHomeScreen(),
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
@@ -83,7 +84,8 @@ class _MyAppState extends State<MyApp> {
                                 _authService.verifyCode)),
                   if (snapshot.data.authFlowStatus == AuthFlowStatus.session)
                     MaterialPage(
-                        child: HomePage(shouldLogOut: _authService.logOut))
+                        child: NavigationHomeScreen(
+                            shouldLogOut: _authService.logOut))
                 ],
                 onPopPage: (route, result) => route.didPop(result),
               );
