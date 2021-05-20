@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:find_a_tutor/src/utils/amplifyconfiguration.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
@@ -11,8 +10,6 @@ import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
-
-import 'package:find_a_tutor/src/screens.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,9 +29,7 @@ class MyApp extends StatefulWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/first': (context) => MainScreen2(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/second': (context) => MainScreen3(),
+        '/first': (context) => NavigationHomeScreen(),
       },
     );
   }

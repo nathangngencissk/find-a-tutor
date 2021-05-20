@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).padding.top,
             ),
-            getAppBarUI(),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
@@ -55,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
           child: Text(
-            'Category',
+            'Categories',
             textAlign: TextAlign.left,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -106,7 +105,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Popular Course',
+            'Popular Courses',
             textAlign: TextAlign.left,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -186,7 +185,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget getSearchBarUI() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 18),
+      padding: const EdgeInsets.only(top: 8.0, left: 60),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +257,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget getAppBarUI() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 18, right: 18),
+      padding: const EdgeInsets.only(top: 3.0, left: 70, right: 18),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -267,17 +266,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Choose your',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    letterSpacing: 0.2,
-                    color: AppTheme.grey,
-                  ),
-                ),
-                Text(
-                  'Design Course',
+                  'Find a Tutor',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
