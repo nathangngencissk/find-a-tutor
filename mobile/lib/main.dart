@@ -6,7 +6,6 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:find_a_tutor/src/utils/amplifyconfiguration.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:find_a_tutor/src/ui/shared/navigation_home_screen.dart';
-import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
