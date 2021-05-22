@@ -16,16 +16,16 @@ export default {
     cards: [
       { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
       {
-        title: 'Photography',
+        title: 'Photography2',
         src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
         flex: 3,
       },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography3', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography4', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography5', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography6', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography7', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Photography8', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
     ],
   }),
 };

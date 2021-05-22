@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app absolute prominent color="white">
+  <v-app-bar app absolute prominent>
     <v-container>
       <v-row align="center" justify="space-between">
         <v-col cols="1" xl="1" lg="2" md="2" sm="6" xs="6">
@@ -28,15 +28,15 @@
 
         <v-col cols="3" xl="3" class="d-none d-xl-flex">
           <v-row align="center" justify="space-around">
-            <v-btn color="blue darken-1" plain @click="logout">
+            <v-btn color="primaryText" plain>
               <span>My Courses</span>
             </v-btn>
 
-            <v-btn color="blue darken-1" plain>
+            <v-btn color="primaryText" plain>
               <span>Discussions</span>
             </v-btn>
 
-            <v-btn color="blue darken-1" plain>
+            <v-btn color="primaryText" plain>
               <span>Exercises</span>
             </v-btn>
           </v-row>
@@ -60,7 +60,16 @@
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
-
+              <v-list-item>
+                <v-list-item-content id="dark_mode_toggler">
+                  <v-switch
+                    v-model="darkModeOn"
+                    @click="toggleDarkMode"
+                    label="Dark Mode"
+                  ></v-switch>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider></v-divider>
               <v-list dense>
                 <v-list-item>
                   <v-list-item-icon>
@@ -129,6 +138,9 @@ export default {
   }),
   computed: {
     ...mapGetters(['currentUser', 'isAuthenticated']),
+    darkModeOn() {
+      return this.$vuetify.theme.dark;
+    },
   },
   methods: {
     logout() {
@@ -148,6 +160,9 @@ export default {
         }
       });
     },
+    toggleDarkMode() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
   },
 };
 </script>
@@ -163,5 +178,9 @@ export default {
 
 .v-avatar {
   right: 0;
+}
+
+#dark_mode_toggler {
+  overflow: visible;
 }
 </style>

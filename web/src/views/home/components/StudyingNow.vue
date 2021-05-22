@@ -43,11 +43,12 @@
 
 <script>
 export default {
-  name: 'PopularCourses',
+  name: 'StudyingCourses',
 
   data: () => ({
     loading: false,
     selection: 1,
+    model: null,
   }),
 
   methods: {
