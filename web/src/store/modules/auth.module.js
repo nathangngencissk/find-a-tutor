@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 import { Auth } from 'aws-amplify';
 
-import { getToken } from '@/services/jwt.service';
 import router from '@/router';
 import { LOGIN } from '../actions.type';
 
@@ -12,7 +11,6 @@ const state = {
   signupError: '',
   confirm: false,
   confirmError: '',
-  isAuthenticated: !!getToken(),
 };
 
 const getters = {
@@ -23,7 +21,7 @@ const getters = {
     return state.authorized;
   },
   isAuthenticated(state) {
-    return state.isAuthenticated;
+    return !!state.user;
   },
 };
 

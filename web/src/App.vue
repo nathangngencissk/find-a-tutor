@@ -2,7 +2,7 @@
   <v-app>
     <Header />
     <v-main>
-      <v-container fluid>
+      <v-container id="main-container">
         <router-view />
       </v-container>
     </v-main>
@@ -35,3 +35,13 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.container {
+  max-width: 1480px;
+}
+
+#main-container {
+  padding-top: 0;
+}
+</style>
