@@ -1,8 +1,8 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-shadow */
 import { Auth } from 'aws-amplify';
 
 import router from '@/router';
-import { LOGIN } from '../actions.type';
 
 const state = {
   authorized: true,
@@ -26,10 +26,19 @@ const getters = {
   verification(state) {
     return state.confirm;
   },
+  loginError(state) {
+    return state.loginError;
+  },
+  signupError(state) {
+    return state.signupError;
+  },
+  confirmError(state) {
+    return state.confirmError;
+  },
 };
 
 const actions = {
-  async [LOGIN]({ dispatch, state }, { email, password }) {
+  async login({ dispatch, state }, { email, password }) {
     state.loginError = '';
     try {
       await Auth.signIn(email, password);
@@ -40,15 +49,18 @@ const actions = {
     }
     await dispatch('fetchUser');
   },
-  async signup({ commit, state }, { email, password, username }) {
+  async signup({ commit, state }, { email, password, name, family_name }) {
     state.signupError = '';
     try {
       await Auth.signUp({
-        username,
+        username: email,
         email,
         password,
         attributes: {
           email,
+          name,
+          family_name,
+          picture: '',
         },
       });
       // switch email confirmation form

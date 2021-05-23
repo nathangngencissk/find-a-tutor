@@ -45,17 +45,19 @@
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
               <v-avatar v-bind="attrs" v-on="on">
-                <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="João" />
+                <img :src="currentUserPicture" alt="João" />
               </v-avatar>
             </template>
             <v-list>
               <v-list-item two-line>
                 <v-list-item-avatar>
-                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" />
+                  <img :src="currentUserPicture" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title>João Silva</v-list-item-title>
+                  <v-list-item-title
+                    >{{ currentUserName }} {{ currentUserFamilyName }}</v-list-item-title
+                  >
                   <v-list-item-subtitle>Estudante</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -111,7 +113,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small to="/about">Ensinar</v-btn>
+                    <v-btn depressed small @click="showUserInfo">Ensinar</v-btn>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -154,6 +156,19 @@ export default {
     darkModeOn() {
       return this.$vuetify.theme.dark;
     },
+    currentUserName() {
+      return this.currentUser.attributes.name;
+    },
+    currentUserFamilyName() {
+      return this.currentUser.attributes.family_name;
+    },
+    currentUserPicture() {
+      if (this.currentUser.username.includes('Facebook')) {
+        const userPictureData = JSON.parse(this.currentUser.attributes.picture);
+        return userPictureData.data.url;
+      }
+      return this.currentUser.attributes.picture;
+    },
   },
   methods: {
     logout() {
@@ -175,6 +190,9 @@ export default {
     },
     toggleDarkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    showUserInfo() {
+      console.log(this.currentUser);
     },
   },
 };
