@@ -8,7 +8,7 @@
 
         <v-img height="250" src="@/assets/interFace4.png"></v-img>
 
-        <v-card-title>Course Name</v-card-title>
+        <v-card-title>Nome do Curso</v-card-title>
 
         <v-card-text>
           <v-row align="center" class="mx-0">
@@ -24,7 +24,10 @@
             <div class="grey--text ml-4">4.5 (413)</div>
           </v-row>
 
-          <div class="my-4 subtitle-1">$150</div>
+          <div class="mt-4 mb-2 subtitle-1">R$150</div>
+          <div class="mb-2">
+            <v-img max-height="20" max-width="20" src="@/assets/flags/pt-br.png"></v-img>
+          </div>
 
           <div>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut
@@ -35,22 +38,22 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-title>Classes availability</v-card-title>
+        <v-card-title>Turmas disponíveis em breve</v-card-title>
 
         <v-card-text>
-          <v-chip-group v-model="selection" active-class="blue darken-3 white--text" column>
-            <v-chip>Monday 5:30PM</v-chip>
+          <v-chip-group column>
+            <v-chip>Segunda-feira 5:30PM</v-chip>
 
-            <v-chip>Monday 7:30PM</v-chip>
+            <v-chip>Segunda-feira 7:30PM</v-chip>
 
-            <v-chip>Thursday 8:00PM</v-chip>
+            <v-chip>Quinta-feira 8:00PM</v-chip>
 
-            <v-chip>Sunday 9:00PM</v-chip>
+            <v-chip>Domingo 9:00PM</v-chip>
           </v-chip-group>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="deep-purple lighten-2" text @click="reserve"> See Course </v-btn>
+          <v-btn color="primary" text @click="reserve"> Ver Curso </v-btn>
         </v-card-actions>
       </v-card>
     </v-slide-item>
@@ -63,7 +66,6 @@ export default {
 
   data: () => ({
     loading: false,
-    selection: 1,
     model: null,
   }),
 

@@ -8,7 +8,7 @@
       </v-chip-group>
     </v-col>
     <v-col cols="2" xl="2" lg="2" md="4" sm="6">
-      <v-btn text color="primary"> See All </v-btn>
+      <v-btn text color="primary"> Ver Todas </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -17,24 +17,24 @@
 export default {
   data: () => ({
     tags: [
-      'Work',
-      'Home Improvement',
-      'Vacation',
-      'Food',
-      'Drawers',
-      'Shopping',
-      'Art',
-      'Tech',
-      'Creative Writing',
-      'Work2',
-      'Home Improvement2',
-      'Vacation2',
-      'Food2',
-      'Drawers2',
-      'Shopping2',
-      'Art2',
-      'Tech2',
-      'Creative Writing3',
+      'Tecnologia',
+      'Decoração',
+      'Economia',
+      'Culinária',
+      'Arte',
+      'Escrita',
+      'Pintura',
+      'Finanças Pessoais',
+      'Inglês',
+      'Fotografia',
+      'Exercícios',
+      'Matemática',
+      'Filosofia',
+      'Biologia',
+      'Química',
+      'Português',
+      'História',
+      'Física',
     ],
   }),
 };

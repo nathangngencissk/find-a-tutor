@@ -7,10 +7,10 @@
           height="200px"
           src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
         >
-          <v-card-title>Photography</v-card-title>
+          <v-card-title>Programação C#</v-card-title>
         </v-img>
 
-        <v-card-subtitle class="pb-0"> Category </v-card-subtitle>
+        <v-card-subtitle class="pb-0"> Tecnologia </v-card-subtitle>
 
         <v-card-text class="text--primary">
           <v-row align="center" class="mx-0 my-2">
@@ -24,7 +24,10 @@
             ></v-rating>
 
             <div class="grey--text ml-2 mr-4">4.5 (413)</div>
-            <div class="my-4 subtitle-1">$150</div>
+            <div class="my-4 subtitle-1">R$150</div>
+            <div class="ml-4">
+              <v-img max-height="20" max-width="20" src="@/assets/flags/pt-br.png"></v-img>
+            </div>
           </v-row>
           <div>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia soluta alias eveniet
@@ -34,7 +37,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="blue darken-4" text> See Course </v-btn>
+          <v-btn color="blue darken-4" text> Ver Curso </v-btn>
         </v-card-actions>
       </v-card>
     </v-slide-item>

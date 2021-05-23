@@ -23,6 +23,9 @@ const getters = {
   isAuthenticated(state) {
     return !!state.user;
   },
+  verification(state) {
+    return state.confirm;
+  },
 };
 
 const actions = {
@@ -37,17 +40,16 @@ const actions = {
     }
     await dispatch('fetchUser');
   },
-  async signup({ commit, state }, { email, password }) {
+  async signup({ commit, state }, { email, password, username }) {
     state.signupError = '';
     try {
       await Auth.signUp({
-        username: email,
+        username,
         email,
         password,
         attributes: {
           email,
         },
-        validationData: [],
       });
       // switch email confirmation form
       commit('confirm', true);
@@ -57,12 +59,13 @@ const actions = {
       commit('confirm', false);
     }
   },
-  async confirm({ commit, state }, { email, code }) {
+  async confirm({ commit, state }, { username, code }) {
     state.confirmError = '';
     try {
-      await Auth.confirmSignUp(email, code, {
+      await Auth.confirmSignUp(username, code, {
         forceAliasCreation: true,
       });
+      router.push({ name: 'Login' });
     } catch (err) {
       console.log(`Confirm Error [${err}]`);
       if (err) state.confirmError = err.message || err;

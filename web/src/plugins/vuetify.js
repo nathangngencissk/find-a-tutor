@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@fortawesome/fontawesome-free/css/all.css';
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
 import colors from 'vuetify/lib/util/colors';
@@ -5,6 +7,9 @@ import colors from 'vuetify/lib/util/colors';
 Vue.use(Vuetify);
 
 const vuetify = new Vuetify({
+  icons: {
+    iconfont: 'fa',
+  },
   theme: {
     themes: {
       light: {

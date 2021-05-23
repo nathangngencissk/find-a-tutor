@@ -2,12 +2,12 @@
   <div>
     <Slider />
     <Categories />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Popular Courses</v-subheader>
+    <v-subheader color="blue darken-1" class="mt-4 mb-2">Cursos Populares</v-subheader>
     <PopularCourses />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Main Categories</v-subheader>
+    <v-subheader color="blue darken-1" class="mt-4 mb-2">Categorias Principais</v-subheader>
     <MainCategories />
     <Discussions />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Others are studying now</v-subheader>
+    <v-subheader color="blue darken-1" class="mt-4 mb-2">Outros estão estudando agora</v-subheader>
     <StudyingNow />
   </div>
 </template>

@@ -14,18 +14,22 @@
 export default {
   data: () => ({
     cards: [
-      { title: 'Photography', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
+      { title: 'Fotografia', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
       {
-        title: 'Photography2',
+        title: 'Culinária',
         src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
         flex: 3,
       },
-      { title: 'Photography3', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography4', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography5', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography6', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography7', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-      { title: 'Photography8', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Tecnologia', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Matemática', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Inglês', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Fisolofia', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      { title: 'Economia', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+      {
+        title: 'Finanças Pessoais',
+        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
+        flex: 3,
+      },
     ],
   }),
 };
