@@ -55,6 +55,7 @@ import Snackbar from '@/components/Snackbar.vue';
 
 export default {
   name: 'Login',
+  title: 'Login | Find A Tutor',
   data() {
     return {
       overlay: false,
