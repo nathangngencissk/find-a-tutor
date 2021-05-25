@@ -4,7 +4,7 @@
       >Resultados de busca para: {{ this.searchText }}</v-subheader
     >
     <v-row>
-      <v-col cols="3">
+      <v-col cols="3" md="6">
         <v-sheet elevation="1" width="100%">
           <v-container>
             <v-subheader color="primary">Categorias</v-subheader>
@@ -54,9 +54,9 @@
           </v-container>
         </v-sheet>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="9" md="6">
         <v-row justify="space-around">
-          <v-col cols="4" v-for="n in 9" :key="n">
+          <v-col cols="4" md="6" sm="12" v-for="n in 9" :key="n">
             <CourseCardFull
               courseName="Programação C#"
               courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
