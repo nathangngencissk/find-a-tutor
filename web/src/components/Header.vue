@@ -15,15 +15,19 @@
           ></v-img>
         </v-col>
         <v-col cols="7" xl="7" lg="8" md="8" class="d-none d-md-flex d-lg-flex d-xl-flex">
-          <v-form>
-            <v-container>
-              <v-row align="end" justify="end">
-                <v-col cols="12">
-                  <v-text-field label="Pesquisar" filled></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
+          <v-container>
+            <v-row align="end" justify="end">
+              <v-col cols="12">
+                <v-text-field
+                  label="Pesquisar"
+                  append-icon="fas fa-search"
+                  v-model="search"
+                  @click:append="pushSearch"
+                  filled
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
 
         <v-col cols="3" xl="3" class="d-none d-xl-flex">
@@ -150,6 +154,7 @@ export default {
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking' },
       { title: 'Minhas Anotações', icon: 'fas fa-book-open' },
     ],
+    search: '',
   }),
   computed: {
     ...mapGetters(['currentUser', 'isAuthenticated']),
@@ -190,9 +195,13 @@ export default {
     },
     toggleDarkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString());
     },
     showUserInfo() {
       console.log(this.currentUser);
+    },
+    pushSearch() {
+      this.$router.push({ path: '/search', query: { search: this.search } });
     },
   },
 };

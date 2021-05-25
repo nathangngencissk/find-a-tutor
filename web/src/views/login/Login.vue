@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-row justify="space-around">
       <v-col cols="12" md="4">
         <v-sheet elevation="12" class="my-8 mx-auto py-8 px-8">
@@ -46,7 +46,7 @@
       </v-col>
     </v-row>
     <Snackbar :text="this.loginError" timeout="5000" :show="this.showError" />
-  </div>
+  </v-container>
 </template>
 
 <script>

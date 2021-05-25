@@ -1,52 +1,30 @@
 <template>
   <v-slide-group v-model="model" class="pa-4" active-class="success" show-arrows>
     <v-slide-item v-for="n in 6" :key="n">
-      <v-card class="mx-auto mr-4" max-width="400" :loading="loading">
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-        >
-          <v-card-title>Programação C#</v-card-title>
-        </v-img>
-
-        <v-card-subtitle class="pb-0"> Tecnologia </v-card-subtitle>
-
-        <v-card-text class="text--primary">
-          <v-row align="center" class="mx-0 my-2">
-            <v-rating
-              :value="4.5"
-              color="amber"
-              dense
-              half-increments
-              readonly
-              size="14"
-            ></v-rating>
-
-            <div class="grey--text ml-2 mr-4">4.5 (413)</div>
-            <div class="my-4 subtitle-1">R$150</div>
-            <div class="ml-4">
-              <v-img max-height="20" max-width="20" src="@/assets/flags/pt-br.png"></v-img>
-            </div>
-          </v-row>
-          <div>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia soluta alias eveniet
-            ipsam recusandae quam? Repellendus, neque delectus explicabo consequatur perspiciatis
-            rem quos nisi ipsa libero ex necessitatibus dolorem quo?
-          </div>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn color="blue darken-4" text> Ver Curso </v-btn>
-        </v-card-actions>
-      </v-card>
+      <CourseCardFull
+        courseName="Programação C#"
+        courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+        courseRating="4.5"
+        courseReviews="413"
+        courseCategory="Tecnologia"
+        courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
+        courseId="1"
+        courseLanguage="pt-br"
+        courseCost="150"
+      />
     </v-slide-item>
   </v-slide-group>
 </template>
 
 <script>
+import CourseCardFull from '@/components/CourseCardFull.vue';
+
 export default {
   name: 'StudyingCourses',
+
+  components: {
+    CourseCardFull,
+  },
 
   data: () => ({
     loading: false,

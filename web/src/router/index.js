@@ -29,6 +29,12 @@ const routes = [
     name: 'Login',
     component: () => import('@/views/login/Login.vue'),
   },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('@/views/search/Search.vue'),
+    props: (route) => ({ searchText: route.query.search }),
+  },
 ];
 
 const router = new VueRouter({

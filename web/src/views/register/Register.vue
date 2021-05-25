@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-alert v-if="verification" border="top" color="green lighten-2" dark dismissible>
       Um código de verificação foi enviado ao seu email.
     </v-alert>
@@ -39,7 +39,7 @@
     </v-row>
     <Snackbar :text="this.signupError" timeout="10000" :show="showSignupError" />
     <Snackbar :text="this.confirmError" timeout="5000" :show="showConfirmError" />
-  </div>
+  </v-container>
 </template>
 
 <script>

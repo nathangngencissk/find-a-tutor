@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container id="main-container">
     <Slider />
     <Categories />
     <v-subheader color="blue darken-1" class="mt-4 mb-2">Cursos Populares</v-subheader>
@@ -9,7 +9,7 @@
     <Discussions />
     <v-subheader color="blue darken-1" class="mt-4 mb-2">Outros estão estudando agora</v-subheader>
     <StudyingNow />
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -38,5 +38,13 @@ export default {
 .v-subheader {
   font-size: 2rem;
   font-weight: '500';
+}
+
+.container {
+  max-width: 1480px;
+}
+
+#main-container {
+  padding-top: 0;
 }
 </style>

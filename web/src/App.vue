@@ -2,9 +2,7 @@
   <v-app>
     <Header />
     <v-main>
-      <v-container id="main-container">
-        <router-view />
-      </v-container>
+      <router-view />
     </v-main>
     <Footer />
   </v-app>
@@ -33,15 +31,15 @@ export default {
       await this.$store.dispatch('logout');
     },
   },
+  mounted() {
+    const theme = localStorage.getItem('dark_theme');
+    if (theme) {
+      if (theme === 'true') {
+        this.$vuetify.theme.dark = true;
+      } else {
+        this.$vuetify.theme.dark = false;
+      }
+    }
+  },
 };
 </script>
-
-<style scoped lang="scss">
-.container {
-  max-width: 1480px;
-}
-
-#main-container {
-  padding-top: 0;
-}
-</style>
