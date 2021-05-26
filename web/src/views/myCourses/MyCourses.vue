@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <v-subheader color="primary" class="mt-4 mb-2"
-      >Resultados de busca para: {{ this.searchText }}</v-subheader
-    >
     <v-row>
       <v-col cols="3" lg="3" md="6">
         <v-sheet elevation="1" width="100%">
@@ -15,7 +12,6 @@
               hide-selected
               multiple
               small-chips
-              class="mx-2"
             >
               <template v-slot:no-data>
                 <v-list-item>
@@ -55,7 +51,6 @@
             <v-radio-group v-model="orderBy">
               <v-radio label="Avaliação" value="ratings"></v-radio>
               <v-radio label="Quantidade de avaliações" value="reviews"></v-radio>
-              <v-radio label="Preço" value="price"></v-radio>
             </v-radio-group>
             <v-divider></v-divider>
             <v-subheader color="primary">Avaliação</v-subheader>
@@ -67,15 +62,6 @@
               :value="[1, 5]"
               :tick-labels="ratings"
             ></v-range-slider>
-            <v-divider></v-divider>
-            <v-subheader color="primary">Preço</v-subheader>
-            <v-checkbox
-              class="my-0"
-              v-model="price"
-              label="100-200"
-              value="[100, 200]"
-            ></v-checkbox>
-            <v-checkbox class="my-0" v-model="price" label=">300" value="[300, 0]"></v-checkbox>
             <v-divider></v-divider>
             <v-subheader color="primary">Idioma</v-subheader>
             <v-checkbox
@@ -96,11 +82,10 @@
               courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
               courseRating="4.5"
               courseReviews="413"
-              :courseCategory="searchText"
+              courseCategory="Tecnologia"
               courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
               courseId="1"
               courseLanguage="pt-br"
-              courseCost="150"
             />
           </v-col>
         </v-row>
@@ -116,9 +101,9 @@
 import CourseCardFull from '@/components/CourseCardFull.vue';
 
 export default {
-  name: 'StudyingCourses',
+  name: 'MyCourses',
 
-  title: 'Busca | Find a Tutor',
+  title: 'Meus Cursos | Find a Tutor',
 
   components: {
     CourseCardFull,
@@ -172,8 +157,6 @@ export default {
       },
     ],
   }),
-
-  props: ['searchText'],
 
   methods: {},
 };

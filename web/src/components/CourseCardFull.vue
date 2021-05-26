@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto mr-4" max-width="400">
+  <v-card class="mb-4 mr-2" max-width="400">
     <v-img class="white--text align-end" height="200px" :src="courseImage">
       <v-card-title>{{ courseName }}</v-card-title>
     </v-img>
@@ -18,7 +18,7 @@
         ></v-rating>
 
         <div class="grey--text ml-2 mr-4">{{ courseRating }} ({{ courseReviews }})</div>
-        <div class="my-4 subtitle-1">R${{ courseCost }}</div>
+        <div v-if="courseCost" class="subtitle-1">R${{ courseCost }}</div>
         <div class="ml-4">
           <v-img max-height="20" max-width="20" :src="flagLanguage"></v-img>
         </div>

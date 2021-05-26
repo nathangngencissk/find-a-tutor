@@ -32,7 +32,7 @@
 
         <v-col cols="3" xl="3" class="d-none d-xl-flex">
           <v-row align="center" justify="space-around">
-            <v-btn color="primaryText" plain>
+            <v-btn color="primaryText" plain to="/courses">
               <span>Meus Cursos</span>
             </v-btn>
 
@@ -85,7 +85,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small to="/about">{{ item.title }}</v-btn>
+                    <v-btn depressed small :to="item.url">{{ item.title }}</v-btn>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -148,11 +148,11 @@ export default {
   name: 'Header',
   data: () => ({
     items: [
-      { title: 'Meus Cursos', icon: 'fas fa-book' },
-      { title: 'Discussões', icon: 'fas fa-comments' },
-      { title: 'Exercícios', icon: 'fas fa-dumbbell' },
-      { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking' },
-      { title: 'Minhas Anotações', icon: 'fas fa-book-open' },
+      { title: 'Meus Cursos', icon: 'fas fa-book', url: '/courses' },
+      { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
+      { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/courses' },
+      { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
+      { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/courses' },
     ],
     search: '',
   }),

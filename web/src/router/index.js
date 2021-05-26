@@ -15,9 +15,6 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import('@/views/about/About.vue'),
-    meta: {
-      middleware: auth,
-    },
   },
   {
     path: '/register',
@@ -34,6 +31,24 @@ const routes = [
     name: 'Search',
     component: () => import('@/views/search/Search.vue'),
     props: (route) => ({ searchText: route.query.search }),
+  },
+  {
+    path: '/courses',
+    name: 'MyCourses',
+    component: () => import('@/views/myCourses/MyCourses.vue'),
+    meta: {
+      middleware: auth,
+    },
+  },
+  {
+    path: '/paths',
+    name: 'Paths',
+    component: () => import('@/views/paths/Paths.vue'),
+  },
+  {
+    path: '/path',
+    name: 'Path',
+    component: () => import('@/views/path/Path.vue'),
   },
 ];
 
