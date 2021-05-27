@@ -55,6 +55,32 @@ const routes = [
     name: 'Cart',
     component: () => import('@/views/cart/Cart.vue'),
   },
+  {
+    path: '/account',
+    name: 'Account',
+    component: () => import('@/views/account/Account.vue'),
+    children: [
+      {
+        path: 'personal',
+        component: () => import('@/views/account/components/PersonalInformation.vue'),
+      },
+      {
+        path: 'email',
+        component: () => import('@/views/account/components/Email.vue'),
+      },
+      {
+        path: 'password',
+        component: () => import('@/views/account/components/Password.vue'),
+      },
+      {
+        path: 'picture',
+        component: () => import('@/views/account/components/Picture.vue'),
+      },
+    ],
+    meta: {
+      middleware: auth,
+    },
+  },
 ];
 
 const router = new VueRouter({

@@ -27,7 +27,7 @@
           <h1 class="ml-5">R$ 450,00</h1>
           <v-card-text class="text--primary">
             <div class="my-2">
-              <v-btn x-large color="success"> Finalizar </v-btn>
+              <v-btn x-large color="success" block> Finalizar </v-btn>
             </div>
           </v-card-text>
         </v-card>

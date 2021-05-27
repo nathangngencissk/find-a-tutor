@@ -11,6 +11,7 @@
     "aws-amplify": "^4.0.2",
     "core-js": "^3.6.5",
     "nouislider": "^15.1.1",
+    "vee-validate": "^3.4.7",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",

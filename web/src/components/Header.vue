@@ -109,13 +109,13 @@
               </v-list-item>
               <v-divider></v-divider>
               <v-list dense>
-                <v-list-item>
+                <v-list-item v-if="currentUserProvider == 'custom'">
                   <v-list-item-icon>
                     <v-icon>fas fa-user</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small to="/about">Minha Conta</v-btn>
+                    <v-btn depressed small to="/account/personal">Minha Conta</v-btn>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -180,6 +180,15 @@ export default {
         return userPictureData.data.url;
       }
       return this.currentUser.attributes.picture;
+    },
+    currentUserProvider() {
+      if (this.currentUser.username.includes('Facebook')) {
+        return 'fb';
+      }
+      if (this.currentUser.username.includes('Google')) {
+        return 'ga';
+      }
+      return 'custom';
     },
   },
   methods: {
