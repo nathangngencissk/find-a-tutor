@@ -128,7 +128,7 @@
 import CourseCardFull from '@/components/CourseCardFull.vue';
 
 export default {
-  name: 'Studyingpaths',
+  name: 'Path',
 
   title: 'Programação Zero to Hero | Find a Tutor',
 

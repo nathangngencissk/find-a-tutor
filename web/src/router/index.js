@@ -50,6 +50,11 @@ const routes = [
     name: 'Path',
     component: () => import('@/views/path/Path.vue'),
   },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: () => import('@/views/cart/Cart.vue'),
+  },
 ];
 
 const router = new VueRouter({

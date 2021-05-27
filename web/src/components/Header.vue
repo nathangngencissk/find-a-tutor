@@ -69,11 +69,18 @@
               <v-list dense>
                 <v-list-item>
                   <v-list-item-icon>
-                    <v-icon>fas fa-shopping-cart</v-icon>
+                    <v-badge
+                      v-if="parseInt(shoppingCartItemsNumber) > 0"
+                      color="primary"
+                      :content="shoppingCartItemsNumber"
+                    >
+                      <v-icon>fas fa-shopping-cart</v-icon>
+                    </v-badge>
+                    <v-icon v-else>fas fa-shopping-cart</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small to="/about">Meu Carrinho</v-btn>
+                    <v-btn depressed small to="/cart">Meu Carrinho</v-btn>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -157,7 +164,7 @@ export default {
     search: '',
   }),
   computed: {
-    ...mapGetters(['currentUser', 'isAuthenticated']),
+    ...mapGetters(['currentUser', 'isAuthenticated', 'shoppingCartItemsNumber']),
     darkModeOn() {
       return this.$vuetify.theme.dark;
     },
