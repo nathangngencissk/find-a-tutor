@@ -76,10 +76,10 @@ export default {
   },
   computed: {
     loginError() {
-      return this.$store.getters.loginError;
+      return this.$store.getters['auth/loginError'];
     },
     showError() {
-      return !!this.$store.getters.loginError;
+      return !!this.$store.getters['auth/loginError'];
     },
   },
   components: { Snackbar },
@@ -88,7 +88,7 @@ export default {
       this.validate();
       if (this.email && this.password) {
         this.overlay = !this.overlay;
-        await this.$store.dispatch('login', {
+        await this.$store.dispatch('auth/login', {
           email: this.$data.email,
           password: this.$data.password,
         });

@@ -20,15 +20,15 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters.currentUser;
+      return this.$store.getters['auth/fetchUser'];
     },
   },
   async created() {
-    await this.$store.dispatch('fetchUser');
+    await this.$store.dispatch('auth/fetchUser');
   },
   methods: {
     async logout() {
-      await this.$store.dispatch('logout');
+      await this.$store.dispatch('auth/logout');
     },
   },
   mounted() {

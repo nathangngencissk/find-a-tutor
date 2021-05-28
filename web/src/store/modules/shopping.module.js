@@ -1,4 +1,7 @@
 /* eslint-disable no-shadow */
+
+const namespaced = true;
+
 const state = {
   shoppingCartItemsNumber: '3',
 };
@@ -14,6 +17,7 @@ const actions = {};
 const mutations = {};
 
 export default {
+  namespaced,
   state,
   actions,
   mutations,

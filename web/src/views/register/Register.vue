@@ -76,7 +76,7 @@ export default {
   methods: {
     async signup() {
       this.overlay = !this.overlay;
-      await this.$store.dispatch('signup', {
+      await this.$store.dispatch('auth/signup', {
         email: this.$data.email,
         password: this.$data.password,
         name: this.$data.name,
@@ -86,7 +86,7 @@ export default {
     },
     async confirm() {
       this.overlay = !this.overlay;
-      await this.$store.dispatch('confirm', {
+      await this.$store.dispatch('auth/confirm', {
         username: this.$data.email,
         code: this.$data.verificationCode,
       });
@@ -103,19 +103,19 @@ export default {
   },
   computed: {
     verification() {
-      return this.$store.getters.verification;
+      return this.$store.getters['auth/verification'];
     },
     signupError() {
-      return this.$store.getters.signupError;
+      return this.$store.getters['auth/signupError'];
     },
     confirmError() {
-      return this.$store.getters.confirmError;
+      return this.$store.getters['auth/confirmError'];
     },
     showSignupError() {
-      return !!this.$store.getters.signupError;
+      return !!this.$store.getters['auth/signupError'];
     },
     showConfirmError() {
-      return !!this.$store.getters.confirmError;
+      return !!this.$store.getters['auth/confirmError'];
     },
   },
 };

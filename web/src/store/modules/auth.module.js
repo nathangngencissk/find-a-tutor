@@ -4,6 +4,8 @@ import { Auth } from 'aws-amplify';
 
 import router from '@/router';
 
+const namespaced = true;
+
 const state = {
   authorized: true,
   user: null,
@@ -48,6 +50,11 @@ const actions = {
       return;
     }
     await dispatch('fetchUser');
+    router.push({ name: 'Home' }).catch((error) => {
+      if (error.name !== 'NavigationDuplicated') {
+        throw error;
+      }
+    });
   },
   async signup({ commit, state }, { email, password, name, family_name }) {
     state.signupError = '';
@@ -106,6 +113,11 @@ const actions = {
   async logout({ commit }) {
     await Auth.signOut();
     commit('user', null);
+    router.push({ name: 'Home' }).catch((error) => {
+      if (error.name !== 'NavigationDuplicated') {
+        throw error;
+      }
+    });
   },
 };
 
@@ -113,12 +125,6 @@ const mutations = {
   user(state, user) {
     state.authorized = !!user && user.attributes && user.attributes.email_verified;
     state.user = user;
-
-    router.push({ name: 'Home' }).catch((error) => {
-      if (error.name !== 'NavigationDuplicated') {
-        throw error;
-      }
-    });
   },
   confirm(state, showConfirm) {
     state.confirm = !!showConfirm;
@@ -126,6 +132,7 @@ const mutations = {
 };
 
 export default {
+  namespaced,
   state,
   actions,
   mutations,

@@ -49,13 +49,13 @@
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
               <v-avatar v-bind="attrs" v-on="on">
-                <img :src="currentUserPicture" alt="João" />
+                <img :src="profilePicture" alt="João" />
               </v-avatar>
             </template>
             <v-list>
               <v-list-item two-line>
                 <v-list-item-avatar>
-                  <img :src="currentUserPicture" />
+                  <img :src="profilePicture" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -164,7 +164,9 @@ export default {
     search: '',
   }),
   computed: {
-    ...mapGetters(['currentUser', 'isAuthenticated', 'shoppingCartItemsNumber']),
+    ...mapGetters('auth', ['currentUser', 'isAuthenticated']),
+    ...mapGetters('profile', ['profilePicture']),
+    ...mapGetters('shopping', ['shoppingCartItemsNumber']),
     darkModeOn() {
       return this.$vuetify.theme.dark;
     },
@@ -173,13 +175,6 @@ export default {
     },
     currentUserFamilyName() {
       return this.currentUser.attributes.family_name;
-    },
-    currentUserPicture() {
-      if (this.currentUser.username.includes('Facebook')) {
-        const userPictureData = JSON.parse(this.currentUser.attributes.picture);
-        return userPictureData.data.url;
-      }
-      return this.currentUser.attributes.picture;
     },
     currentUserProvider() {
       if (this.currentUser.username.includes('Facebook')) {
@@ -193,7 +188,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch('auth/logout');
     },
     pushHome() {
       this.$router.push({ name: 'Home' }).catch((error) => {
@@ -219,6 +214,12 @@ export default {
     pushSearch() {
       this.$router.push({ path: '/search', query: { search: this.search } });
     },
+    async getProfilePicture() {
+      await this.$store.dispatch('profile/getProfilePicture');
+    },
+  },
+  async created() {
+    this.getProfilePicture();
   },
 };
 </script>
