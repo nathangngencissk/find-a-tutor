@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
@@ -7,11 +8,19 @@ const namespaced = true;
 
 const state = {
   profilePicture: '',
+  updateSuccess: '',
+  updateError: '',
 };
 
 const getters = {
   profilePicture(state) {
     return state.profilePicture;
+  },
+  updateSuccess(state) {
+    return state.updateSuccess;
+  },
+  updateError(state) {
+    return state.updateError;
   },
 };
 
@@ -40,14 +49,46 @@ const actions = {
       await Storage.put(fileName, file, {
         level: 'private',
       });
-      const user = await Auth.currentAuthenticatedUser();
 
+      const user = await Auth.currentAuthenticatedUser();
       const result = await Auth.updateUserAttributes(user, {
         picture: fileName,
       });
+
       await dispatch('getProfilePicture');
     } catch (error) {
       console.error('Error uploading file: ', error);
+    }
+  },
+  async updateProfilePersonalInformation(
+    { dispatch, commit, getters, rootGetters },
+    { name, family_name }
+  ) {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+
+      const result = await Auth.updateUserAttributes(user, {
+        name,
+        family_name,
+      });
+      await dispatch('auth/fetchUser', null, { root: true });
+      commit('changeUpdateSuccess', 'Seus dados foram atualizados com sucesso!');
+    } catch (error) {
+      commit('changeUpdateError', 'Ocorreu um erro, por favor tente novamente.');
+    }
+  },
+  async updateProfilePassword(
+    { dispatch, commit, getters, rootGetters },
+    { oldPassword, newPassword }
+  ) {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+
+      const result = await Auth.changePassword(user, oldPassword, newPassword);
+      await dispatch('auth/fetchUser', null, { root: true });
+      commit('changeUpdateSuccess', 'Seus dados foram atualizados com sucesso!');
+    } catch (error) {
+      commit('changeUpdateError', 'Ocorreu um erro, por favor tente novamente.');
     }
   },
 };
@@ -55,6 +96,15 @@ const actions = {
 const mutations = {
   changeProfilePicture(state, picture) {
     state.profilePicture = picture;
+  },
+  changeProfilePersonalInformation(state, picture) {
+    state.profilePicture = picture;
+  },
+  changeUpdateError(state, error) {
+    state.updateError = error;
+  },
+  changeUpdateSuccess(state, success) {
+    state.updateSuccess = success;
   },
 };
 

@@ -5,99 +5,63 @@
       <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit" class="mx-4">
-            <validation-provider v-slot="{ errors }" name="Name" rules="required|max:10">
+            <validation-provider v-slot="{ errors }" name="Nome" rules="required|max:15">
               <v-text-field
                 v-model="name"
-                :counter="10"
+                :counter="15"
                 :error-messages="errors"
-                label="Name"
+                label="Nome"
                 required
               ></v-text-field>
             </validation-provider>
-            <validation-provider
-              v-slot="{ errors }"
-              name="phoneNumber"
-              :rules="{
-                required: true,
-                digits: 7,
-                regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$',
-              }"
-            >
+            <validation-provider v-slot="{ errors }" name="Sobrenome" rules="required|max:15">
               <v-text-field
-                v-model="phoneNumber"
-                :counter="7"
+                v-model="family_name"
+                :counter="15"
                 :error-messages="errors"
-                label="Phone Number"
+                label="Sobrenome"
                 required
               ></v-text-field>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" name="email" rules="required|email">
-              <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="E-mail"
-                required
-              ></v-text-field>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" name="select" rules="required">
-              <v-select
-                v-model="select"
-                :items="items"
-                :error-messages="errors"
-                label="Select"
-                data-vv-name="select"
-                required
-              ></v-select>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" rules="required" name="checkbox">
-              <v-checkbox
-                v-model="checkbox"
-                :error-messages="errors"
-                value="1"
-                label="Option"
-                type="checkbox"
-                required
-              ></v-checkbox>
             </validation-provider>
 
-            <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
+            <v-btn
+              color="success"
+              class="mr-4"
+              @click="updateUserPersonalInformation"
+              :disabled="invalid"
+            >
+              Salvar
+            </v-btn>
+            <v-btn color="error" outlined @click="clear"> Limpar </v-btn>
           </form>
         </validation-observer>
       </v-container>
     </v-sheet>
+    <Snackbar :text="this.updateSuccess" timeout="5000" :show="this.showSuccess" />
+    <Snackbar :text="this.updateError" timeout="5000" :show="this.showError" />
   </v-container>
 </template>
 
 <script>
-import { required, digits, email, max, regex } from 'vee-validate/dist/rules';
+import { required, digits, max } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import Snackbar from '@/components/Snackbar.vue';
 
 setInteractionMode('eager');
 
 extend('digits', {
   ...digits,
-  message: '{_field_} needs to be {length} digits. ({_value_})',
+  message: '{_field_} precisa ter {length} caracteres. ({_value_})',
 });
 
 extend('required', {
   ...required,
-  message: '{_field_} can not be empty',
+  message: '{_field_} não pode ficar vazio',
 });
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
-});
-
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
-});
-
-extend('email', {
-  ...email,
-  message: 'Email must be valid',
+  message: '{_field_} não pode ter mais que {length} caracteres',
 });
 
 export default {
@@ -106,27 +70,43 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    Snackbar,
   },
   data: () => ({
     name: '',
-    phoneNumber: '',
-    email: '',
-    select: null,
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    checkbox: null,
+    family_name: '',
   }),
-
+  computed: {
+    updateSuccess() {
+      return this.$store.getters['profile/updateSuccess'];
+    },
+    showSuccess() {
+      return !!this.$store.getters['profile/updateSuccess'];
+    },
+    updateError() {
+      return this.$store.getters['profile/updateError'];
+    },
+    showError() {
+      return !!this.$store.getters['profile/updateError'];
+    },
+  },
   methods: {
     submit() {
       this.$refs.observer.validate();
     },
     clear() {
       this.name = '';
-      this.phoneNumber = '';
-      this.email = '';
-      this.select = null;
-      this.checkbox = null;
+      this.family_name = '';
       this.$refs.observer.reset();
+    },
+    async updateUserPersonalInformation() {
+      this.overlay = !this.overlay;
+      await this.$store.dispatch('profile/updateProfilePersonalInformation', {
+        name: this.name,
+        family_name: this.family_name,
+      });
+      this.overlay = !this.overlay;
+      this.clear();
     },
   },
 };

@@ -1,37 +1,19 @@
 <template>
   <v-container>
+    <v-alert v-if="verification" border="top" color="green lighten-2" dark dismissible>
+      Um código de verificação foi enviado ao seu email.
+    </v-alert>
     <v-subheader> Email </v-subheader>
     <v-sheet elevation="1">
       <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit" class="mx-4">
-            <validation-provider v-slot="{ errors }" name="Name" rules="required|max:10">
-              <v-text-field
-                v-model="name"
-                :counter="10"
-                :error-messages="errors"
-                label="Name"
-                required
-              ></v-text-field>
-            </validation-provider>
             <validation-provider
               v-slot="{ errors }"
-              name="phoneNumber"
-              :rules="{
-                required: true,
-                digits: 7,
-                regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$',
-              }"
+              name="email"
+              rules="required|email"
+              ref="email"
             >
-              <v-text-field
-                v-model="phoneNumber"
-                :counter="7"
-                :error-messages="errors"
-                label="Phone Number"
-                required
-              ></v-text-field>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" name="email" rules="required|email">
               <v-text-field
                 v-model="email"
                 :error-messages="errors"
@@ -39,39 +21,51 @@
                 required
               ></v-text-field>
             </validation-provider>
-            <validation-provider v-slot="{ errors }" name="select" rules="required">
-              <v-select
-                v-model="select"
-                :items="items"
+            <validation-provider
+              v-slot="{ errors }"
+              name="confirmEmail"
+              rules="required|email|confirmEmail:@email"
+            >
+              <v-text-field
+                v-model="confirmEmail"
                 :error-messages="errors"
-                label="Select"
-                data-vv-name="select"
+                label="Confirme o E-mail"
                 required
-              ></v-select>
+              ></v-text-field>
             </validation-provider>
-            <validation-provider v-slot="{ errors }" rules="required" name="checkbox">
-              <v-checkbox
-                v-model="checkbox"
-                :error-messages="errors"
-                value="1"
-                label="Option"
-                type="checkbox"
-                required
-              ></v-checkbox>
-            </validation-provider>
+            <v-text-field
+              v-if="verification"
+              v-model="verificationCode"
+              label="Código de Verificação"
+              required
+            ></v-text-field>
 
-            <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
+            <v-btn
+              color="success"
+              class="mr-4"
+              @click="updateUserPersonalInformation"
+              :disabled="invalid"
+              v-if="confirm"
+            >
+              Confirmar
+            </v-btn>
+            <v-btn v-else color="success" class="mr-4" @click="confirm" :disabled="invalid">
+              Salvar
+            </v-btn>
+            <v-btn color="error" outlined @click="clear"> Limpar </v-btn>
           </form>
         </validation-observer>
       </v-container>
     </v-sheet>
+    <Snackbar :text="this.updateSuccess" timeout="5000" :show="this.showSuccess" />
+    <Snackbar :text="this.updateError" timeout="5000" :show="this.showError" />
   </v-container>
 </template>
 
 <script>
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import Snackbar from '@/components/Snackbar.vue';
 
 setInteractionMode('eager');
 
@@ -97,7 +91,15 @@ extend('regex', {
 
 extend('email', {
   ...email,
-  message: 'Email must be valid',
+  message: 'Email tem que ser válido',
+});
+
+extend('confirmEmail', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value === target;
+  },
+  message: 'Emails não são iguais',
 });
 
 export default {
@@ -106,27 +108,47 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    Snackbar,
   },
   data: () => ({
-    name: '',
-    phoneNumber: '',
     email: '',
-    select: null,
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    checkbox: null,
+    confirmEmail: '',
+    verification: false,
+    verificationCode: '',
   }),
-
+  computed: {
+    updateSuccess() {
+      return this.$store.getters['profile/updateSuccess'];
+    },
+    showSuccess() {
+      return !!this.$store.getters['profile/updateSuccess'];
+    },
+    updateError() {
+      return this.$store.getters['profile/updateError'];
+    },
+    showError() {
+      return !!this.$store.getters['profile/updateError'];
+    },
+  },
   methods: {
     submit() {
       this.$refs.observer.validate();
     },
     clear() {
-      this.name = '';
-      this.phoneNumber = '';
       this.email = '';
-      this.select = null;
-      this.checkbox = null;
+      this.confirmEmail = '';
       this.$refs.observer.reset();
+    },
+    async confirm() {
+      await this.$store.dispatch('profile/updateProfileEmail', {
+        email: this.email,
+      });
+    },
+    async updateUserPersonalInformation() {
+      await this.$store.dispatch('profile/confirmUpdateProfileEmail', {
+        verificationCode: this.verificationCode,
+      });
+      this.verification = !this.verification;
     },
   },
 };

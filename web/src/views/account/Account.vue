@@ -5,7 +5,6 @@
         <v-card class="d-flex flex-column mt-6">
           <v-btn to="/account/personal" tile>Informações Pessoais</v-btn>
           <v-btn to="/account/picture" tile>Foto</v-btn>
-          <v-btn to="/account/email" tile>Email</v-btn>
           <v-btn to="/account/password" tile>Senha</v-btn>
         </v-card>
       </v-col>

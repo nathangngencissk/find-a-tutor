@@ -65,10 +65,6 @@ const routes = [
         component: () => import('@/views/account/components/PersonalInformation.vue'),
       },
       {
-        path: 'email',
-        component: () => import('@/views/account/components/Email.vue'),
-      },
-      {
         path: 'password',
         component: () => import('@/views/account/components/Password.vue'),
       },

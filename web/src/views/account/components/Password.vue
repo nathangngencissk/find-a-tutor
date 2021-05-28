@@ -1,103 +1,86 @@
 <template>
   <v-container>
-    <v-subheader> Senha </v-subheader>
+    <v-subheader> Email </v-subheader>
     <v-sheet elevation="1">
       <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit" class="mx-4">
-            <validation-provider v-slot="{ errors }" name="Name" rules="required|max:10">
+            <validation-provider v-slot="{ errors }" name="oldPassword" rules="required">
               <v-text-field
-                v-model="name"
-                :counter="10"
+                v-model="oldPassword"
                 :error-messages="errors"
-                label="Name"
+                label="Senha atual"
                 required
+                :append-icon="showOld ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showOld ? 'text' : 'password'"
+                @click:append="showOld = !showOld"
+              ></v-text-field>
+            </validation-provider>
+            <validation-provider v-slot="{ errors }" name="newPassword" rules="required|min:8">
+              <v-text-field
+                v-model="newPassword"
+                :error-messages="errors"
+                label="Senha nova"
+                required
+                :append-icon="showNew ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showNew ? 'text' : 'password'"
+                @click:append="showNew = !showNew"
               ></v-text-field>
             </validation-provider>
             <validation-provider
               v-slot="{ errors }"
-              name="phoneNumber"
-              :rules="{
-                required: true,
-                digits: 7,
-                regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$',
-              }"
+              name="confirmNewPassword"
+              rules="required|min:8|confirmPassword:@newPassword"
             >
               <v-text-field
-                v-model="phoneNumber"
-                :counter="7"
+                v-model="confirmNewPassword"
                 :error-messages="errors"
-                label="Phone Number"
+                label="Confirme a senha nova"
                 required
+                :append-icon="showNewConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showNewConfirm ? 'text' : 'password'"
+                @click:append="showNewConfirm = !showNewConfirm"
               ></v-text-field>
             </validation-provider>
-            <validation-provider v-slot="{ errors }" name="email" rules="required|email">
-              <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="E-mail"
-                required
-              ></v-text-field>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" name="select" rules="required">
-              <v-select
-                v-model="select"
-                :items="items"
-                :error-messages="errors"
-                label="Select"
-                data-vv-name="select"
-                required
-              ></v-select>
-            </validation-provider>
-            <validation-provider v-slot="{ errors }" rules="required" name="checkbox">
-              <v-checkbox
-                v-model="checkbox"
-                :error-messages="errors"
-                value="1"
-                label="Option"
-                type="checkbox"
-                required
-              ></v-checkbox>
-            </validation-provider>
-
-            <v-btn class="mr-4" type="submit" :disabled="invalid"> submit </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
+            <v-btn color="success" class="mr-4" @click="updateUserPassword" :disabled="invalid">
+              Salvar
+            </v-btn>
+            <v-btn color="error" outlined @click="clear"> Limpar </v-btn>
           </form>
         </validation-observer>
       </v-container>
     </v-sheet>
+    <Snackbar :text="this.updateSuccess" timeout="5000" :show="this.showSuccess" />
+    <Snackbar :text="this.updateError" timeout="5000" :show="this.showError" />
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
 <script>
-import { required, digits, email, max, regex } from 'vee-validate/dist/rules';
+import { required, min } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import Snackbar from '@/components/Snackbar.vue';
 
 setInteractionMode('eager');
-
-extend('digits', {
-  ...digits,
-  message: '{_field_} needs to be {length} digits. ({_value_})',
-});
 
 extend('required', {
   ...required,
   message: '{_field_} can not be empty',
 });
 
-extend('max', {
-  ...max,
-  message: '{_field_} may not be greater than {length} characters',
+extend('min', {
+  ...min,
+  message: '{_field_} precisa ter no mínimo {length} caracteres',
 });
 
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
-});
-
-extend('email', {
-  ...email,
-  message: 'Email must be valid',
+extend('confirmPassword', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value === target;
+  },
+  message: 'Senhas não são iguais',
 });
 
 export default {
@@ -106,27 +89,49 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    Snackbar,
   },
   data: () => ({
-    name: '',
-    phoneNumber: '',
-    email: '',
-    select: null,
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    checkbox: null,
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+    showOld: false,
+    showNew: false,
+    showNewConfirm: false,
+    overlay: false,
   }),
-
+  computed: {
+    updateSuccess() {
+      return this.$store.getters['profile/updateSuccess'];
+    },
+    showSuccess() {
+      return !!this.$store.getters['profile/updateSuccess'];
+    },
+    updateError() {
+      return this.$store.getters['profile/updateError'];
+    },
+    showError() {
+      return !!this.$store.getters['profile/updateError'];
+    },
+  },
   methods: {
     submit() {
       this.$refs.observer.validate();
     },
     clear() {
-      this.name = '';
-      this.phoneNumber = '';
-      this.email = '';
-      this.select = null;
-      this.checkbox = null;
+      this.oldPassword = '';
+      this.newPassword = '';
+      this.confirmNewPassword = '';
       this.$refs.observer.reset();
+    },
+    async updateUserPassword() {
+      this.overlay = !this.overlay;
+      await this.$store.dispatch('profile/updateProfilePassword', {
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+      });
+      this.overlay = !this.overlay;
+      this.clear();
     },
   },
 };

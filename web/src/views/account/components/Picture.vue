@@ -1,32 +1,51 @@
 /* eslint-disable no-bitwise */ /* eslint-disable no-bitwise */ /* eslint-disable no-bitwise */ /*
 eslint-disable eqeqeq */ /* eslint-disable no-bitwise */
 <template>
-  <div>
-    <div size="120" class="user">
-      <v-img :src="image_name" class="profile-img"></v-img>
-      <v-icon class="icon primary white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
-      <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
-    </div>
-    <v-dialog v-model="dialog" width="500">
-      <v-card>
-        <v-card-text>
-          <VueCropper
-            v-show="selectedFile"
-            ref="cropper"
-            :src="selectedFile"
-            alt="Source Image"
-          ></VueCropper>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn class="primary" @click="saveImage(), (dialog = false)">Crop</v-btn>
-          <v-btn color="primary" text @click="dialog = false">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+  <v-container>
+    <v-subheader> Foto </v-subheader>
+    <v-sheet elevation="1" height="400">
+      <v-row justify="center" align="center">
+        <v-col cols="4">
+          <v-hover>
+            <template v-slot:default="{ hover }">
+              <v-avatar class="mt-10" width="300" height="300">
+                <img :src="profilePicture" alt="profilePicture" />
+                <v-fade-transition>
+                  <v-overlay v-if="hover" absolute color="#1976d2">
+                    <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
+                  </v-overlay>
+                </v-fade-transition>
+                <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
+              </v-avatar>
+            </template>
+          </v-hover>
+          <v-dialog v-model="dialog" width="500">
+            <v-card>
+              <v-card-text>
+                <VueCropper
+                  v-show="selectedFile"
+                  ref="cropper"
+                  :src="selectedFile"
+                  alt="Source Image"
+                ></VueCropper>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
+                <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
+      <v-overlay :value="overlayUpload">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VueCropper from 'vue-cropperjs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'cropperjs/dist/cropper.css';
@@ -44,7 +63,12 @@ export default {
       image: '',
       dialog: false,
       files: '',
+      overlay: false,
+      overlayUpload: false,
     };
+  },
+  computed: {
+    ...mapGetters('profile', ['profilePicture']),
   },
   methods: {
     uuidv4() {
@@ -54,6 +78,8 @@ export default {
       });
     },
     saveImage() {
+      this.overlayUpload = !this.overlayUpload;
+      console.log(this.overlayUpload);
       this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL();
       this.$refs.cropper.getCroppedCanvas().toBlob(async (blob) => {
         await this.$store.dispatch('profile/updateProfilePicture', {
@@ -61,11 +87,12 @@ export default {
           fileName: `${this.uuidv4()}.${this.mime_type.replace('image/', '')}`,
         });
       }, this.mime_type);
+      this.overlayUpload = !this.overlayUpload;
+      console.log(this.overlayUpload);
     },
     onFileSelect(e) {
       const file = e.target.files[0];
       this.mime_type = file.type;
-      console.log(this.mime_type);
       if (typeof FileReader === 'function') {
         this.dialog = true;
         const reader = new FileReader();
@@ -92,7 +119,7 @@ export default {
   width: 140px;
   height: 140px;
   border-radius: 100%;
-  border: 3px solid #2e7d32;
+  border: 3px solid #1976d2;
   position: relative;
 }
 .profile-img {
