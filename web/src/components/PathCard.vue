@@ -4,8 +4,6 @@
       <v-card-title>{{ pathName }}</v-card-title>
     </v-img>
 
-    <v-card-subtitle class="pb-0"> {{ pathCategory }} </v-card-subtitle>
-
     <v-card-text class="text--primary">
       <v-row align="center" class="mx-0 my-2">
         <v-rating

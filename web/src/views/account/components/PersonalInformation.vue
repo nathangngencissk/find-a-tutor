@@ -37,15 +37,19 @@
         </validation-observer>
       </v-container>
     </v-sheet>
-    <Snackbar :text="this.updateSuccess" timeout="5000" :show="this.showSuccess" />
-    <Snackbar :text="this.updateError" timeout="5000" :show="this.showError" />
+    <v-snackbar v-model="show" timeout="5000">
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="show = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import { required, digits, max } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
-import Snackbar from '@/components/Snackbar.vue';
 
 setInteractionMode('eager');
 
@@ -70,7 +74,6 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
-    Snackbar,
   },
   data: () => ({
     name: '',
@@ -88,6 +91,12 @@ export default {
     },
     showError() {
       return !!this.$store.getters['profile/updateError'];
+    },
+    text() {
+      return this.showSuccess ? this.updateSuccess : this.updateError;
+    },
+    show() {
+      return this.updateSuccess ? this.updateSuccess : this.updateError;
     },
   },
   methods: {
