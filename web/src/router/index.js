@@ -77,6 +77,11 @@ const routes = [
       middleware: auth,
     },
   },
+  {
+    path: '/course/:id',
+    name: 'Course',
+    component: () => import('@/views/course/Course.vue'),
+  },
 ];
 
 const router = new VueRouter({
