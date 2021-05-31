@@ -159,7 +159,7 @@ export default {
       { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
       { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/exercises' },
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
-      { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/courses' },
+      { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/notes' },
     ],
     search: '',
   }),

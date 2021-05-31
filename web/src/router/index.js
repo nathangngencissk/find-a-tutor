@@ -54,6 +54,9 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: () => import('@/views/cart/Cart.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/account',
@@ -86,16 +89,33 @@ const routes = [
     path: '/account/forgot',
     name: 'ForgotPassword',
     component: () => import('@/views/forgotPassword/ForgotPassword.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/exercises',
     name: 'Exercises',
     component: () => import('@/views/exercises/Exercises.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/exercise/:id',
     name: 'Exercise',
     component: () => import('@/views/exercise/Exercise.vue'),
+    meta: {
+      middleware: auth,
+    },
+  },
+  {
+    path: '/notes',
+    name: 'Notes',
+    component: () => import('@/views/notes/Notes.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
 ];
 
