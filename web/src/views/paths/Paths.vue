@@ -70,7 +70,7 @@
       </v-col>
     </v-row>
     <div class="text-center my-10">
-      <v-pagination v-model="page" :length="4" circle></v-pagination>
+      <v-pagination v-model="page" length="4" circle></v-pagination>
     </div>
   </v-container>
 </template>

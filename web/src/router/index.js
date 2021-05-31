@@ -87,6 +87,16 @@ const routes = [
     name: 'ForgotPassword',
     component: () => import('@/views/forgotPassword/ForgotPassword.vue'),
   },
+  {
+    path: '/exercises',
+    name: 'Exercises',
+    component: () => import('@/views/exercises/Exercises.vue'),
+  },
+  {
+    path: '/exercise/:id',
+    name: 'Exercise',
+    component: () => import('@/views/exercise/Exercise.vue'),
+  },
 ];
 
 const router = new VueRouter({

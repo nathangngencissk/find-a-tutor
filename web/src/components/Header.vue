@@ -40,7 +40,7 @@
               <span>Discussões</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain>
+            <v-btn color="primaryText" plain to="/exercises">
               <span>Exercícios</span>
             </v-btn>
           </v-row>
@@ -157,7 +157,7 @@ export default {
     items: [
       { title: 'Meus Cursos', icon: 'fas fa-book', url: '/courses' },
       { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
-      { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/courses' },
+      { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/exercises' },
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
       { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/courses' },
     ],
