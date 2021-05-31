@@ -13,6 +13,8 @@ const state = {
   signupError: '',
   confirm: false,
   confirmError: '',
+  forgotPasswordError: '',
+  forgotPasswordSubmit: false,
 };
 
 const getters = {
@@ -37,19 +39,31 @@ const getters = {
   confirmError(state) {
     return state.confirmError;
   },
+  forgotPasswordError(state) {
+    return state.forgotPasswordError;
+  },
+  forgotPasswordSubmit(state) {
+    return state.forgotPasswordSubmit;
+  },
 };
 
 const actions = {
   async login({ dispatch, state }, { email, password }) {
     state.loginError = '';
     try {
-      await Auth.signIn(email, password);
+      const user = await Auth.signIn(email, password);
+      if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        Auth.completeNewPassword(user, password, {
+          email,
+        });
+      }
     } catch (err) {
       console.log(`Login Error [${err}]`);
       if (err) state.loginError = err.message || err;
       return;
     }
     await dispatch('fetchUser');
+    await dispatch('profile/getProfilePicture', null, { root: true });
     router.push({ name: 'Home' }).catch((error) => {
       if (error.name !== 'NavigationDuplicated') {
         throw error;
@@ -119,6 +133,21 @@ const actions = {
       }
     });
   },
+  async forgotPassword({ commit }, { username }) {
+    Auth.forgotPassword(username).catch((err) => commit('setForgotPasswordError', err));
+    commit('setForgotPasswordSubmit', true);
+  },
+  async forgotPasswordSubmit({ commit }, { username, code, new_password }) {
+    Auth.forgotPasswordSubmit(username, code, new_password).catch((err) =>
+      commit('setForgotPasswordError', err)
+    );
+    commit('setForgotPasswordSubmit', false);
+    router.push({ name: 'Login' }).catch((error) => {
+      if (error.name !== 'NavigationDuplicated') {
+        throw error;
+      }
+    });
+  },
 };
 
 const mutations = {
@@ -128,6 +157,12 @@ const mutations = {
   },
   confirm(state, showConfirm) {
     state.confirm = !!showConfirm;
+  },
+  setForgotPasswordError(state, error) {
+    state.forgotPasswordError = error;
+  },
+  setForgotPasswordSubmit(state, submit) {
+    state.forgotPasswordSubmit = submit;
   },
 };
 

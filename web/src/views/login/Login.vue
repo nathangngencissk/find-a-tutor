@@ -15,29 +15,24 @@
               @click:append="show = !show"
             ></v-text-field>
           </v-form>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-center">
-              <v-btn :disabled="!valid" color="success" class="mr-4" @click="login"> Entrar </v-btn>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-center">
-              <v-btn color="primary" to="/register">Registrar</v-btn>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-center">
-              <v-btn class="blue--text" color="white" outlined depressed tex @click="loginGoogle"
+          <v-row justify="center" align="center">
+            <v-col cols="4" class="d-flex flex-column">
+              <v-btn :disabled="!valid" color="success" class="my-2" @click="login" block>
+                Entrar
+              </v-btn>
+              <v-btn color="primary" to="/register" class="my-2" block>Registrar</v-btn>
+              <v-btn class="blue--text my-2" color="white" depressed block @click="loginGoogle"
                 ><v-icon class="my-2 mr-2">fab fa-google</v-icon> Google</v-btn
               >
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-center">
-              <v-btn class="white--text" color="#4867aa" depressed @click="loginFacebook"
+              <v-btn class="white--text my-2" color="#4867aa" block depressed @click="loginFacebook"
                 ><v-icon class="my-2 mr-2">fab fa-facebook</v-icon> Facebook</v-btn
               >
             </v-col>
+          </v-row>
+          <v-row justify="center" align="center">
+            <v-btn depressed text class="mt-4 mx-auto" to="/account/forgot"
+              >Esqueci minha senha</v-btn
+            >
           </v-row>
         </v-sheet>
         <v-overlay :value="overlay">

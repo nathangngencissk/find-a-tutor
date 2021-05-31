@@ -47,7 +47,7 @@ import Snackbar from '@/components/Snackbar.vue';
 
 export default {
   name: 'Register',
-  title: 'Register | Find A Tutor',
+  title: 'Registrar | Find A Tutor',
   components: { Snackbar },
   data() {
     return {
