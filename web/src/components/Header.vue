@@ -156,9 +156,11 @@ export default {
   data: () => ({
     items: [
       { title: 'Meus Cursos', icon: 'fas fa-book', url: '/courses' },
-      { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
-      { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/exercises' },
+      { title: 'Minhas Turmas', icon: 'fas fa-users', url: '/classes' },
+      { title: 'Meus Grupos de estudo', icon: 'fas fa-user-friends', url: '/groups' },
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
+      { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/exercises' },
+      { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
       { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/notes' },
     ],
     search: '',

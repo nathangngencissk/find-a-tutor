@@ -52,7 +52,6 @@
           <v-text-field label="Título" :value="title"></v-text-field>
           <v-textarea outlined name="input-7-4" label="Anotação" :value="body"></v-textarea>
           <v-select :items="courses" label="Curso" dense outlined></v-select>
-          <v-checkbox v-model="publicNote" label="Público"></v-checkbox>
         </v-form>
         <v-btn class="white--text mr-4" color="success" @click="overlay = false"> Salvar </v-btn>
         <v-btn class="white--text" color="error" @click="overlay = false"> Fechar </v-btn>
@@ -70,7 +69,6 @@ export default {
     zIndex: 0,
     title: '',
     body: '',
-    publicNote: false,
     courseId: '',
     courses: ['Programação C#'],
     fixedNotes: [
@@ -78,14 +76,12 @@ export default {
         id: 1,
         title: 'Titulo Nota 1',
         body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam beatae amet nesciunt natus sit quaerat, odit vero ipsam rem quas delectus, quasi ea! Adipisci nobis hic ullam sapiente iure earum!',
-        publicNote: true,
         courseId: 4,
       },
       {
         id: 2,
         title: 'Titulo Nota 2',
         body: 'Corpo Nota 2',
-        publicNote: false,
         courseId: null,
       },
     ],
@@ -94,21 +90,18 @@ export default {
         id: 3,
         title: 'Titulo Nota 3',
         body: 'Corpo Nota 3',
-        publicNote: false,
         courseId: null,
       },
       {
         id: 4,
         title: 'Titulo Nota 4',
         body: 'Corpo Nota 4',
-        publicNote: false,
         courseId: null,
       },
       {
         id: 5,
         title: 'Titulo Nota 5',
         body: 'Corpo Nota 5',
-        publicNote: false,
         courseId: null,
       },
     ],
@@ -117,7 +110,6 @@ export default {
     edit(event, note) {
       this.title = note.title;
       this.body = note.body;
-      this.publicNote = note.publicNote;
       this.courseId = note.courseId;
       this.overlay = true;
     },

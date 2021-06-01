@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/home/Home.vue';
 import auth from '@/middleware/auth';
+import course from '@/middleware/course';
+import watch from '@/middleware/watch';
 
 Vue.use(VueRouter);
 
@@ -84,14 +86,14 @@ const routes = [
     path: '/course/:id',
     name: 'Course',
     component: () => import('@/views/course/Course.vue'),
+    meta: {
+      middleware: [watch],
+    },
   },
   {
     path: '/account/forgot',
     name: 'ForgotPassword',
     component: () => import('@/views/forgotPassword/ForgotPassword.vue'),
-    meta: {
-      middleware: auth,
-    },
   },
   {
     path: '/exercises',
@@ -115,6 +117,14 @@ const routes = [
     component: () => import('@/views/notes/Notes.vue'),
     meta: {
       middleware: auth,
+    },
+  },
+  {
+    path: '/watch/:id',
+    name: 'Watch',
+    component: () => import('@/views/watch/Watch.vue'),
+    meta: {
+      middleware: [auth, course],
     },
   },
 ];

@@ -5,7 +5,7 @@
         <h2 class="mb-6">{{ courseName }}</h2>
         <h3 class="mb-2">Descrição</h3>
         <v-sheet elevation="1" class="pa-6">
-          <vue-markdown>{{ courseDescription }}</vue-markdown>
+          <div v-html="compiledMarkdown"></div>
         </v-sheet>
         <h3 class="mt-4">Turmas disponíveis em breve</h3>
         <v-subheader> 20/07 </v-subheader>
@@ -241,17 +241,9 @@
 </template>
 
 <script>
-import VueMarkdown from '@adapttive/vue-markdown';
-
 export default {
   name: 'Course',
-
   title: 'Programação C# | Find a Tutor',
-
-  components: {
-    VueMarkdown,
-  },
-
   data: () => ({
     classes: [
       'Segunda-feira 5:30PM',
@@ -322,6 +314,9 @@ _This is italic text_
     },
     courseRatingFloat() {
       return parseFloat(this.courseRating);
+    },
+    compiledMarkdown() {
+      return this.$marked(this.courseDescription, { sanitize: true });
     },
   },
 
