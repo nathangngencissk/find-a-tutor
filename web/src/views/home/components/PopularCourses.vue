@@ -79,38 +79,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.v-slide-group__wrapper >>> .vuetify-class {
-  contain: none;
-  overflow: visible;
-}
-</style>
-
-<style lang="scss">
-.v-slide-group {
-  ::v-deep other-class {
-    contain: none;
-    overflow: visible;
-  }
-}
-
-.v-slide-group__wrapper {
-  ::v-deep other-class {
-    contain: none;
-    overflow: visible;
-  }
-}
-
-.v-slide-group__wrapper {
-  contain: none;
-  overflow: visible;
-}
-
-.vuetify-class {
-  ::v-deep other-class {
-    contain: none;
-    overflow: visible;
-  }
-}
-</style>

@@ -56,9 +56,21 @@
         <v-col cols="1" xl="1" lg="2" md="2" sm="6" xs="6" align-self="center">
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
-              <v-avatar v-bind="attrs" v-on="on" :class="{ 'Tutor-avatar': platformTutor }">
-                <img :src="profilePicture" alt="João" />
-              </v-avatar>
+              <v-badge
+                color="transparent"
+                icon="fas fa-chalkboard-teacher"
+                overlap
+                v-if="platformTutor"
+              >
+                <v-avatar v-bind="attrs" v-on="on">
+                  <img :src="profilePicture" alt="João" />
+                </v-avatar>
+              </v-badge>
+              <v-badge color="transparent" overlap v-else>
+                <v-avatar v-bind="attrs" v-on="on">
+                  <img :src="profilePicture" alt="João" />
+                </v-avatar>
+              </v-badge>
             </template>
             <v-list>
               <v-list-item two-line>

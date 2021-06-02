@@ -175,6 +175,28 @@ const routes = [
     meta: {
       middleware: [auth, tutor],
     },
+    children: [
+      {
+        name: 'DashboardMain',
+        path: '',
+        component: () => import('@/views/dashboard/components/Main.vue'),
+      },
+      {
+        name: 'DashboardClasses',
+        path: 'classes',
+        component: () => import('@/views/dashboard/components/Classes.vue'),
+      },
+      {
+        name: 'DashboardCourses',
+        path: 'courses',
+        component: () => import('@/views/dashboard/components/Courses.vue'),
+      },
+      {
+        name: 'DashboardExercises',
+        path: 'exercises',
+        component: () => import('@/views/dashboard/components/Exercises.vue'),
+      },
+    ],
   },
 ];
 

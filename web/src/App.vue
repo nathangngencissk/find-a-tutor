@@ -43,10 +43,13 @@ export default {
     const student = localStorage.getItem('student');
     if (student) {
       if (student === 'false') {
-        await this.$store.dispatch('common/changeToTeacher');
+        await this.$store.dispatch('common/changeToTutor');
+      } else {
+        await this.$store.dispatch('common/changeToStudent');
       }
     } else {
       localStorage.student = 'true';
+      await this.$store.dispatch('common/changeToStudent');
     }
   },
 };

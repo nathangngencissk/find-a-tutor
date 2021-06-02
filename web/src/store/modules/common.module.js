@@ -3,7 +3,7 @@
 const namespaced = true;
 
 const state = {
-  student: true,
+  student: null,
 };
 
 const getters = {
