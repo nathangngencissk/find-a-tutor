@@ -12,6 +12,7 @@
                     <li><b>Término:</b> {{ cl.end }}</li>
                     <li><b>Frequência:</b> {{ cronToDatetime(cl) }}</li>
                   </ul>
+                  <h3 class="mt-4 enrolled" v-if="enrolled == cl.id">MATRICULADO</h3>
                 </v-card-subtitle>
               </v-card>
             </v-item>
@@ -21,7 +22,9 @@
     </v-item-group>
     <v-bottom-sheet v-model="sheet">
       <v-sheet class="text-center" height="200px">
-        <v-btn class="mt-6" color="success" @click="sheet = !sheet"> confirmar </v-btn>
+        <v-btn class="mt-6" color="success" @click="confirmEnroll($event, enrolling)">
+          confirmar
+        </v-btn>
         <v-btn class="mt-6" text color="red" @click="sheet = !sheet"> fechar </v-btn>
         <div class="py-3">Deseja se matricular na turma {{ sheetText }}</div>
       </v-sheet>
@@ -36,6 +39,8 @@ export default {
   data: () => ({
     sheet: false,
     sheetText: '',
+    enrolled: null,
+    enrolling: null,
     classes: [
       {
         id: 1,
@@ -85,12 +90,17 @@ export default {
     enroll(event, cl) {
       this.sheetText = `${this.cronToDatetime(cl)} de ${cl.start} até ${cl.end}`;
       this.sheet = !this.sheet;
+      this.enrolling = cl;
+    },
+    confirmEnroll(event, cl) {
+      this.sheet = !this.sheet;
+      this.enrolled = cl.id;
     },
     cronToDatetime(cl) {
       const startDate = new Date(Date.parse(cl.start));
       const options = {
         currentDate: startDate,
-        endDate: this.addDays(startDate, 14),
+        endDate: this.addDays(startDate, 7),
         iterator: true,
       };
       const optionsFormatDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
@@ -118,3 +128,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.enrolled {
+  color: #4caf50;
+  transform: rotate(-5deg);
+  right: 2rem;
+  bottom: 2rem;
+  position: absolute;
+}
+</style>

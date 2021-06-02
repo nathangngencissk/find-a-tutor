@@ -37,9 +37,6 @@
                 <CourseClasses id="1" />
               </v-card>
             </v-tab-item>
-            <v-tab-item>
-              <v-card color="basil" flat min-height="200px"> </v-card>
-            </v-tab-item>
           </v-tabs-items>
         </v-row>
       </v-col>
@@ -85,10 +82,6 @@ export default {
       },
       {
         name: 'Turmas',
-        body: '',
-      },
-      {
-        name: 'Grupos de Estudo',
         body: '',
       },
     ],

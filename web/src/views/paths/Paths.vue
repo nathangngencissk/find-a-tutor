@@ -59,7 +59,7 @@
           <v-col cols="12" lg="4" md="12" v-for="n in 9" :key="n">
             <PathCard
               pathName="Programação C#"
-              pathImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+              pathImage="https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg"
               pathRating="4.5"
               pathReviews="413"
               pathDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"

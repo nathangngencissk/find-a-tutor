@@ -127,6 +127,14 @@ const routes = [
       middleware: [auth, course],
     },
   },
+  {
+    path: '/classes',
+    name: 'Classes',
+    component: () => import('@/views/classes/Classes.vue'),
+    meta: {
+      middleware: auth,
+    },
+  },
 ];
 
 const router = new VueRouter({
