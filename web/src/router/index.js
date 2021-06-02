@@ -135,6 +135,38 @@ const routes = [
       middleware: auth,
     },
   },
+  {
+    path: '/class/:id',
+    name: 'Class',
+    component: () => import('@/views/class/Class.vue'),
+    children: [
+      {
+        name: 'ClassLecture',
+        path: 'lecture',
+        component: () => import('@/views/class/components/Lecture.vue'),
+      },
+      {
+        name: 'ClassCalendar',
+        path: 'calendar',
+        component: () => import('@/views/class/components/Calendar.vue'),
+      },
+      {
+        name: 'ClassPosts',
+        path: 'posts',
+        component: () => import('@/views/class/components/Posts.vue'),
+        children: [
+          {
+            name: 'ClassPost',
+            path: ':postId',
+            component: () => import('@/views/class/components/Post.vue'),
+          },
+        ],
+      },
+    ],
+    meta: {
+      middleware: auth,
+    },
+  },
 ];
 
 const router = new VueRouter({

@@ -14,7 +14,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" text to="/class/1"> Ver Turma </v-btn>
+      <v-btn color="primary" text to="/class/1/lecture"> Ver Turma </v-btn>
     </v-card-actions>
   </v-card>
 </template>

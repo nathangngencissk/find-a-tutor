@@ -21,6 +21,36 @@
         <CourseClassCard :courseClass="cl" />
       </v-col>
     </v-row>
+    <v-subheader> Histórico </v-subheader>
+    <v-expansion-panels popout>
+      <v-expansion-panel v-for="(item, i) in 5" :key="i">
+        <v-expansion-panel-header>
+          Turma {{ i }}
+          <div class="text-center">
+            <v-chip color="success" class="mr-2" label v-if="i < 4"
+              ><v-icon left> far fa-calendar-check </v-icon> Concluido
+            </v-chip>
+            <v-chip color="error" class="mr-2" label v-else
+              ><v-icon left> far fa-calendar-times </v-icon> Abandonada
+            </v-chip>
+            <v-chip color="success" label v-if="i == 0"> 11/11/2020 - 12/02/2021 </v-chip>
+            <v-chip color="success" label v-if="i == 1"> 10/01-2021 - 07/04/2021 </v-chip>
+            <v-chip color="success" label v-if="i == 2"> 20/04/2021 - 22/06/2021 </v-chip>
+            <v-chip color="success" label v-if="i == 3"> 23/01/2021 - 23/06/2021 </v-chip>
+            <v-chip color="error" label v-if="i == 4"> 24/02/2021 - 12/03/2021 </v-chip>
+          </div></v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-subheader> Curso </v-subheader>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+          <v-btn color="primary" depressed text v-if="i != 4">Ver Turma</v-btn>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-container>
 </template>
 
