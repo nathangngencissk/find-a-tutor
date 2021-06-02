@@ -19,6 +19,9 @@
                   <v-list-item-title>{{ post.title }}</v-list-item-title>
                   <v-list-item-subtitle>{{ post.subtitle }}</v-list-item-subtitle>
                 </v-list-item-content>
+                <v-list-item-action>
+                  <v-list-item-action-text v-text="post.action"></v-list-item-action-text>
+                </v-list-item-action>
               </template>
             </v-list-item>
           </v-list-item-group>
@@ -43,35 +46,35 @@ export default {
         id: 1,
         action: '15 min',
         headline: 'Brunch this weekend?',
-        subtitle: `Subtitulo 1`,
+        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
         title: 'Titulo 1',
       },
       {
         id: 2,
         action: '2 hr',
         headline: 'Summer BBQ',
-        subtitle: `Subtitulo 2`,
+        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
         title: 'Titulo 2',
       },
       {
         id: 3,
         action: '6 hr',
         headline: 'Oui oui',
-        subtitle: `Subtitulo 3`,
+        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
         title: 'Titulo 3',
       },
       {
         id: 4,
         action: '12 hr',
         headline: 'Birthday gift',
-        subtitle: `Subtitulo 4`,
+        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
         title: 'Titulo 4',
       },
       {
         id: 5,
         action: '18hr',
         headline: 'Recipe to try',
-        subtitle: `Subtitulo 5`,
+        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
         title: 'Titulo 5',
       },
     ],

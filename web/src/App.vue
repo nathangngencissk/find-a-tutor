@@ -31,7 +31,7 @@ export default {
       await this.$store.dispatch('auth/logout');
     },
   },
-  mounted() {
+  async mounted() {
     const theme = localStorage.getItem('dark_theme');
     if (theme) {
       if (theme === 'true') {
@@ -39,6 +39,14 @@ export default {
       } else {
         this.$vuetify.theme.dark = false;
       }
+    }
+    const student = localStorage.getItem('student');
+    if (student) {
+      if (student === 'false') {
+        await this.$store.dispatch('common/changeToTeacher');
+      }
+    } else {
+      localStorage.student = 'true';
     }
   },
 };

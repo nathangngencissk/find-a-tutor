@@ -53,7 +53,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="primary" text @click="reserve"> Ver Curso </v-btn>
+          <v-btn color="primary" text @click="reserve" to="/course/1"> Ver Curso </v-btn>
         </v-card-actions>
       </v-card>
     </v-slide-item>

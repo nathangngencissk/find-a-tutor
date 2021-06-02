@@ -4,6 +4,7 @@ import Home from '@/views/home/Home.vue';
 import auth from '@/middleware/auth';
 import course from '@/middleware/course';
 import watch from '@/middleware/watch';
+import tutor from '@/middleware/tutor';
 
 Vue.use(VueRouter);
 
@@ -165,6 +166,14 @@ const routes = [
     ],
     meta: {
       middleware: auth,
+    },
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/dashboard/Dashboard.vue'),
+    meta: {
+      middleware: [auth, tutor],
     },
   },
 ];

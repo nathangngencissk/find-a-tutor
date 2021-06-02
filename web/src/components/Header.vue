@@ -32,7 +32,11 @@
 
         <v-col cols="3" xl="3" class="d-none d-xl-flex">
           <v-row align="center" justify="space-around">
-            <v-btn color="primaryText" plain to="/courses">
+            <v-btn color="primaryText" plain to="/dashboard" v-if="platformTutor">
+              <span>Painel</span>
+            </v-btn>
+
+            <v-btn color="primaryText" plain to="/courses" v-else>
               <span>Meus Cursos</span>
             </v-btn>
 
@@ -40,7 +44,11 @@
               <span>Discussões</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain to="/exercises">
+            <v-btn color="primaryText" plain to="/notes" v-if="platformTutor">
+              <span>Minhas Anotações</span>
+            </v-btn>
+
+            <v-btn color="primaryText" plain to="/exercises" v-else>
               <span>Exercícios</span>
             </v-btn>
           </v-row>
@@ -48,7 +56,7 @@
         <v-col cols="1" xl="1" lg="2" md="2" sm="6" xs="6" align-self="center">
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
-              <v-avatar v-bind="attrs" v-on="on">
+              <v-avatar v-bind="attrs" v-on="on" :class="{ 'Tutor-avatar': platformTutor }">
                 <img :src="profilePicture" alt="João" />
               </v-avatar>
             </template>
@@ -62,11 +70,22 @@
                   <v-list-item-title
                     >{{ currentUserName }} {{ currentUserFamilyName }}</v-list-item-title
                   >
-                  <v-list-item-subtitle>Estudante</v-list-item-subtitle>
+                  <v-list-item-subtitle v-if="platformTutor">Tutor</v-list-item-subtitle>
+                  <v-list-item-subtitle v-else>Estudante</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
               <v-list dense>
+                <v-list-item v-if="platformTutor">
+                  <v-list-item-icon>
+                    <v-icon>fas fa-pencil-ruler</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-btn depressed small to="/dashboard">Painel</v-btn>
+                  </v-list-item-content>
+                </v-list-item>
+
                 <v-list-item>
                   <v-list-item-icon>
                     <v-badge
@@ -118,13 +137,22 @@
                     <v-btn depressed small to="/account/personal">Minha Conta</v-btn>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="platformTutor">
+                  <v-list-item-icon>
+                    <v-icon>fas fa-graduation-cap</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-btn depressed small @click="changeToStudent">Estudar</v-btn>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item v-else>
                   <v-list-item-icon>
                     <v-icon>fas fa-chalkboard-teacher</v-icon>
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small @click="showUserInfo">Ensinar</v-btn>
+                    <v-btn depressed small @click="changeToTutor">Ensinar</v-btn>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -144,6 +172,13 @@
           <v-btn rounded color="primary" dark v-else @click="pushLogin">Entrar</v-btn>
         </v-col>
       </v-row>
+      <v-snackbar v-model="snackbar" timeout="2000">
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
+        </template>
+      </v-snackbar>
     </v-container>
   </v-app-bar>
 </template>
@@ -154,6 +189,7 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'Header',
   data: () => ({
+    snackbar: false,
     items: [
       { title: 'Meus Cursos', icon: 'fas fa-book', url: '/courses' },
       { title: 'Minhas Turmas', icon: 'fas fa-users', url: '/classes' },
@@ -167,6 +203,7 @@ export default {
   computed: {
     ...mapGetters('auth', ['currentUser', 'isAuthenticated']),
     ...mapGetters('profile', ['profilePicture']),
+    ...mapGetters('common', ['student']),
     ...mapGetters('shopping', ['shoppingCartItemsNumber']),
     darkModeOn() {
       return this.$vuetify.theme.dark;
@@ -185,6 +222,12 @@ export default {
         return 'ga';
       }
       return 'custom';
+    },
+    platformTutor() {
+      return !this.student;
+    },
+    text() {
+      return `Plataforma alterada para ${this.platformTutor ? 'Tutor' : 'Estudante'}`;
     },
   },
   methods: {
@@ -209,8 +252,13 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString());
     },
-    showUserInfo() {
-      console.log(this.currentUser);
+    changeToTutor() {
+      this.$store.dispatch('common/changeToTutor');
+      this.snackbar = true;
+    },
+    changeToStudent() {
+      this.$store.dispatch('common/changeToStudent');
+      this.snackbar = true;
     },
     pushSearch() {
       this.$router.push({ path: '/search', query: { search: this.search } });
@@ -241,5 +289,9 @@ export default {
 #dark_mode_toggler {
   overflow: visible;
   margin-right: 24px;
+}
+
+.Tutor-avatar {
+  border: 3px solid #1e88e5;
 }
 </style>
