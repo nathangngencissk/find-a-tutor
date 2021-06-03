@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:find_a_tutor/src/utils/auth_credentials.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -32,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
               alignment: Alignment.bottomCenter,
               child: FlatButton(
                   onPressed: widget.shouldShowLogin,
-                  child: Text('Already have an account? Login.')),
+                  child: Text('Ja possui conta? Faça o login.')),
             )
           ])),
     );
@@ -45,22 +44,22 @@ class _SignUpPageState extends State<SignUpPage> {
         // Username TextField
         TextField(
           controller: _usernameController,
-          decoration:
-              InputDecoration(icon: Icon(Icons.person), labelText: 'Username'),
+          decoration: InputDecoration(
+              icon: Icon(Icons.person), labelText: 'Nome de usuário'),
         ),
 
         // Email TextField
         TextField(
           controller: _emailController,
           decoration:
-              InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
+              InputDecoration(icon: Icon(Icons.mail), labelText: 'E-mail'),
         ),
 
         // Password TextField
         TextField(
           controller: _passwordController,
-          decoration: InputDecoration(
-              icon: Icon(Icons.lock_open), labelText: 'Password'),
+          decoration:
+              InputDecoration(icon: Icon(Icons.lock_open), labelText: 'Senha'),
           obscureText: true,
           keyboardType: TextInputType.visiblePassword,
         ),
@@ -68,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
         // Sign Up Button
         FlatButton(
             onPressed: _signUp,
-            child: Text('Sign Up'),
+            child: Text('Cadastre-se'),
             color: Theme.of(context).accentColor)
       ],
     );

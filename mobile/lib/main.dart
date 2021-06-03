@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-
 import 'package:find_a_tutor/src/utils/amplifyconfiguration.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:find_a_tutor/src/ui/shared/navigation_home_screen.dart';
-import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
+// import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
@@ -25,12 +23,13 @@ class MyApp extends StatefulWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: NavigationHomeScreen(),
-      initialRoute: '/',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/first': (context) => NavigationHomeScreen(),
-      },
+      // home: MyBottomNavigatonBar(),
+      // home: NavigationHomeScreen(),
+      // initialRoute: '/',
+      // routes: {
+      //   // When navigating to the "/" route, build the FirstScreen widget.
+      //   '/first': (context) => NavigationHomeScreen(),
+      // },
     );
   }
 }
@@ -104,3 +103,40 @@ class _MyAppState extends State<MyApp> {
     }
   }
 }
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+}
+
+// class MyBottomNavigatonBar extends StatefulWidget {
+//   @override
+//   _MyBottomNavigatonBarState createState() => _MyBottomNavigatonBarState();
+// }
+
+// class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//       bottomNavigationBar: BottomNavigationBar(
+//         items: [
+//           BottomNavigationBarItem(
+//               icon: new Icon(Icons.home), title: new Text('Home')),
+//           BottomNavigationBarItem(
+//               icon: new Icon(Icons.search), title: new Text('Pesquisar')),
+//           BottomNavigationBarItem(
+//               icon: new Icon(Icons.bookmark), title: new Text('Meus Cursos')),
+//           BottomNavigationBarItem(
+//               icon: new Icon(Icons.person), title: new Text('Perfil')),
+//         ],
+//       ),
+//     );
+//   }
+// }

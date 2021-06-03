@@ -3,7 +3,7 @@ import 'package:find_a_tutor/src/ui/shared/custom_drawer/drawer_user_controller.
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/home_drawer.dart';
 import 'package:find_a_tutor/src/ui/views/feedback/feedback_screen.dart';
 import 'package:find_a_tutor/src/ui/views/help/help_screen.dart';
-import 'package:find_a_tutor/src/ui/views/home/home_page.dart';
+import 'package:find_a_tutor/src/ui/views/home/homePageController.dart';
 import 'package:find_a_tutor/src/ui/views/invite_friend/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -42,10 +42,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             drawerWidth: MediaQuery.of(context).size.width * 0.75,
             onDrawerCall: (DrawerIndex drawerIndexdata) {
               changeIndex(drawerIndexdata);
-              //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
             },
             screenView: screenView,
-            //we replace screen view as we need on navigate starting screens like HomePage, HelpScreen, FeedbackScreen, etc...
           ),
         ),
       ),
@@ -71,8 +69,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         setState(() {
           screenView = InviteFriend();
         });
-      } else {
-        //do in your way......
       }
     }
   }
