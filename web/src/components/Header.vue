@@ -40,8 +40,8 @@
               <span>Meus Cursos</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain>
-              <span>Discussões</span>
+            <v-btn color="primaryText" plain to="/foruns">
+              <span>Fóruns</span>
             </v-btn>
 
             <v-btn color="primaryText" plain to="/notes" v-if="platformTutor">
@@ -208,7 +208,7 @@ export default {
       { title: 'Minhas Turmas', icon: 'fas fa-users', url: '/classes' },
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
       { title: 'Exercícios', icon: 'fas fa-dumbbell', url: '/exercises' },
-      { title: 'Discussões', icon: 'fas fa-comments', url: '/courses' },
+      { title: 'Fóruns', icon: 'fas fa-comments', url: '/foruns' },
       { title: 'Minhas Anotações', icon: 'fas fa-book-open', url: '/notes' },
     ],
     search: '',

@@ -30,6 +30,24 @@ const routes = [
     component: () => import('@/views/contact/Contact.vue'),
   },
   {
+    path: '/categories',
+    name: 'Categories',
+    component: () => import('@/views/categories/Categories.vue'),
+  },
+  {
+    path: '/foruns',
+    name: 'Foruns',
+    component: () => import('@/views/foruns/Foruns.vue'),
+  },
+  {
+    path: '/foruns/thread',
+    name: 'Thread',
+    component: () => import('@/views/foruns/components/Thread.vue'),
+    meta: {
+      middleware: auth,
+    },
+  },
+  {
     path: '/register',
     name: 'Register',
     component: () => import('@/views/register/Register.vue'),

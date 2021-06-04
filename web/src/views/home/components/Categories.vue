@@ -8,7 +8,7 @@
       </v-chip-group>
     </v-col>
     <v-col cols="2" xl="2" lg="2" md="4" sm="6">
-      <v-btn text color="primary"> Ver Todas </v-btn>
+      <v-btn text color="primary" to="/categories"> Ver Todas </v-btn>
     </v-col>
   </v-row>
 </template>
