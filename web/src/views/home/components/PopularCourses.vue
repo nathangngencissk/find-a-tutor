@@ -1,72 +1,86 @@
 <template>
   <v-slide-group v-model="model" class="pa-4" active-class="success" show-arrows>
-    <v-slide-item v-for="n in 6" :key="n">
-      <v-card :loading="loading" class="mx-auto mr-4 mb-2" max-width="400">
-        <template slot="progress">
-          <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
-        </template>
-
-        <v-img height="250" src="@/assets/interFace4.png"></v-img>
-
-        <v-card-title>Nome do Curso</v-card-title>
-
-        <v-card-text>
-          <v-row align="center" class="mx-0">
-            <v-rating
-              :value="4.5"
-              color="amber"
-              dense
-              half-increments
-              readonly
-              size="14"
-            ></v-rating>
-
-            <div class="grey--text ml-4">4.5 (413)</div>
-          </v-row>
-
-          <div class="mt-4 mb-2 subtitle-1">R$150</div>
-          <div class="mb-2">
-            <v-img max-height="20" max-width="20" src="@/assets/flags/pt-br.png"></v-img>
-          </div>
-
-          <div>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut
-            pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ipsa
-            veritatis repudiandae eaque, eum fuga facere rerum.
-          </div>
-        </v-card-text>
-
-        <v-divider class="mx-4"></v-divider>
-
-        <v-card-title>Turmas disponíveis em breve</v-card-title>
-
-        <v-card-text>
-          <v-chip-group column>
-            <v-chip>Segunda-feira 5:30PM</v-chip>
-
-            <v-chip>Segunda-feira 7:30PM</v-chip>
-
-            <v-chip>Quinta-feira 8:00PM</v-chip>
-
-            <v-chip>Domingo 9:00PM</v-chip>
-          </v-chip-group>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn color="primary" @click="reserve" to="/course/1"> Ver Curso </v-btn>
-        </v-card-actions>
-      </v-card>
+    <v-slide-item v-for="course in courses" :key="course.id">
+      <PopularCourseCard
+        :id="course.id"
+        :name="course.name"
+        :description="course.description"
+        :value="course.value"
+        :rating="course.rating"
+        :reviews="course.reviews"
+        :image="course.image"
+        :loading="loading"
+      />
     </v-slide-item>
   </v-slide-group>
 </template>
 
 <script>
+import PopularCourseCard from '@/views/home/components/PopularCourseCard.vue';
+
 export default {
   name: 'PopularCourses',
-
+  components: { PopularCourseCard },
   data: () => ({
     loading: false,
     model: null,
+    courses: [
+      {
+        id: 2,
+        name: 'Programação C#',
+        description:
+          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
+        value: '150',
+        rating: 4.5,
+        reviews: 413,
+        image:
+          'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      },
+      {
+        id: 2,
+        name: 'Programação Básica',
+        description:
+          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
+        value: '120',
+        rating: 4.6,
+        reviews: 22,
+        image:
+          'https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
+      },
+      {
+        id: 2,
+        name: 'Redes de computadores',
+        description:
+          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
+        value: '200',
+        rating: 4.8,
+        reviews: 111,
+        image:
+          'https://images.unsplash.com/photo-1597733336794-12d05021d510?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80',
+      },
+      {
+        id: 2,
+        name: 'Matemática financeira',
+        description:
+          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
+        value: '180',
+        rating: 4.4,
+        reviews: 98,
+        image:
+          'https://images.unsplash.com/photo-1511377107391-116a9d5d20b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      },
+      {
+        id: 2,
+        name: 'Arduino do básico ao avançado',
+        description:
+          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
+        value: '250',
+        rating: 4.9,
+        reviews: 42,
+        image:
+          'https://images.unsplash.com/photo-1557855506-3619a44bab73?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80',
+      },
+    ],
   }),
 
   methods: {
