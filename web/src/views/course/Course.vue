@@ -209,7 +209,7 @@
           <v-card-text class="text--primary">
             <h1>R${{ courseCost }},00</h1>
             <div class="my-6">
-              <v-btn x-large color="success" block> Adicionar ao Carrinho </v-btn>
+              <v-btn x-large color="success" block to="/cart"> Adicionar ao Carrinho </v-btn>
             </div>
             <v-row align="center" class="mx-0 my-2">
               <v-rating

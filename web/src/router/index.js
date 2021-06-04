@@ -20,6 +20,16 @@ const routes = [
     component: () => import('@/views/about/About.vue'),
   },
   {
+    path: '/team',
+    name: 'Team',
+    component: () => import('@/views/team/Team.vue'),
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: () => import('@/views/contact/Contact.vue'),
+  },
+  {
     path: '/register',
     name: 'Register',
     component: () => import('@/views/register/Register.vue'),
@@ -207,9 +217,9 @@ const routes = [
         component: () => import('@/views/dashboard/components/Exercises.vue'),
       },
       {
-        name: 'DashboardExercise',
-        path: ':exerciseId',
-        component: () => import('@/views/dashboard/components/Exercise.vue'),
+        name: 'DashboardEditExercise',
+        path: 'exercises/edit',
+        component: () => import('@/views/dashboard/components/EditExercise.vue'),
       },
     ],
   },
