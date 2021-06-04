@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Amplify from 'aws-amplify';
 import './plugins/base';
 import './plugins/chartist';
+import './plugins/lodash';
 import marked from 'marked';
 import parser from 'cron-parser';
 import VuePlyr from 'vue-plyr';

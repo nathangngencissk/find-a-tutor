@@ -187,14 +187,29 @@ const routes = [
         component: () => import('@/views/dashboard/components/Classes.vue'),
       },
       {
+        name: 'DashboardEditClass',
+        path: 'classes/edit',
+        component: () => import('@/views/dashboard/components/EditClass.vue'),
+      },
+      {
         name: 'DashboardCourses',
         path: 'courses',
         component: () => import('@/views/dashboard/components/Courses.vue'),
       },
       {
+        name: 'DashboardEditCourse',
+        path: 'courses/edit',
+        component: () => import('@/views/dashboard/components/EditCourse.vue'),
+      },
+      {
         name: 'DashboardExercises',
         path: 'exercises',
         component: () => import('@/views/dashboard/components/Exercises.vue'),
+      },
+      {
+        name: 'DashboardExercise',
+        path: ':exerciseId',
+        component: () => import('@/views/dashboard/components/Exercise.vue'),
       },
     ],
   },

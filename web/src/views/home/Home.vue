@@ -2,12 +2,12 @@
   <v-container id="main-container">
     <Slider />
     <Categories />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Cursos Populares</v-subheader>
+    <v-subheader class="mt-4 mb-2 section-title">Cursos Populares</v-subheader>
     <PopularCourses />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Categorias Principais</v-subheader>
+    <v-subheader class="mt-4 mb-2 section-title">Categorias Principais</v-subheader>
     <MainCategories />
     <Discussions />
-    <v-subheader color="blue darken-1" class="mt-4 mb-2">Outros estão estudando agora</v-subheader>
+    <v-subheader class="mt-4 mb-2 section-title">Outros estão estudando agora</v-subheader>
     <StudyingNow />
   </v-container>
 </template>
@@ -46,5 +46,12 @@ export default {
 
 #main-container {
   padding-top: 0;
+}
+
+.section-title {
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #3c3b37;
+  font-family: 'Roboto';
 }
 </style>

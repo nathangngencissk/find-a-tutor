@@ -14,6 +14,7 @@ module.exports = {
     'prettier/prettier': ['error'],
     'import/no-unresolved': ['off'],
     'import/extensions': ['off'],
+    'vue/no-unused-vars': ['off'],
   },
   settings: {
     'import/resolver': {

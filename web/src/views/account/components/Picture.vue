@@ -1,5 +1,3 @@
-/* eslint-disable no-bitwise */ /* eslint-disable no-bitwise */ /* eslint-disable no-bitwise */ /*
-eslint-disable eqeqeq */ /* eslint-disable no-bitwise */
 <template>
   <v-container>
     <v-subheader> Foto </v-subheader>

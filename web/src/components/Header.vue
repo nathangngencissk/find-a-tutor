@@ -57,9 +57,10 @@
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
               <v-badge
-                color="transparent"
+                color="primary"
                 icon="fas fa-chalkboard-teacher"
                 overlap
+                bordered
                 v-if="platformTutor"
               >
                 <v-avatar v-bind="attrs" v-on="on">

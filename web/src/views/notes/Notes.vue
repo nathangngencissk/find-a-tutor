@@ -46,7 +46,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-overlay :z-index="zIndex" :value="overlay">
+    <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
           <v-text-field label="Título" :value="title"></v-text-field>

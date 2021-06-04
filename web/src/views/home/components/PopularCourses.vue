@@ -1,7 +1,7 @@
 <template>
   <v-slide-group v-model="model" class="pa-4" active-class="success" show-arrows>
     <v-slide-item v-for="n in 6" :key="n">
-      <v-card :loading="loading" class="mx-auto mr-4" max-width="400">
+      <v-card :loading="loading" class="mx-auto mr-4 mb-2" max-width="400">
         <template slot="progress">
           <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
         </template>
@@ -53,7 +53,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="primary" text @click="reserve" to="/course/1"> Ver Curso </v-btn>
+          <v-btn color="primary" @click="reserve" to="/course/1"> Ver Curso </v-btn>
         </v-card-actions>
       </v-card>
     </v-slide-item>

@@ -16,7 +16,7 @@
           </v-sheet>
         </v-row>
         <v-row>
-          <v-tabs v-model="tab" background-color="theme--color" color="primary" fixed-tabs dark>
+          <v-tabs v-model="tab" color="primary" fixed-tabs :dark="$vuetify.theme.dark">
             <v-tab v-for="item in items" :key="item.name">
               {{ item.name }}
             </v-tab>
