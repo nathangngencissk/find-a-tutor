@@ -239,6 +239,16 @@ const routes = [
         path: 'exercises/edit',
         component: () => import('@/views/dashboard/components/EditExercise.vue'),
       },
+      {
+        name: 'DashboardPaths',
+        path: 'paths',
+        component: () => import('@/views/dashboard/components/Paths.vue'),
+      },
+      {
+        name: 'DashboardEditPath',
+        path: 'paths/edit',
+        component: () => import('@/views/dashboard/components/EditPath.vue'),
+      },
     ],
   },
 ];

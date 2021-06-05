@@ -108,6 +108,14 @@
           ></v-text-field>
         </div>
       </v-col>
+      <v-btn class="mr-4" color="success" @click="snackbar = true"> Salvar </v-btn>
+      <v-snackbar v-model="snackbar">
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
@@ -147,6 +155,8 @@ export default {
     name: '',
     description: '',
     video: '',
+    text: 'Salvo com sucesso!',
+    snackbar: false,
     lectures: [
       {
         id: 1,

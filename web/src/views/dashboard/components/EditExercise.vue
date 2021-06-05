@@ -59,6 +59,14 @@
           </transition-group>
         </draggable>
       </v-list>
+      <v-btn class="mr-4 mt-4" color="success" @click="snackbar = true"> Salvar </v-btn>
+      <v-snackbar v-model="snackbar">
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
@@ -109,6 +117,8 @@ export default {
     options: [],
     selectedOptions: [],
     rightOptions: [],
+    text: 'Salvo com sucesso',
+    snackbar: false,
   }),
   computed: {
     exerciseList() {
@@ -245,7 +255,6 @@ textarea {
 
 .question {
   border: 1px black solid;
-  color: #3c3b37;
   font-weight: 300;
   line-height: 1.4;
   font-size: 1.1rem;
