@@ -51,16 +51,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
         labelName: 'Convide um amigo',
         icon: Icon(Icons.group),
       ),
-      DrawerList(
-        index: DrawerIndex.Share,
-        labelName: 'Avalie o aplicativo',
-        icon: Icon(Icons.share),
-      ),
-      DrawerList(
-        index: DrawerIndex.About,
-        labelName: 'Sobre nós',
-        icon: Icon(Icons.info),
-      ),
     ];
   }
 

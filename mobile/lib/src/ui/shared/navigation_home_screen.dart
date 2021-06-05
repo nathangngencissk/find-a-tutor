@@ -22,7 +22,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   @override
   void initState() {
-    drawerIndex = DrawerIndex.HOME;
+    drawerIndex = DrawerIndex.Help;
     screenView = HomePage();
     super.initState();
   }
@@ -53,13 +53,13 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   void changeIndex(DrawerIndex drawerIndexdata) {
     if (drawerIndex != drawerIndexdata) {
       drawerIndex = drawerIndexdata;
-      if (drawerIndex == DrawerIndex.HOME) {
-        setState(() {
-          screenView = HomePage();
-        });
-      } else if (drawerIndex == DrawerIndex.Help) {
+      if (drawerIndex == DrawerIndex.Help) {
         setState(() {
           screenView = HelpScreen();
+        });
+      } else if (drawerIndex == DrawerIndex.HOME) {
+        setState(() {
+          screenView = HomePage();
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {
         setState(() {

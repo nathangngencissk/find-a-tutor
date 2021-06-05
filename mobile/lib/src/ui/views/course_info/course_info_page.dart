@@ -294,13 +294,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                   child: InkWell(
                     borderRadius:
                         BorderRadius.circular(AppBar().preferredSize.height),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: AppTheme.nearlyBlack,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    // child: Icon(
+                    //   Icons.arrow_back_ios,
+                    //   color: AppTheme.nearlyBlack,
+                    // ),
+                    // onTap: () {
+                    //   Navigator.pop(context);
+                    // },
                   ),
                 ),
               ),

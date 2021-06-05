@@ -114,8 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget getCategoryUI() {
     return Column(
-      // mainAxisAlignment: MainAxisAlignment.center,
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 40, left: 18, right: 16),
@@ -180,8 +178,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Padding(
       padding: const EdgeInsets.only(top: 8, left: 85),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             width: 300,
@@ -249,38 +245,87 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget carouselUi() {
-    return Column(children: <Widget>[
-      CarouselSlider(
-        items: <Widget>[
-          Container(
-            width: 325,
-            height: 125,
-            color: Colors.blue,
-          ),
-          Container(
-            width: 325,
-            height: 125,
-            color: Colors.grey,
-          ),
-          Container(
-            width: 325,
-            height: 125,
-            color: Colors.green,
-            // decoration: BoxDecoration(
-            //   image: DecorationImage(
-            //     image: AssetImage('assets/images/livro_1.png'),
-            //   ),
-            // )
-          ),
-          Container(
-            width: 325,
-            height: 125,
-            color: Colors.red,
-          ),
+    return Container(
+      height: 275,
+      padding: EdgeInsets.only(top: 20, bottom: 20),
+      child: Column(
+        children: <Widget>[
+          CarouselSlider(
+            items: <Widget>[
+              Expanded(
+                child: Container(
+                  width: 320,
+                  margin: EdgeInsets.only(top: 20, bottom: 30),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/python.jpg"),
+                          fit: BoxFit.cover),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black87,
+                            blurRadius: 15,
+                            offset: Offset(10, 10))
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  width: 320,
+                  margin: EdgeInsets.only(top: 20, bottom: 30),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/gambit.jpg"),
+                          fit: BoxFit.cover),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black87,
+                            blurRadius: 15,
+                            offset: Offset(10, 10))
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  width: 320,
+                  margin: EdgeInsets.only(top: 20, bottom: 30),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/powerbi.png"),
+                          fit: BoxFit.cover),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black87,
+                            blurRadius: 15,
+                            offset: Offset(10, 10))
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  width: 320,
+                  margin: EdgeInsets.only(top: 20, bottom: 30),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/sql.jpg"),
+                          fit: BoxFit.cover),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black87,
+                            blurRadius: 15,
+                            offset: Offset(10, 10))
+                      ]),
+                ),
+              ),
+            ],
+            options: CarouselOptions(autoPlay: true),
+          )
         ],
-        options: CarouselOptions(autoPlay: true),
-      )
-    ]);
+      ),
+    );
   }
 
   Widget getPopularCourseUI() {
@@ -324,6 +369,34 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
+  // Widget _buildBullets() {
+  //   return Padding(
+  //     padding: EdgeInsets.all(8),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: _listSlide.map((i) {
+  //         return InkWell(
+  //           onTap: () {
+  //             setState(() {
+  //               _pageController.jumpToPage(i['id']);
+  //               _currentPage = i['id'];
+  //             });
+  //           },
+  //           child: Container(
+  //             margin: EdgeInsets.all(10),
+  //             width: 10,
+  //             height: 10,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(30),
+  //               color: _currentPage == i['id'] ? Colors.red : Colors.grey,
+  //             ),
+  //           ),
+  //         );
+  //       }).toList(),
+  //     ),
+  //   );
+  // }
 
   void moveTo() {
     Navigator.push<dynamic>(

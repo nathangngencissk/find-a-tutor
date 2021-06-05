@@ -3,7 +3,6 @@ import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/courseListView.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 
@@ -23,8 +22,6 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
   Widget tabBody = Container(
     color: CoursesAppTheme.background,
   );
-  // essa classe é o my courses, sem a barra de pesquisa e sem os 15 cursos encontrados.
-  //E Criar uma view para o myCourses e pronto!
   @override
   void initState() {
     tabIconsList.forEach((TabIconData tab) {
@@ -83,13 +80,6 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                                 );
                               }, childCount: 1),
                             ),
-                            // SliverPersistentHeader(
-                            //   pinned: true,
-                            //   floating: true,
-                            //   delegate: ContestTabHeader(
-                            //     // getFilterBarUI(),
-                            //   ),
-                            // ),
                           ];
                         },
                         body: Container(
@@ -279,18 +269,19 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
               height: AppBar().preferredSize.height,
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_back),
-                  ),
-                ),
+                // Icone de voltar da página
+                // child: InkWell(
+                //   borderRadius: const BorderRadius.all(
+                //     Radius.circular(32.0),
+                //   ),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //   },
+                //   // child: Padding(
+                //   //   padding: const EdgeInsets.all(8.0),
+                //   //   child: Icon(Icons.arrow_back),
+                //   // ),
+                // ),
               ),
             ),
             Expanded(

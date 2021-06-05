@@ -120,8 +120,6 @@ class CategoryView extends StatelessWidget {
                                 color: HexColor('#F8FAFB'),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(16.0)),
-                                // border: new Border.all(
-                                //     color: AppTheme.notWhite),
                               ),
                               child: Column(
                                 children: <Widget>[
@@ -139,8 +137,7 @@ class CategoryView extends StatelessWidget {
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 16,
                                                 letterSpacing: 0.27,
-                                                color: AppTheme
-                                                    .darkerText,
+                                                color: AppTheme.darkerText,
                                               ),
                                             ),
                                           ),
@@ -158,14 +155,13 @@ class CategoryView extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Text(
-                                                  '${category.lessonCount} lesson',
+                                                  '${category.lessonCount} avaliações',
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w200,
                                                     fontSize: 12,
                                                     letterSpacing: 0.27,
-                                                    color: AppTheme
-                                                        .grey,
+                                                    color: Colors.grey[600],
                                                   ),
                                                 ),
                                                 Container(
@@ -180,16 +176,13 @@ class CategoryView extends StatelessWidget {
                                                               FontWeight.w200,
                                                           fontSize: 18,
                                                           letterSpacing: 0.27,
-                                                          color:
-                                                              AppTheme
-                                                                  .grey,
+                                                          color: AppTheme.grey,
                                                         ),
                                                       ),
                                                       Icon(
                                                         Icons.star,
                                                         color:
-                                                            AppTheme
-                                                                .nearlyBlue,
+                                                            AppTheme.nearlyBlue,
                                                         size: 20,
                                                       ),
                                                     ],
@@ -225,8 +218,7 @@ class CategoryView extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16.0)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: AppTheme.grey
-                                      .withOpacity(0.2),
+                                  color: AppTheme.grey.withOpacity(0.2),
                                   offset: const Offset(0.0, 0.0),
                                   blurRadius: 6.0),
                             ],

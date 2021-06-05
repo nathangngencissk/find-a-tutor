@@ -43,5 +43,9 @@
 	<false/>
     <key>NSCameraUsageDescription</key>
     <string>Need the camera to take pictures.</string>
+		<key>NSAppTransporSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+	</dict>
 </dict>
 </plist>
