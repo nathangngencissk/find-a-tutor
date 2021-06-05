@@ -1,17 +1,18 @@
 <template>
-  <v-row dense>
-    <template v-for="(card, i) in cards">
-      <v-col :key="i" :cols="card.flex">
-        <v-hover v-slot="{ hover }">
-          <v-card class="mx-auto" :class="{ 'on-hover': hover }" max-width="344" to="/search">
-            <v-img :src="card.src" height="200px"></v-img>
-
-            <v-card-title> {{ card.title }} </v-card-title>
-          </v-card>
-        </v-hover>
-      </v-col>
-    </template>
-  </v-row>
+  <v-container>
+    <v-row dense justify="start">
+      <template v-for="(card, i) in cards">
+        <v-col :key="i" :cols="card.flex">
+          <v-hover v-slot="{ hover }">
+            <v-card class="mx-auto" :class="{ 'on-hover': hover }" max-width="344" to="/search">
+              <v-img :src="card.src" height="200px"></v-img>
+              <v-card-title> {{ card.title }} </v-card-title>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </template>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

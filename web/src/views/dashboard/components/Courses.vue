@@ -16,7 +16,14 @@
           <v-toolbar-title>Cursos</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-text-field v-model="search" label="Filtrar" class="mx-4"></v-text-field>
-          <v-btn color="success" dark class="mb-2"> Adicionar </v-btn>
+          <v-btn
+            color="success"
+            dark
+            class="mb-2"
+            :to="{ name: 'DashboardEditCourse', params: { course: newCourse } }"
+          >
+            Adicionar
+          </v-btn>
         </v-toolbar>
       </template>
       <template v-slot:item.edit="{ item }">
@@ -50,6 +57,13 @@ export default {
       pageCount: 0,
       itemsPerPage: 10,
       search: '',
+      newCourse: {
+        id: 0,
+        name: '',
+        category: '',
+        value: 0,
+        description: '',
+      },
       courses: [
         {
           id: 1,

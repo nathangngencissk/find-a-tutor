@@ -7,6 +7,7 @@
           <v-btn :to="{ name: 'DashboardCourses' }" tile>Cursos</v-btn>
           <v-btn :to="{ name: 'DashboardClasses' }" tile>Turmas</v-btn>
           <v-btn :to="{ name: 'DashboardExercises' }" tile>Exercícios</v-btn>
+          <v-btn :to="{ name: 'DashboardPaths' }" tile>Trilhas</v-btn>
         </v-card>
       </v-col>
       <v-col cols="10">

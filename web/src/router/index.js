@@ -20,6 +20,34 @@ const routes = [
     component: () => import('@/views/about/About.vue'),
   },
   {
+    path: '/team',
+    name: 'Team',
+    component: () => import('@/views/team/Team.vue'),
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: () => import('@/views/contact/Contact.vue'),
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    component: () => import('@/views/categories/Categories.vue'),
+  },
+  {
+    path: '/foruns',
+    name: 'Foruns',
+    component: () => import('@/views/foruns/Foruns.vue'),
+  },
+  {
+    path: '/foruns/thread',
+    name: 'Thread',
+    component: () => import('@/views/foruns/components/Thread.vue'),
+    meta: {
+      middleware: auth,
+    },
+  },
+  {
     path: '/register',
     name: 'Register',
     component: () => import('@/views/register/Register.vue'),
@@ -207,9 +235,19 @@ const routes = [
         component: () => import('@/views/dashboard/components/Exercises.vue'),
       },
       {
-        name: 'DashboardExercise',
-        path: ':exerciseId',
-        component: () => import('@/views/dashboard/components/Exercise.vue'),
+        name: 'DashboardEditExercise',
+        path: 'exercises/edit',
+        component: () => import('@/views/dashboard/components/EditExercise.vue'),
+      },
+      {
+        name: 'DashboardPaths',
+        path: 'paths',
+        component: () => import('@/views/dashboard/components/Paths.vue'),
+      },
+      {
+        name: 'DashboardEditPath',
+        path: 'paths/edit',
+        component: () => import('@/views/dashboard/components/EditPath.vue'),
       },
     ],
   },

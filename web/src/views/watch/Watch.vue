@@ -37,6 +37,11 @@
                 <CourseClasses id="1" />
               </v-card>
             </v-tab-item>
+            <v-tab-item>
+              <v-card color="basil" flat min-height="200px">
+                <CourseReview id="1" />
+              </v-card>
+            </v-tab-item>
           </v-tabs-items>
         </v-row>
       </v-col>
@@ -63,12 +68,13 @@
 <script>
 import CourseNotes from '@/views/watch/components/CourseNotes.vue';
 import CourseClasses from '@/views/watch/components/CourseClasses.vue';
+import CourseReview from '@/views/watch/components/CourseReview.vue';
 
 export default {
   name: 'Watch',
   title: 'Programação C# | Find a Tutor',
   props: ['courseId'],
-  components: { CourseNotes, CourseClasses },
+  components: { CourseNotes, CourseClasses, CourseReview },
   data: () => ({
     tab: null,
     items: [
@@ -82,6 +88,10 @@ export default {
       },
       {
         name: 'Turmas',
+        body: '',
+      },
+      {
+        name: 'Avaliar',
         body: '',
       },
     ],

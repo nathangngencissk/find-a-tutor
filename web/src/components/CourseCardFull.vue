@@ -29,7 +29,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" text to="/course/1"> Ver Curso </v-btn>
+      <v-btn color="primary" text :to="'/course/' + courseId"> Ver Curso </v-btn>
     </v-card-actions>
   </v-card>
 </template>
