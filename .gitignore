@@ -68,7 +68,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-#amplify
+# amplify
 amplify/
 build/
 dist/
@@ -80,4 +80,3 @@ amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
 amplifyconfiguration.dart
-

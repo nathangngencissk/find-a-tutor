@@ -9,9 +9,21 @@
             max-width="200"
             min-width="100"
             min-height="100"
+            src="@/assets/main-logo-dark.png"
+            @click="pushHome"
+            id="main_logo"
+            v-if="darkModeOn"
+          ></v-img>
+          <v-img
+            :aspect-ratio="16 / 9"
+            max-height="200"
+            max-width="200"
+            min-width="100"
+            min-height="100"
             src="@/assets/main-logo.png"
             @click="pushHome"
             id="main_logo"
+            v-else
           ></v-img>
         </v-col>
         <v-col cols="7" xl="7" lg="8" md="8" class="d-none d-md-flex d-lg-flex d-xl-flex">

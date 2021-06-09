@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6" lg="6" md="6" sm="12">
+      <v-col xl="6" lg="6" md="6" sm="12" xs="12">
         <v-stepper v-model="e6" vertical>
           <v-stepper-step :complete="e6 > 1" step="1" @click="e6 = 1" class="stepper-clickable">
             Lógica de programação
@@ -80,21 +80,20 @@
           </v-stepper-content>
         </v-stepper>
       </v-col>
-      <v-col cols="3" lg="3" md="6" sm="12">
+      <v-col xl="6" lg="6" md="6" sm="12" xs="12">
         <v-card width="400">
           <v-img
             height="200px"
             src="https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg"
           >
-            <v-card-title class="white--text mt-16">
-              <p class="my-2">Programação de Zero a Hero</p>
-            </v-card-title>
           </v-img>
 
           <v-card-text class="text--primary">
             <v-row align="center" class="mx-0 my-2">
+              <v-card-title> Programação de Zero a Hero </v-card-title>
+
               <v-rating
-                :value="pathRatingInteger"
+                v-model="pathRatingInteger"
                 color="amber"
                 dense
                 half-increments
@@ -103,7 +102,11 @@
               ></v-rating>
 
               <div class="grey--text ml-2 mr-4">{{ pathRating }} ({{ pathReviews }})</div>
+              <v-btn class="my-4" color="primary" text @click="saved = !saved">
+                <v-icon class="mr-2">{{ bookmarkIcon }} </v-icon> {{ bookmarkText }}
+              </v-btn>
             </v-row>
+
             <div>
               {{ pathDescription }}
             </div>
@@ -116,9 +119,19 @@
             <p class="my-2">Gustavo Gambit</p>
           </v-card-text>
         </v-card>
-        <v-btn class="mt-4" @click="saved = !saved">
-          <v-icon class="mr-2">{{ bookmarkIcon }} </v-icon> {{ bookmarkText }}
-        </v-btn>
+        <v-card width="400" class="mt-4">
+          <v-card-text class="text--primary">
+            <v-subheader>Deixe sua avaliação</v-subheader>
+            <v-rating
+              class="mb-4"
+              v-model="rating"
+              background-color="orange lighten-3"
+              color="orange"
+              half-increments
+              large
+            ></v-rating>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

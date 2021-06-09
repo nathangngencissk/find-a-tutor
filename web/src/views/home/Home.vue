@@ -51,7 +51,6 @@ export default {
 .section-title {
   font-weight: 700;
   letter-spacing: -1px;
-  color: #3c3b37;
   font-family: 'Roboto';
 }
 </style>
