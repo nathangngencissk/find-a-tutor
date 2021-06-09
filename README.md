@@ -1,4 +1,6 @@
-# find_a_tutor
+# Find a Tutor
+
+![Main Logo](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/web/src/assets/main-logo.png)
 
 ## Class Diagram
 
