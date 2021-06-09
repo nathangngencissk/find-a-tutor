@@ -19,7 +19,7 @@ class AndamentCourse {
 
   static List<AndamentCourse> myCourseList = <AndamentCourse>[
     AndamentCourse(
-      imagePath: 'assets/images/interFace4.png',
+      imagePath: 'assets/images/webdesign.jpg',
       titleTxt: 'Web Design',
       dist: 2.0,
       reviews: 80,
@@ -27,7 +27,7 @@ class AndamentCourse {
       price: 180,
     ),
     AndamentCourse(
-      imagePath: 'assets/images/interFace2.png',
+      imagePath: 'assets/images/uiux.png',
       titleTxt: 'Ui/UX',
       dist: 4.0,
       reviews: 74,
@@ -35,23 +35,23 @@ class AndamentCourse {
       price: 200,
     ),
     AndamentCourse(
-      imagePath: 'assets/images/interFace3.png',
-      titleTxt: 'Coding',
+      imagePath: 'assets/images/programacao.jpg',
+      titleTxt: 'Programação',
       dist: 3.0,
       reviews: 62,
       rating: 4.0,
       price: 60,
     ),
     AndamentCourse(
-      imagePath: 'assets/images/interFace4.png',
-      titleTxt: 'Programação',
+      imagePath: 'assets/images/php.jpg',
+      titleTxt: 'Curso de PHP',
       dist: 7.0,
       reviews: 90,
       rating: 4.4,
       price: 170,
     ),
     AndamentCourse(
-      imagePath: 'assets/images/interFace4.png',
+      imagePath: 'assets/images/mktdigital.jpg',
       titleTxt: 'Marketing Digital',
       dist: 2.0,
       reviews: 240,

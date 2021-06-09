@@ -1,5 +1,6 @@
 import 'package:find_a_tutor/src/ui/views/myCourses/myCourses.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
+import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
@@ -46,6 +47,7 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
   final List<Widget> _children = [
     MyHomePage(),
     MyCourses(),
+    CartScreen(),
   ];
 
   void onTappedBar(int index) {
@@ -72,8 +74,8 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
               title: new Text('Meus Cursos'),
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.person),
-              title: new Text('Perfil'),
+              icon: new Icon(Icons.shopping_cart_rounded),
+              title: new Text('Carrinho'),
               backgroundColor: Colors.white),
         ],
       ),

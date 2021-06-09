@@ -1,10 +1,14 @@
 import 'package:find_a_tutor/src/models/andamentCourse.dart';
-import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
+import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass.dart/watchClass.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class MyCourseView extends StatelessWidget {
+class MyCourseView extends StatefulWidget {
+  final VoidCallback callback;
+  final AndamentCourse myCourseData;
+  final AnimationController animationController;
+  final Animation<dynamic> animation;
   const MyCourseView(
       {Key key,
       this.myCourseData,
@@ -13,28 +17,28 @@ class MyCourseView extends StatelessWidget {
       this.callback})
       : super(key: key);
 
-  final VoidCallback callback;
-  final AndamentCourse myCourseData;
-  final AnimationController animationController;
-  final Animation<dynamic> animation;
+  @override
+  _MyCourseViewState createState() => _MyCourseViewState();
+}
 
+class _MyCourseViewState extends State<MyCourseView> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: Transform(
             transform: Matrix4.translationValues(
-                0.0, 50 * (1.0 - animation.value), 0.0),
+                0.0, 50 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 8, bottom: 16),
               child: InkWell(
                 splashColor: Colors.transparent,
                 onTap: () {
-                  callback();
+                  widget.callback();
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -56,7 +60,7 @@ class MyCourseView extends StatelessWidget {
                             AspectRatio(
                               aspectRatio: 2,
                               child: Image.asset(
-                                myCourseData.imagePath,
+                                widget.myCourseData.imagePath,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -79,7 +83,7 @@ class MyCourseView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              myCourseData.titleTxt,
+                                              widget.myCourseData.titleTxt,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -93,7 +97,7 @@ class MyCourseView extends StatelessWidget {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  myCourseData.subTxt,
+                                                  widget.myCourseData.subTxt,
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -135,26 +139,49 @@ class MyCourseView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16, top: 8),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          'Em andamento',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
-                                          ),
+                                  Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 16, top: 8),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'Em andamento',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 4,
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                FlatButton(
+                                                    color: Colors.lightBlue,
+                                                    child: Text(
+                                                      'Assistir aula ...',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16,
+                                                        letterSpacing: 0.0,
+                                                        color: AppTheme
+                                                            .nearlyWhite,
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      moveToWatchClass();
+                                                    }),
+                                              ],
+                                            )
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -169,6 +196,15 @@ class MyCourseView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void moveToWatchClass() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => WatchClass(),
+      ),
     );
   }
 }

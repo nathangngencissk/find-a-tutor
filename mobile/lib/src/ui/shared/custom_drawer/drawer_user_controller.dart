@@ -105,12 +105,10 @@ class _DrawerUserControllerState extends State<DrawerUserController>
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width + widget.drawerWidth,
-          //we use with as screen width and add drawerWidth (from navigation_home_screen)
           child: Row(
             children: <Widget>[
               SizedBox(
                 width: widget.drawerWidth,
-                //we divided first drawer Width with HomeDrawer and second full-screen Width with all home screen, we called screen View
                 height: MediaQuery.of(context).size.height,
                 child: AnimatedBuilder(
                   animation: iconAnimationController,
@@ -121,9 +119,9 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                           scrollController.offset, 0.0, 0.0),
                       child: HomeDrawer(
                         shouldLogOut: widget.shouldLogOut,
-                        screenIndex: widget.screenIndex == null
-                            ? DrawerIndex.HOME
-                            : widget.screenIndex,
+                        // screenIndex: widget.screenIndex == null
+                        //     ? DrawerIndex.HOME
+                        //     : widget.screenIndex,
                         iconAnimationController: iconAnimationController,
                         callBackIndex: (DrawerIndex indexType) {
                           onDrawerClick();
@@ -177,7 +175,6 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                               borderRadius: BorderRadius.circular(
                                   AppBar().preferredSize.height),
                               child: Center(
-                                // if you use your own menu view UI you add form initialization
                                 child: widget.menuView != null
                                     ? widget.menuView
                                     : AnimatedIcon(
