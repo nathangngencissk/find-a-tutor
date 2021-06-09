@@ -2,7 +2,7 @@
   <v-container>
     <v-subheader>Fixados</v-subheader>
     <v-row>
-      <v-col cols="2" v-for="note in fixedNotes" :key="note.id">
+      <v-col xl="2" lg="4" md="4" sm="6" xs="12" v-for="note in fixedNotes" :key="note.id">
         <v-badge bordered color="orange lighten-2" icon="fas fa-thumbtack" overlap>
           <v-card class="mx-auto" min-width="250">
             <v-card-title> {{ note.title }} </v-card-title>
@@ -26,7 +26,7 @@
     </v-row>
     <v-subheader>Outros</v-subheader>
     <v-row>
-      <v-col cols="2" v-for="note in notes" :key="note.id">
+      <v-col xl="2" lg="4" md="4" sm="6" xs="12" v-for="note in notes" :key="note.id">
         <v-card class="mx-auto" min-width="250">
           <v-card-title> {{ note.title }} </v-card-title>
 

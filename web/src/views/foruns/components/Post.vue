@@ -18,10 +18,10 @@
             </v-card-text>
           </v-col>
           <v-col cols="2" class="d-flex flex-column justify-center">
-            <v-btn icon :color="liked ? 'indigo' : 'grey darken-1'" @click="like">
+            <v-btn icon :color="liked ? 'orange' : 'grey darken-1'" @click="like">
               <v-icon>mdi-thumb-up</v-icon>
             </v-btn>
-            <v-btn icon :color="disliked ? 'orange lighten-2' : 'grey darken-1'" @click="dislike">
+            <v-btn icon :color="disliked ? 'indigo' : 'grey darken-1'" @click="dislike">
               <v-icon>mdi-thumb-down</v-icon>
             </v-btn>
           </v-col>

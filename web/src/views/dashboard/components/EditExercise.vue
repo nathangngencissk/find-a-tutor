@@ -88,6 +88,12 @@
               ></v-text-field>
             </template>
           </v-checkbox>
+          <v-textarea
+            outlined
+            name="input-7-4"
+            label="Explicação da resposta"
+            v-model="responseExplanation"
+          ></v-textarea>
         </v-form>
         <v-btn class="mr-4" color="success" @click="overlay = false"> Salvar </v-btn>
         <v-btn color="error" outlined @click="overlay = false"> Fechar </v-btn>
@@ -112,8 +118,9 @@ export default {
     search: '',
     isDragging: false,
     overlay: false,
-    zIndex: 0,
+    zIndex: 2,
     question: '',
+    responseExplanation: '',
     options: [],
     selectedOptions: [],
     rightOptions: [],

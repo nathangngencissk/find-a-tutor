@@ -22,7 +22,7 @@
             </v-list-item-content>
 
             <v-row align="center" justify="end">
-              <v-btn color="secondary" depressed small to="/about">Ver Discussões</v-btn>
+              <v-btn color="secondary" depressed small to="/foruns">Ver Discussões</v-btn>
             </v-row>
           </v-list-item>
         </v-card-actions>
