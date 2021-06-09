@@ -1,6 +1,8 @@
 # Find a Tutor
 
-![Main Logo](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/web/src/assets/main-logo.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/web/src/assets/main-logo.png" alt="Main Logo"/>
+</p>
 
 ## Class Diagram
 
