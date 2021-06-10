@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
-import 'package:find_a_tutor/src/ui/views/home/homePageController.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -31,33 +30,50 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          getSearchBarUI(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                height: 1500,
-                child: Column(
-                  children: <Widget>[
-                    carouselUi(),
-                    getCategoryUI(),
-                    Expanded(
-                      child: getPopularCourseUI(),
-                    ),
-                  ],
+    var size = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+        title: getSearchBarUI(),
+        backgroundColor: AppTheme.white,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: size.height,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: LayoutBuilder(
+                    builder: (_, constraints) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight / 3,
+                            child: carouselUi(),
+                          ),
+                          Container(
+                            width: constraints.maxWidth,
+                            height: size.width * 0.4,
+                            child: getCategoryUI(),
+                          ),
+                          Container(
+                            width: constraints.maxWidth,
+                            height: size.width * 0.9,
+                            child: getPopularCourseUI(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
     );
   }
 
@@ -67,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       txt = 'Ui/Ux';
       Icon(Icons.menu_book_rounded);
     } else if (CategoryType.coding == categoryTypeData) {
-      txt = 'Programação';
+      txt = 'Codar';
       Icon(Icons.menu_book_rounded);
     } else if (CategoryType.basic == categoryTypeData) {
       txt = 'Web Design';
@@ -99,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
-                    letterSpacing: 0.27,
+                    letterSpacing: 0.25,
                     color:
                         isSelected ? AppTheme.nearlyWhite : AppTheme.nearlyBlue,
                   ),
@@ -116,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 40, left: 18, right: 16),
+          padding: const EdgeInsets.only(left: 18, right: 16),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -150,20 +166,17 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
               const SizedBox(
-                width: 16,
+                width: 17,
               ),
               getButtonUI(
                   CategoryType.coding, categoryType == CategoryType.coding),
               const SizedBox(
-                width: 16,
+                width: 17,
               ),
               getButtonUI(
                   CategoryType.basic, categoryType == CategoryType.basic),
             ],
           ),
-        ),
-        const SizedBox(
-          height: 16,
         ),
         CategoryListView(
           callBack: () {
@@ -175,86 +188,87 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8, left: 85),
+    var size = MediaQuery.of(context).size;
+    return Container(
+      padding: const EdgeInsets.only(left: 45, right: 10),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 300,
-            height: 64,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 18, bottom: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: HexColor('#F8FAFB'),
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(13.0),
-                    bottomLeft: Radius.circular(13.0),
-                    topLeft: Radius.circular(13.0),
-                    topRight: Radius.circular(13.0),
-                  ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(left: 2, right: 10),
+              width: 5,
+              height: 50,
+              decoration: BoxDecoration(
+                color: HexColor('#f2f1f0'),
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(13.0),
+                  bottomLeft: Radius.circular(13.0),
+                  topLeft: Radius.circular(13.0),
+                  topRight: Radius.circular(13.0),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 16, right: 10),
-                        child: TextFormField(
-                          style: TextStyle(
-                            fontFamily: 'WorkSans',
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 16, right: 10),
+                      child: TextFormField(
+                        style: TextStyle(
+                          fontFamily: 'WorkSans',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: AppTheme.nearlyBlue,
+                        ),
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Procurar por curso',
+                          border: InputBorder.none,
+                          helperStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: AppTheme.nearlyBlue,
+                            color: HexColor('#B9BABC'),
                           ),
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: 'Procurar por curso',
-                            border: InputBorder.none,
-                            helperStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: HexColor('#B9BABC'),
-                            ),
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              letterSpacing: 0.2,
-                              color: HexColor('#B9BABC'),
-                            ),
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            letterSpacing: 0.2,
+                            color: HexColor('#B9BABC'),
                           ),
-                          onEditingComplete: () {},
                         ),
+                        onEditingComplete: () {},
                       ),
                     ),
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Icon(Icons.search, color: HexColor('#B9BABC')),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: Icon(Icons.search, color: HexColor('#B9BABC')),
+                  )
+                ],
               ),
             ),
           ),
-          const Expanded(
-            child: SizedBox(),
-          )
+          // const Expanded(
+          //   child: SizedBox(),
+          // )
         ],
       ),
     );
   }
 
   Widget carouselUi() {
+    var size = MediaQuery.of(context).size;
+
     return Container(
-      height: 275,
-      padding: EdgeInsets.only(top: 20, bottom: 20),
+      padding: EdgeInsets.only(top: 5, bottom: 25),
       child: Column(
         children: <Widget>[
           CarouselSlider(
             items: <Widget>[
               Expanded(
                 child: Container(
-                  width: 320,
+                  width: 300,
+                  alignment: Alignment.topCenter,
                   margin: EdgeInsets.only(top: 20, bottom: 30),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -271,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: Container(
-                  width: 320,
+                  width: 300,
                   margin: EdgeInsets.only(top: 20, bottom: 30),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -288,7 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: Container(
-                  width: 320,
+                  width: 300,
                   margin: EdgeInsets.only(top: 20, bottom: 30),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -305,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: Container(
-                  width: 320,
+                  width: 300,
                   margin: EdgeInsets.only(top: 20, bottom: 30),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -321,7 +335,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ],
-            options: CarouselOptions(autoPlay: true),
+            options: CarouselOptions(autoPlay: false),
           )
         ],
       ),
@@ -329,6 +343,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getPopularCourseUI() {
+    var size = MediaQuery.of(context).size;
+
     return Column(
       children: <Widget>[
         Padding(
@@ -359,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         SizedBox(
-          height: 400,
+          height: size.height - 500,
           child: PopularCourseListView(
             callBack: () {
               moveTo();
@@ -369,34 +385,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-
-  // Widget _buildBullets() {
-  //   return Padding(
-  //     padding: EdgeInsets.all(8),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: _listSlide.map((i) {
-  //         return InkWell(
-  //           onTap: () {
-  //             setState(() {
-  //               _pageController.jumpToPage(i['id']);
-  //               _currentPage = i['id'];
-  //             });
-  //           },
-  //           child: Container(
-  //             margin: EdgeInsets.all(10),
-  //             width: 10,
-  //             height: 10,
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(30),
-  //               color: _currentPage == i['id'] ? Colors.red : Colors.grey,
-  //             ),
-  //           ),
-  //         );
-  //       }).toList(),
-  //     ),
-  //   );
-  // }
 
   void moveTo() {
     Navigator.push<dynamic>(

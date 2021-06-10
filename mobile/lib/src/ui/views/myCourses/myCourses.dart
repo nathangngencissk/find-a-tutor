@@ -52,6 +52,16 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
       data: CoursesAppTheme.buildLightTheme(),
       child: Container(
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: const Text('Meus Cursos',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22,
+                  letterSpacing: 0.27,
+                  color: AppTheme.darkerText,
+                )),
+          ),
           body: Stack(
             children: <Widget>[
               InkWell(
@@ -64,29 +74,19 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
                 },
                 child: Column(
                   children: <Widget>[
-                    AppBar(
-                      backgroundColor: Colors.grey[350],
-                      title: const Text('Meus Cursos',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.27,
-                            color: AppTheme.darkerText,
-                          )),
-                    ),
                     Container(
                       color: CoursesAppTheme.buildLightTheme().backgroundColor,
                       height: 25,
                     ),
                     Container(
-                      color: CoursesAppTheme.buildLightTheme().backgroundColor,
                       padding:
-                          new EdgeInsets.only(top: 9.0, right: 100, left: 2),
+                          new EdgeInsets.only(top: 9.0, right: 120, left: 2),
                       height: 35,
                       width: 400,
-                      alignment: Alignment.topLeft,
+                      alignment: Alignment.center,
+                      color: Colors.white,
                       child: Text(
-                        ' Meus Cursos em andamento',
+                        ' Cursos em andamento',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 22,
@@ -96,7 +96,7 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      height: 30,
+                      height: 15,
                       color: CoursesAppTheme.buildLightTheme().backgroundColor,
                     ),
                     Expanded(

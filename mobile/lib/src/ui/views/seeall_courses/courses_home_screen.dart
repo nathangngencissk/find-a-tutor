@@ -51,6 +51,18 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
       data: CoursesAppTheme.buildLightTheme(),
       child: Container(
         child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Mais cursos',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                letterSpacing: 0.27,
+                color: AppTheme.darkerText,
+              ),
+            ),
+            backgroundColor: Colors.white,
+          ),
           body: Stack(
             children: <Widget>[
               InkWell(
@@ -63,7 +75,7 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                 },
                 child: Column(
                   children: <Widget>[
-                    getAppBarUI(),
+                    // getAppBarUI(),
                     Expanded(
                       child: NestedScrollView(
                         controller: _scrollController,
@@ -284,17 +296,17 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                 // ),
               ),
             ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Explore',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: Center(
+            //     child: Text(
+            //       'Explore',
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w600,
+            //         fontSize: 22,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Container(
               width: AppBar().preferredSize.height + 40,
               height: AppBar().preferredSize.height,

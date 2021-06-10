@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/ui/views/myClass/myClass.dart';
 import 'package:find_a_tutor/src/ui/views/myCourses/myCourses.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
 import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
@@ -5,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 
-class HomePage extends StatefulWidget {
+class NavigationBar extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _NavigationBarState createState() => _NavigationBarState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NavigationBarState extends State<NavigationBar> {
   AnimationController animationController;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -47,6 +48,7 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
   final List<Widget> _children = [
     MyHomePage(),
     MyCourses(),
+    MyClass(),
     CartScreen(),
   ];
 
@@ -59,9 +61,13 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: _children[_currentIndex],
+      body: Center(
+        child: _children[_currentIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey[100],
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey[500],
+        showUnselectedLabels: true,
         onTap: onTappedBar,
         currentIndex: _currentIndex,
         items: [
@@ -72,6 +78,10 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
           BottomNavigationBarItem(
               icon: new Icon(Icons.bookmark),
               title: new Text('Meus Cursos'),
+              backgroundColor: Colors.white),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.shopping_cart_rounded),
+              title: new Text('Turmas'),
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.shopping_cart_rounded),
