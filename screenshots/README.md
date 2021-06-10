@@ -10,8 +10,6 @@
 
 ![Home Screen](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/home_screen.png)
 
-![Side Menu](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/side_menu_screen.png)
-
 ### Detalhes do curso
 
 ![Course Details](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/detalhes_curso_screen.png)
@@ -40,4 +38,6 @@
 
 ### Turmas de curso
 
-![Tutor Dashboard](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/turmas_screen.png)
+![Lectures](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/turmas_screen.png)
+
+![Lecture](https://raw.githubusercontent.com/nathangngencissk/find-a-tutor/main/screenshots/turmas_detalhes_screen.png)
