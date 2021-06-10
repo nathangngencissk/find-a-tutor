@@ -3,7 +3,8 @@ import 'package:find_a_tutor/src/ui/shared/custom_drawer/drawer_user_controller.
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/home_drawer.dart';
 import 'package:find_a_tutor/src/ui/views/feedback/feedback_screen.dart';
 import 'package:find_a_tutor/src/ui/views/help/help_screen.dart';
-import 'package:find_a_tutor/src/ui/views/home/homePageController.dart';
+import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
+import 'package:find_a_tutor/src/ui/views/home/navigationBar.dart';
 import 'package:find_a_tutor/src/ui/views/invite_friend/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.Help;
-    screenView = HomePage();
+    screenView = MyBottomNavigatonBar();
     super.initState();
   }
 
@@ -59,7 +60,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         });
       } else if (drawerIndex == DrawerIndex.HOME) {
         setState(() {
-          screenView = HomePage();
+          screenView = MyBottomNavigatonBar();
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {
         setState(() {

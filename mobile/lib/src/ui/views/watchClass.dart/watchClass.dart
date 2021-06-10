@@ -193,34 +193,3 @@ class _MyWatchClassState extends State<MyWatchClass> {
     );
   }
 }
-
-// class _MyWatchClassState extends State<MyWatchClass> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.grey[350],
-//         title: const Text('        Meus Cursos',
-//             style: TextStyle(
-//               fontWeight: FontWeight.w600,
-//               fontSize: 22,
-//               letterSpacing: 0.27,
-//               color: AppTheme.darkerText,
-//             )),
-//       ),
-//       body: ListView(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-//             child: ChewieListItem(
-//               videoPlayerController: VideoPlayerController.network(
-//                 "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4",
-//               ),
-//               looping: true,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
