@@ -18,7 +18,7 @@
       <v-col cols="3">
         <v-card-actions class="flex-column">
           <v-btn color="red" depressed outlined text> Remover </v-btn>
-          <v-btn color="primary" text class="mx-0"> Ver Curso </v-btn>
+          <v-btn color="primary" text class="mx-0" to="/course/2"> Ver Curso </v-btn>
           <h4 class="mt-16">R$ 150,00</h4>
         </v-card-actions>
       </v-col>

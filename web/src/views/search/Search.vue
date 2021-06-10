@@ -96,9 +96,9 @@
               courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
               courseRating="4.5"
               courseReviews="413"
-              :courseCategory="searchText"
+              courseCategory="Tecnologia"
               courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-              courseId="1"
+              courseId="2"
               courseLanguage="pt-br"
               courseCost="150"
             />
