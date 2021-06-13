@@ -94,6 +94,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
     return true;
   }
 
+  List indexes = [DrawerIndex.HOME, DrawerIndex];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,9 +121,9 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                           scrollController.offset, 0.0, 0.0),
                       child: HomeDrawer(
                         shouldLogOut: widget.shouldLogOut,
-                        // screenIndex: widget.screenIndex == null
-                        //     ? DrawerIndex.HOME
-                        //     : widget.screenIndex,
+                        screenIndex: widget.screenIndex == null
+                            ? DrawerIndex.HOME
+                            : widget.screenIndex,
                         iconAnimationController: iconAnimationController,
                         callBackIndex: (DrawerIndex indexType) {
                           onDrawerClick();
@@ -137,7 +139,6 @@ class _DrawerUserControllerState extends State<DrawerUserController>
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                //full-screen Width with widget.screenView
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppTheme.white,
@@ -149,12 +150,10 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                   ),
                   child: Stack(
                     children: <Widget>[
-                      //this IgnorePointer we use as touch(user Interface) widget.screen View, for example scrolloffset == 1 means drawer is close we just allow touching all widget.screen View
                       IgnorePointer(
                         ignoring: scrolloffset == 1 || false,
                         child: widget.screenView,
                       ),
-                      //alternative touch(user Interface) for widget.screen, for example, drawer is close we need to tap on a few home screen area and close the drawer
                       if (scrolloffset == 1.0)
                         InkWell(
                           onTap: () {

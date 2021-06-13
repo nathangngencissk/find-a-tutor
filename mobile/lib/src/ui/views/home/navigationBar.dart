@@ -80,7 +80,7 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
               title: new Text('Meus Cursos'),
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.shopping_cart_rounded),
+              icon: new Icon(Icons.access_time_rounded),
               title: new Text('Turmas'),
               backgroundColor: Colors.white),
           BottomNavigationBarItem(

@@ -23,7 +23,7 @@ class _MyWatchClassState extends State<MyWatchClass> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Assistir Aulas',
@@ -87,11 +87,18 @@ class _MyWatchClassState extends State<MyWatchClass> {
                         ),
                       ),
                     ),
+                    Tab(
+                      child: Text(
+                        'Turmas',
+                        style: TextStyle(
+                          color: AppTheme.darkerText,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            // create widgets for each tab bar here
             Expanded(
               child: TabBarView(
                 children: [
@@ -139,7 +146,50 @@ class _MyWatchClassState extends State<MyWatchClass> {
                       ),
                     ],
                   ),
-                  // second tab bar viiew widget
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, right: 120),
+                        child: Text(
+                          'Aula 1: Texto de exemplo ',
+                          style: TextStyle(color: Colors.black, fontSize: 23),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, right: 120),
+                        child: Text(
+                          'Aula 2: Texto de exemplo ',
+                          style: TextStyle(color: Colors.black, fontSize: 23),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, right: 120),
+                        child: Text(
+                          'Aula 3: Texto de exemplo ',
+                          style: TextStyle(color: Colors.black, fontSize: 23),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, right: 120),
+                        child: Text(
+                          'Aula 4: Texto de exemplo ',
+                          style: TextStyle(color: Colors.black, fontSize: 23),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, right: 120),
+                        child: Text(
+                          'Aula 5: Texto de exemplo ',
+                          style: TextStyle(color: Colors.black, fontSize: 23),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  ),
                   Column(
                     children: [
                       Padding(

@@ -15,13 +15,13 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
     with TickerProviderStateMixin {
   List<CategoriesCourses> categorieList = CategoriesCourses.categorieList;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-
   AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
 
   Widget tabBody = Container(
     color: CoursesAppTheme.background,
   );
+
   @override
   void initState() {
     tabIconsList.forEach((TabIconData tab) {

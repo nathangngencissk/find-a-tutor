@@ -41,6 +41,8 @@ dependencies:
   flutter_signin_button: ^2.0.0
   chewie: ^1.0.0
   video_player: ^2.1.5
+  table_calendar: ^3.0.0
+
 dev_dependencies:
   flutter_localizations:
     sdk: flutter
