@@ -173,7 +173,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 
   void onTapped() {
-    print('Doing Something...'); // Print to console.
+    print('Fazendo algo');
   }
 
   Widget inkwell(DrawerList listData) {

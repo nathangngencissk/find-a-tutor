@@ -52,6 +52,7 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
       child: Container(
         child: Scaffold(
           appBar: AppBar(
+            // AnimatedIcons.arrow_menu,
             title: Text(
               'Mais cursos',
               style: TextStyle(
@@ -60,6 +61,10 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                 letterSpacing: 0.27,
                 color: AppTheme.darkerText,
               ),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
             ),
             backgroundColor: Colors.white,
           ),
@@ -75,7 +80,6 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                 },
                 child: Column(
                   children: <Widget>[
-                    // getAppBarUI(),
                     Expanded(
                       child: NestedScrollView(
                         controller: _scrollController,
@@ -131,6 +135,16 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
   }
 

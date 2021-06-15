@@ -1,27 +1,26 @@
-import 'package:find_a_tutor/src/models/andamentCourse.dart';
+import 'package:find_a_tutor/src/models/myClassModel.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
-import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/watchClass.dart/watchClass.dart';
+import 'package:find_a_tutor/src/ui/views/detailClass/detailClass.dart';
 import 'package:flutter/material.dart';
 
-class MyCourseView extends StatefulWidget {
+class MyClassView extends StatefulWidget {
   final VoidCallback callback;
-  final AndamentCourse myCourseData;
+  final MyClassModel myClassData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
-  const MyCourseView(
+  const MyClassView(
       {Key key,
-      this.myCourseData,
+      this.myClassData,
       this.animationController,
       this.animation,
       this.callback})
       : super(key: key);
 
   @override
-  _MyCourseViewState createState() => _MyCourseViewState();
+  _MyClassViewState createState() => _MyClassViewState();
 }
 
-class _MyCourseViewState extends State<MyCourseView> {
+class _MyClassViewState extends State<MyClassView> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -60,7 +59,7 @@ class _MyCourseViewState extends State<MyCourseView> {
                             AspectRatio(
                               aspectRatio: 2,
                               child: Image.asset(
-                                widget.myCourseData.imagePath,
+                                widget.myClassData.imagePath,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -83,7 +82,7 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              widget.myCourseData.titleTxt,
+                                              widget.myClassData.titleTxt,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -97,7 +96,7 @@ class _MyCourseViewState extends State<MyCourseView> {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  widget.myCourseData.subTxt,
+                                                  widget.myClassData.subTxt,
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -105,13 +104,13 @@ class _MyCourseViewState extends State<MyCourseView> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    'Julia Rodrigues',
+                                                    'Tecnologia',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                                      fontSize: 14,
+                                                      color: Colors.grey[800],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -122,12 +121,11 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               child: Row(
                                                 children: <Widget>[
                                                   Text(
-                                                    '73% concluído.',
+                                                    'Teste de descrição\ndescriçao do curso\ndescrição.',
                                                     style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8),
-                                                    ),
+                                                        fontSize: 14,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.8)),
                                                   ),
                                                 ],
                                               ),
@@ -144,30 +142,21 @@ class _MyCourseViewState extends State<MyCourseView> {
                                             right: 16, top: 8),
                                         child: Column(
                                           children: <Widget>[
-                                            Text(
-                                              'Em andamento',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 22,
-                                              ),
-                                            ),
                                             Container(
-                                              height: 4,
+                                              height: 25,
                                             ),
                                             Row(
                                               children: <Widget>[
                                                 FlatButton(
-                                                    color: Colors.lightBlue,
+                                                    color: Colors.white,
                                                     child: Text(
-                                                      'Assistir aula ...',
+                                                      'Ver turma',
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
-                                                        fontSize: 16,
+                                                        fontSize: 20,
                                                         letterSpacing: 0.0,
-                                                        color: AppTheme
-                                                            .nearlyWhite,
+                                                        color: Colors.lightBlue,
                                                       ),
                                                     ),
                                                     onPressed: () {
@@ -201,7 +190,7 @@ class _MyCourseViewState extends State<MyCourseView> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => MyWatchClass(),
+        builder: (BuildContext context) => DetailClass(),
       ),
     );
   }

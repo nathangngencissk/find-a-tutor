@@ -1,8 +1,6 @@
 import 'package:find_a_tutor/src/models/andamentCourse.dart';
-import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/myCourses/myCourseView.dart';
-import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';

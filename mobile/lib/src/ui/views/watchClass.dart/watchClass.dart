@@ -3,17 +3,6 @@ import 'package:find_a_tutor/src/ui/views/watchClass.dart/chewie_list_item.dart'
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class WatchClass extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter demo',
-      home: MyWatchClass(),
-    );
-  }
-}
-
-// mudar pra stateful e segui o tutorial
 class MyWatchClass extends StatefulWidget {
   @override
   _MyWatchClassState createState() => _MyWatchClassState();
@@ -26,13 +15,19 @@ class _MyWatchClassState extends State<MyWatchClass> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Assistir Aulas',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 22,
-                letterSpacing: 0.27,
-                color: AppTheme.darkerText,
-              )),
+          title: const Text(
+            'Assistir Aulas',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 22,
+              letterSpacing: 0.27,
+              color: AppTheme.darkerText,
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           centerTitle: true,
           backgroundColor: Colors.grey[350].withOpacity(0.4),
           elevation: 0,
