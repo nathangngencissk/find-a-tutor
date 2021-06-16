@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <v-sheet elevation="1" class="pa-4 mb-2" v-for="(item, i) in 10" :key="i">
           <v-row justify="space-between" align="center">
             <v-col cols="10">
@@ -19,7 +19,7 @@
         </v-sheet>
       </v-col>
       <v-divider vertical inset></v-divider>
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <div class="ml-4">
           <v-subheader>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus accusamus beatae saepe

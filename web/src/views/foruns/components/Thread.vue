@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="8">
+      <v-col xl="8" cols="12">
         <Post
           v-for="post in thread.posts"
           :key="post.id"
@@ -22,7 +22,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <v-sheet elevation="1" class="pa-4">
           <v-textarea
             outlined

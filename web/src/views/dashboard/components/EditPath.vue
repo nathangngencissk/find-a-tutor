@@ -1,13 +1,13 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Nome</h2>
         <v-text-field label="Nome" :value="path.name"></v-text-field>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Descrição</h2>
         <v-textarea
           class="mt-2"
@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2 class="mb-2">Imagem de capa</h2>
         <v-hover>
           <template v-slot:default="{ hover }">
@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
     <v-row justify="center" v-for="section in path.sections" :key="section.id">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <v-row>
           <v-col cols="10">
             <v-text-field

@@ -81,7 +81,7 @@ const actions = {
           email,
           name,
           family_name,
-          picture: '',
+          picture: 'default-profile-picture.png',
         },
       });
       // switch email confirmation form

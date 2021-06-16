@@ -2,7 +2,7 @@
   <v-app-bar app absolute prominent>
     <v-container>
       <v-row align="center" justify="space-between">
-        <v-col cols="1" xl="1" lg="2" md="2" sm="6" xs="6">
+        <v-col xl="1" lg="2" md="2" sm="6" xs="6">
           <v-img
             :aspect-ratio="16 / 9"
             max-height="200"
@@ -65,7 +65,7 @@
             </v-btn>
           </v-row>
         </v-col>
-        <v-col cols="1" xl="1" lg="2" md="2" sm="6" xs="6" align-self="center">
+        <v-col xl="1" lg="2" md="2" sm="6" xs="6" align-self="center">
           <v-menu offset-y left nudge-bottom="10" v-if="isAuthenticated">
             <template v-slot:activator="{ on, attrs }">
               <v-badge
@@ -76,12 +76,12 @@
                 v-if="platformTutor"
               >
                 <v-avatar v-bind="attrs" v-on="on">
-                  <img :src="profilePicture" alt="João" />
+                  <img :src="profilePicture" alt="Foto de perfil" />
                 </v-avatar>
               </v-badge>
               <v-badge color="transparent" overlap v-else>
                 <v-avatar v-bind="attrs" v-on="on">
-                  <img :src="profilePicture" alt="João" />
+                  <img :src="profilePicture" alt="Foto de perfil" />
                 </v-avatar>
               </v-badge>
             </template>

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <v-subheader color="primary">Palavras-chave</v-subheader>
         <v-combobox
           v-model="selectedKeywords"

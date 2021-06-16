@@ -2,38 +2,38 @@
   <v-container>
     <v-container>
       <v-row>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Nome</h2>
           <v-text-field label="Nome" :value="cl.name"></v-text-field>
         </v-col>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Curso</h2>
           <v-select :items="items" label="Curso" :value="cl.course"></v-select>
         </v-col>
       </v-row>
 
       <v-row>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Descrição</h2>
           <textarea :value="cl.description" auto-grow @input="update($event)"></textarea>
         </v-col>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Preview</h2>
           <div v-html="compiledMarkdown"></div>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Como acessar</h2>
           <textarea :value="cl.access" auto-grow @input="updateAccess($event)"></textarea>
         </v-col>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Preview</h2>
           <div v-html="compiledMarkdownAccess"></div>
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2 class="mb-2">Datas de início e fim</h2>
           <v-row justify="center">
             <v-col cols="12">
@@ -116,7 +116,7 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2 class="mb-2">Imagem de capa</h2>
           <v-hover>
             <template v-slot:default="{ hover }">

@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="1" xl="1" lg="2" md="2" sm="4">
+      <v-col xl="1" lg="2" md="2" sm="4" xs="4">
         <h1>Contato</h1>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="1" xl="1" lg="2" md="2" sm="4">
+      <v-col xl="1" lg="2" md="2" sm="4" xs="4">
         <v-img
           :aspect-ratio="16 / 9"
           max-height="200"
@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" lg="6" md="8" sm="12" xs="12">
         <v-sheet elevation="1" class="pa-6">
           <validation-observer ref="observer" v-slot="{ invalid }">
             <form>
@@ -73,6 +73,9 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
+
+  title: 'Contato | Find a Tutor',
+
   data: () => ({
     subject: '',
     body: '',

@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="2">
+      <v-col xl="2" cols="12">
         <v-card class="mx-auto" max-width="300" tile>
           <v-list disabled>
             <v-subheader>Categorias</v-subheader>
@@ -20,7 +20,7 @@
           </v-list>
         </v-card>
       </v-col>
-      <v-col cols="8">
+      <v-col xl="8" cols="12">
         <v-list three-line>
           <template v-for="(item, index) in items">
             <v-subheader v-if="item.header" :key="item.header" v-text="item.header"></v-subheader>

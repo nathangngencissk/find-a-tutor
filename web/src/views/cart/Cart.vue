@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6" xl="6" lg="12" md="12" sm="12" class="mt-4">
+      <v-col xl="6" lg="8" md="12" sm="12" xs="12" class="mt-4">
         <CourseCardShort
           courseName="Programação C#"
           courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
@@ -21,7 +21,7 @@
           courseId="1"
         />
       </v-col>
-      <v-col cols="3" xl="3" lg="12" md="12" sm="12">
+      <v-col xl="3" lg="4" md="12" sm="12" xs="12">
         <v-card width="350">
           <v-subheader> Total:</v-subheader>
           <h1 class="ml-5">R$ 450,00</h1>

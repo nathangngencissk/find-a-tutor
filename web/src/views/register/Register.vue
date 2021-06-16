@@ -4,7 +4,7 @@
       Um código de verificação foi enviado ao seu email.
     </v-alert>
     <v-row justify="space-around">
-      <v-col cols="12" md="4">
+      <v-col cols="12" xl="6" lg="6">
         <v-sheet elevation="12" class="my-8 mx-auto py-8 px-8">
           <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="login">
             <v-text-field

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="2">
+      <v-col xl="2" lg="8" md="8" sm="12" xs="12">
         <v-card class="d-flex flex-column mt-6">
           <v-btn :to="{ name: 'DashboardMain' }" tile>Informações</v-btn>
           <v-btn :to="{ name: 'DashboardCourses' }" tile>Cursos</v-btn>
@@ -10,7 +10,7 @@
           <v-btn :to="{ name: 'DashboardPaths' }" tile>Trilhas</v-btn>
         </v-card>
       </v-col>
-      <v-col cols="10">
+      <v-col xl="10" lg="12" md="8" sm="12" xs="12">
         <router-view></router-view>
       </v-col>
     </v-row>

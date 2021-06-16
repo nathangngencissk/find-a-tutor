@@ -73,6 +73,7 @@ export default {
           {
             id: 1,
             question: '',
+            status: 'EM AVALIAÇÃO',
             rightOptions: [],
             options: [
               {
@@ -106,6 +107,7 @@ export default {
           description:
             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quia vitae voluptatum sequi. Iste eos, sapiente tempora voluptatem excepturi dignissimos accusamus officia esse neque expedita soluta iusto quaerat dolores veritatis?',
           tags: ['Programação', 'Jogos'],
+          status: 'APROVADO',
           exercises: [
             {
               id: 1,
@@ -205,6 +207,7 @@ export default {
           value: 'name',
         },
         { text: 'Tags', value: 'tags', align: 'center' },
+        { text: 'Status', value: 'status', align: 'center' },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
       ];

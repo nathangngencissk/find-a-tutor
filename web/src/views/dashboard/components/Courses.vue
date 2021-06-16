@@ -63,6 +63,7 @@ export default {
         category: '',
         value: 0,
         description: '',
+        status: 'EM AVALIAÇÃO',
       },
       courses: [
         {
@@ -72,6 +73,7 @@ export default {
           value: 150,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'APROVADO',
         },
         {
           id: 2,
@@ -80,6 +82,7 @@ export default {
           value: 200,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'APROVADO',
         },
         {
           id: 3,
@@ -88,6 +91,7 @@ export default {
           value: 350,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'EM AVALIAÇÃO',
         },
         {
           id: 4,
@@ -96,6 +100,7 @@ export default {
           value: 100,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'EM AVALIAÇÃO',
         },
         {
           id: 5,
@@ -104,6 +109,7 @@ export default {
           value: 80,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'EM AVALIAÇÃO',
         },
         {
           id: 6,
@@ -112,6 +118,7 @@ export default {
           value: 1000,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'EM AVALIAÇÃO',
         },
         {
           id: 7,
@@ -120,6 +127,7 @@ export default {
           value: 250,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'EM AVALIAÇÃO',
         },
         {
           id: 8,
@@ -128,6 +136,7 @@ export default {
           value: 175,
           description:
             'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
+          status: 'REPROVADO',
         },
       ],
     };
@@ -145,6 +154,7 @@ export default {
           value: 'category',
         },
         { text: 'Valor (R$)', value: 'value', align: 'center' },
+        { text: 'Status', value: 'status', align: 'center' },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
       ];

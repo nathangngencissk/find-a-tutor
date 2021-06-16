@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6" xl="6" lg="12" md="12" sm="12" class="mt-4">
+      <v-col xs="12" xl="6" lg="12" md="12" sm="12" class="mt-4">
         <h2 class="mb-6">{{ courseName }}</h2>
         <h3 class="mb-2">Descrição</h3>
         <v-sheet elevation="1" class="pa-6">
@@ -41,7 +41,7 @@
         <h3 class="my-4">Tutor</h3>
         <v-card>
           <v-row justify="center" align="center">
-            <v-col cols="3">
+            <v-col xl="3" lg="4" md="6" sm="12" xs="12">
               <v-avatar width="150" height="150">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTohhzqvuj_Z-Erq0V3pDbboZq1Xvy5zYS4UA&usqp=CAU"
@@ -49,7 +49,7 @@
                 />
               </v-avatar>
             </v-col>
-            <v-col cols="8">
+            <v-col xl="9" lg="8" md="6" sm="12" xs="12">
               <h4 class="mb-4">Gustavo Gambit</h4>
               <ul>
                 <li>Número de cursos na plataforma: 8</li>
@@ -61,7 +61,7 @@
         </v-card>
         <h3 class="mt-8">Avaliações</h3>
         <v-row justify="center" align="center">
-          <v-col cols="5">
+          <v-col xl="5" lg="8" md="6" sm="12" xs="12">
             <v-rating
               v-model="courseRatingFloat"
               background-color="indigo lighten-3"
@@ -70,7 +70,7 @@
               size="40"
             ></v-rating>
           </v-col>
-          <v-col cols="1">
+          <v-col xl="1" lg="2" md="6" sm="12" xs="12">
             <span id="course-rating-average-subtitle" class="indigo--text">4.5</span>
           </v-col>
         </v-row>
@@ -146,13 +146,13 @@
         </v-row>
         <h3 class="mt-8">Comentários</h3>
         <v-row justify="center" align="center" class="mt-1">
-          <v-col cols="2">
+          <v-col xl="2" lg="3" md="6" sm="12" xs="12">
             <v-avatar width="75" height="75" class="ml-4" color="red">
               <span class="white--text headline">CJ</span>
             </v-avatar>
             <v-subheader class="mx-auto">Carlos Jonas</v-subheader>
           </v-col>
-          <v-col cols="8">
+          <v-col xl="8" lg="9" md="6" sm="12" xs="12">
             <p class="headline">
               <v-rating
                 value="4.5"
@@ -160,7 +160,7 @@
                 background-color="grey darken-1"
                 empty-icon="$ratingFull"
                 half-increments
-                hover
+                readonly
                 size="10"
               ></v-rating>
             </p>
@@ -173,13 +173,13 @@
         </v-row>
         <v-divider></v-divider>
         <v-row justify="center" align="center" class="mt-1">
-          <v-col cols="2">
+          <v-col xl="2" lg="3" md="6" sm="12" xs="12">
             <v-avatar width="75" height="75" class="ml-4">
               <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
             </v-avatar>
             <v-subheader class="mx-auto">João Flores</v-subheader>
           </v-col>
-          <v-col cols="8">
+          <v-col xl="8" lg="9" md="6" sm="12" xs="12">
             <p class="headline">
               <v-rating
                 value="5"
@@ -187,7 +187,7 @@
                 background-color="grey darken-1"
                 empty-icon="$ratingFull"
                 half-increments
-                hover
+                readonly
                 size="10"
               ></v-rating>
             </p>
@@ -202,7 +202,7 @@
           <v-btn large color="primary" outlined block> Ver mais comentários </v-btn>
         </div>
       </v-col>
-      <v-col cols="3" lg="3" md="6" sm="12">
+      <v-col xl="3" lg="3" md="6" sm="12" xs="12">
         <v-card width="400">
           <v-img height="200px" :src="courseImage" />
 

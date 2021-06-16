@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="2">
+      <v-col xl="2" lg="2" md="3" sm="3" xs="4">
         <h1>Find a Tutor</h1>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="2">
+      <v-col xl="2" lg="2" md="3" sm="3" xs="4">
         <v-img
           :aspect-ratio="16 / 9"
           max-height="200"
@@ -44,3 +44,9 @@
     </v-row>
   </v-container>
 </template>
+
+<script>
+export default {
+  title: 'Sobre | Find a Tutor',
+};
+</script>

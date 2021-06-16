@@ -1,10 +1,17 @@
 <template>
   <v-container>
-    <v-subheader>Fixados</v-subheader>
+    <v-row class="d-flex justify-space-between">
+      <v-col xl="2" lg="4" md="4" sm="6" xs="12">
+        <v-subheader>Fixados</v-subheader>
+      </v-col>
+      <v-col xl="2" lg="4" md="4" sm="6" xs="12">
+        <v-btn color="success" @click="add">Nova anotação</v-btn>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col xl="2" lg="4" md="4" sm="6" xs="12" v-for="note in fixedNotes" :key="note.id">
         <v-badge bordered color="orange lighten-2" icon="fas fa-thumbtack" overlap>
-          <v-card class="mx-auto" min-width="250">
+          <v-card class="mx-auto" min-width="200">
             <v-card-title> {{ note.title }} </v-card-title>
 
             <v-card-subtitle>
@@ -107,6 +114,12 @@ export default {
     ],
   }),
   methods: {
+    add() {
+      this.title = '';
+      this.body = '';
+      this.courseId = null;
+      this.overlay = true;
+    },
     edit(event, note) {
       this.title = note.title;
       this.body = note.body;

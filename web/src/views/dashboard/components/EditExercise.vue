@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <v-row align="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Nome</h2>
         <v-text-field label="Nome" :value="exerciseList.name" class="mt-3"></v-text-field>
       </v-col>
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Tags</h2>
         <v-select
           v-model="selectedTags"
@@ -18,11 +18,11 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Descrição</h2>
         <textarea :value="exerciseList.description" auto-grow @input="update($event)"></textarea>
       </v-col>
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2>Preview</h2>
         <div v-html="compiledMarkdown"></div>
       </v-col>

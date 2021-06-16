@@ -17,7 +17,7 @@
     </v-row>
     <v-subheader> Turmas </v-subheader>
     <v-row justify="start">
-      <v-col cols="3" v-for="cl in classes" :key="cl.id">
+      <v-col xl="3" lg="4" md="4" sm="6" xs="12" v-for="cl in classes" :key="cl.id">
         <CourseClassCard :courseClass="cl" />
       </v-col>
     </v-row>

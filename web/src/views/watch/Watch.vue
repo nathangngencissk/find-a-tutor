@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="8">
+      <v-col xl="8" lg="8" cols="12">
         <v-row>
           <v-sheet width="100%" height="100%" elevation="1">
             <vue-plyr>
@@ -45,7 +45,7 @@
           </v-tabs-items>
         </v-row>
       </v-col>
-      <v-col cols="4">
+      <v-col xl="4" lg="4" cols="12">
         <v-subheader>Aulas</v-subheader>
         <v-expansion-panels popout>
           <v-expansion-panel v-for="(item, i) in 11" :key="i">

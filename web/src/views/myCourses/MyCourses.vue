@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="3" lg="3" md="6">
+      <v-col xl="3" lg="3" md="12" sm="12" xs="12">
         <v-sheet elevation="1" width="100%">
           <v-container>
             <v-subheader color="primary">Palavras-chave</v-subheader>
@@ -74,9 +74,9 @@
           </v-container>
         </v-sheet>
       </v-col>
-      <v-col cols="9" lg="9" md="6">
+      <v-col xl="9" lg="9" md="12" sm="12" xs="12">
         <v-row justify="start">
-          <v-col cols="12" lg="4" md="12" v-for="course in courses" :key="course.id">
+          <v-col cols="12" lg="4" md="6" v-for="course in courses" :key="course.id">
             <CourseCardFull
               :courseName="course.name"
               :courseImage="course.image"

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="space-around">
-      <v-col cols="12" md="4">
+      <v-col cols="12" xl="6" lg="6">
         <v-sheet elevation="12" class="my-8 mx-auto py-8 px-8">
           <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="login">
             <v-text-field v-model="email" label="Email" :rules="emailRules" required></v-text-field>
@@ -16,12 +16,28 @@
             ></v-text-field>
           </v-form>
           <v-row justify="center" align="center">
-            <v-col cols="4" class="d-flex flex-column">
+            <v-col xl="4" lg="6" md="8" cols="10" class="d-flex flex-column">
               <v-btn :disabled="!valid" color="success" class="my-2" @click="login" block>
                 Entrar
               </v-btn>
               <v-btn color="primary" to="/register" class="my-2" block>Registrar</v-btn>
-              <v-btn class="blue--text my-2" color="white" depressed block @click="loginGoogle"
+              <v-btn
+                class="blue--text my-2"
+                color="white"
+                v-if="$vuetify.theme.dark"
+                depressed
+                block
+                @click="loginGoogle"
+                ><v-icon class="my-2 mr-2">fab fa-google</v-icon> Google</v-btn
+              >
+              <v-btn
+                class="blue--text my-2"
+                color="white"
+                v-else
+                outlined
+                depressed
+                block
+                @click="loginGoogle"
                 ><v-icon class="my-2 mr-2">fab fa-google</v-icon> Google</v-btn
               >
               <v-btn class="white--text my-2" color="#4867aa" block depressed @click="loginFacebook"

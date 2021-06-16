@@ -2,32 +2,32 @@
   <v-container>
     <v-container>
       <v-row>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Nome</h2>
           <v-text-field label="Nome" :value="course.name"></v-text-field>
         </v-col>
-        <v-col cols="3">
+        <v-col xl="3" xs="12" cols="6">
           <h2>Categoria</h2>
           <v-select :items="items" label="Categoria" :value="course.category"></v-select>
         </v-col>
-        <v-col cols="3">
+        <v-col xl="3" xs="12" cols="6">
           <h2>Valor (R$)</h2>
           <v-text-field label="Valor" :value="course.value"></v-text-field>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Descrição</h2>
           <textarea :value="course.description" auto-grow @input="update($event)"></textarea>
         </v-col>
-        <v-col cols="6">
+        <v-col xl="6" cols="12">
           <h2>Preview</h2>
           <div v-html="compiledMarkdown"></div>
         </v-col>
       </v-row>
     </v-container>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col xl="6" cols="12">
         <h2 class="mb-2">Imagem de capa</h2>
         <v-hover>
           <template v-slot:default="{ hover }">

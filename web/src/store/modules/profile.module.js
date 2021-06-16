@@ -35,6 +35,14 @@ const actions = {
       commit('changeProfilePicture', currentUser.attributes.picture);
     } else {
       try {
+        if (currentUser.attributes.picture === 'default-profile-picture.png') {
+          const picture = await Storage.get(currentUser.attributes.picture, {
+            level: 'public',
+          });
+          commit('changeProfilePicture', picture);
+          return;
+        }
+
         const picture = await Storage.get(currentUser.attributes.picture, {
           level: 'private',
         });

@@ -2,7 +2,7 @@
   <v-container>
     <h1>{{ cl.name }}</h1>
     <v-row class="mt-4">
-      <v-col cols="3">
+      <v-col xl="3" lg="3" md="4" sm="12" xs="12">
         <v-card class="mb-4 mr-2" max-width="400" height="100%">
           <v-img class="white--text align-end" height="200px" :src="cl.image" />
 
@@ -42,7 +42,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="9">
+      <v-col xl="9" lg="9" md="8" sm="12" xs="12">
         <v-sheet height="100%" width="100%" elevation="1">
           <router-view></router-view>
         </v-sheet>

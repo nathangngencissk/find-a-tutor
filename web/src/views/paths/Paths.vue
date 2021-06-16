@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="3" lg="3" md="6">
+      <v-col xl="3" lg="3" md="12" sm="12" xs="12">
         <v-sheet elevation="1" width="100%" class="mb-4">
           <v-subheader color="primary">Salvos</v-subheader>
           <v-list-item v-for="bookmark in bookmarks" :key="bookmark.name">
@@ -54,9 +54,9 @@
           </v-container>
         </v-sheet>
       </v-col>
-      <v-col cols="9" lg="9" md="6">
+      <v-col xl="9" lg="9" md="12" sm="12" xs="12">
         <v-row justify="space-around">
-          <v-col cols="12" lg="4" md="12" v-for="n in 9" :key="n">
+          <v-col cols="12" xl="4" lg="4" md="6" v-for="n in 9" :key="n">
             <PathCard
               pathName="Programação C#"
               pathImage="https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg"
