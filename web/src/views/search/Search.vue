@@ -1,8 +1,21 @@
 <template>
   <v-container>
-    <v-subheader color="primary" class="mt-4 mb-2"
-      >Resultados de busca para: {{ this.searchText }}</v-subheader
-    >
+    <v-row>
+      <v-col xl="3" lg="4" cols="12">
+        <v-subheader color="primary" class="mt-4 mb-2"
+          >Resultados de busca para: {{ this.searchText }}</v-subheader
+        >
+      </v-col>
+      <v-col xl="9" lg="8" cols="12">
+        <v-text-field
+          label="Pesquisar"
+          append-icon="fas fa-search"
+          v-model="search"
+          filled
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col xl="3" lg="4" cols="12">
         <v-sheet elevation="1" width="100%">

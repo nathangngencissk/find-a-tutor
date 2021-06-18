@@ -216,6 +216,7 @@ export default {
   data: () => ({
     snackbar: false,
     items: [
+      { title: 'Pesquisar', icon: 'fas fa-search', url: '/search' },
       { title: 'Meus Cursos', icon: 'fas fa-book', url: '/courses' },
       { title: 'Minhas Turmas', icon: 'fas fa-users', url: '/classes' },
       { title: 'Trilhas de Aprendizagem', icon: 'fas fa-hiking', url: '/paths' },
