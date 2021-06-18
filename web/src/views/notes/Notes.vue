@@ -73,7 +73,7 @@ export default {
   title: 'Minhas Anotações | Find a Tutor',
   data: () => ({
     overlay: false,
-    zIndex: 0,
+    zIndex: 2,
     title: '',
     body: '',
     courseId: '',

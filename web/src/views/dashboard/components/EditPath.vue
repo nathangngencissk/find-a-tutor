@@ -62,7 +62,7 @@
             >
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="rgba(0, 0, 0, 0.87)">
-                  <v-btn color="primary">Alterar</v-btn>
+                  <v-btn color="primary" @click="change">Alterar</v-btn>
                 </v-overlay>
               </v-fade-transition>
             </v-img>
@@ -80,6 +80,46 @@
         <v-btn color="success">Salvar</v-btn>
       </v-col>
     </v-row>
+    <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
+      <v-card class="pa-4" width="600px">
+        <v-form>
+          <v-text-field label="Buscar" :value="title"></v-text-field>
+          <v-btn color="success" depressed>Buscar</v-btn>
+          <v-row>
+            <v-col xl="4" lg="6" cols="12">
+              <v-subheader>Programação C#</v-subheader>
+              <v-img
+                src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                cover
+              >
+              </v-img>
+            </v-col>
+            <v-col xl="4" lg="6" cols="12">
+              <v-subheader>Programação C#</v-subheader>
+              <v-img
+                src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                cover
+              >
+              </v-img>
+            </v-col>
+            <v-col xl="4" lg="6" cols="12">
+              <v-subheader>Programação C#</v-subheader>
+              <v-img
+                src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                cover
+              >
+              </v-img>
+            </v-col>
+          </v-row>
+        </v-form>
+        <v-row class="my-4 mx-1">
+          <v-btn class="white--text mr-4" color="success" @click="overlay = false"> Salvar </v-btn>
+          <v-btn class="white--text" color="error" outlined @click="overlay = false">
+            Fechar
+          </v-btn>
+        </v-row>
+      </v-card>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -96,7 +136,7 @@ export default {
     search: '',
     isDragging: false,
     overlay: false,
-    zIndex: 0,
+    zIndex: 2,
     title: '',
     body: '',
   }),
@@ -111,6 +151,9 @@ export default {
         id: 0,
         name: '',
       });
+    },
+    change() {
+      this.overlay = true;
     },
   },
   watch: {},

@@ -227,7 +227,7 @@ export default {
     search: '',
     isDragging: false,
     overlay: false,
-    zIndex: 0,
+    zIndex: 2,
     title: '',
     body: '',
     posts: [
