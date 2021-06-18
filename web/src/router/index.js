@@ -249,6 +249,16 @@ const routes = [
         path: 'paths/edit',
         component: () => import('@/views/dashboard/components/EditPath.vue'),
       },
+      {
+        name: 'DashboardWithdrawal',
+        path: 'withdrawal',
+        component: () => import('@/views/dashboard/components/Withdrawal.vue'),
+      },
+      {
+        name: 'DashboardWithdrawalAccount',
+        path: 'account',
+        component: () => import('@/views/dashboard/components/WithdrawalAccount.vue'),
+      },
     ],
   },
 ];
