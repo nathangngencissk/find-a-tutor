@@ -12,7 +12,7 @@ class _MyWatchClassState extends State<MyWatchClass> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -43,7 +43,6 @@ class _MyWatchClassState extends State<MyWatchClass> {
                 looping: true,
               ),
             ),
-            // the tab bar with two items
             Container(
               padding: EdgeInsets.only(left: 0, right: 222),
               child: Text(
@@ -69,14 +68,6 @@ class _MyWatchClassState extends State<MyWatchClass> {
                     Tab(
                       child: Text(
                         'Aulas',
-                        style: TextStyle(
-                          color: AppTheme.darkerText,
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Mais',
                         style: TextStyle(
                           color: AppTheme.darkerText,
                         ),
@@ -141,94 +132,187 @@ class _MyWatchClassState extends State<MyWatchClass> {
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 1: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
+                  GridView.count(
+                    primary: false,
+                    padding: const EdgeInsets.all(30),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: <Widget>[
+                      Container(
+                        height: 150,
+                        width: 190,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              offset: const Offset(0, 3),
+                              spreadRadius: 5,
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
+                        child: Container(
+                            margin:
+                                EdgeInsets.only(left: 5, top: 20, bottom: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "Início: 2021-11-21",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Término: 2021-12-22",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Dia: Segunda-feira",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Horário: 14:00",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 2: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
+                      Container(
+                        height: 150,
+                        width: 190,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              offset: const Offset(0, 3),
+                              spreadRadius: 5,
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
+                        child: Container(
+                            margin:
+                                EdgeInsets.only(left: 5, top: 20, bottom: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "Início: 2021-11-21",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Término: 2021-12-22",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Dia: Segunda-feira",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Horário: 14:00",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 3: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
+                      Container(
+                        height: 150,
+                        width: 190,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              offset: const Offset(0, 3),
+                              spreadRadius: 5,
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
+                        child: Container(
+                            margin:
+                                EdgeInsets.only(left: 5, top: 20, bottom: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "Início: 2021-07-21",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Término: 2021-10-25",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Dia: Segunda-feira",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Horário: 14:00",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 4: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
+                      Container(
+                        height: 150,
+                        width: 190,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              offset: const Offset(0, 3),
+                              spreadRadius: 5,
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 5: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
+                        child: Container(
+                            margin:
+                                EdgeInsets.only(left: 5, top: 20, bottom: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "Início: 2021-07-21",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Término: 2021-10-25",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Dia: Segunda-feira",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Horário: 14:00",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                      )
                     ],
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 1: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 2: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 3: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 4: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 5: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ],
-                  ),
+                  )
                 ],
               ),
             ),

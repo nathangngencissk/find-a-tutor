@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../../main.dart';
 import 'components/category_list_view.dart';
 import 'components/popular_course_list_view.dart';
+import 'navigationBar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -17,10 +18,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   CategoryType categoryType = CategoryType.ui;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  Widget screenView;
 
   @override
   void initState() {
     super.initState();
+
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
@@ -79,9 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
     String txt = '';
+    var icon;
     if (CategoryType.ui == categoryTypeData) {
       txt = 'Ui/Ux';
-      Icon(Icons.menu_book_rounded);
+      icon = Icon(Icons.menu_book_rounded);
     } else if (CategoryType.coding == categoryTypeData) {
       txt = 'Codar';
       Icon(Icons.menu_book_rounded);
@@ -138,13 +142,15 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text('Categorias',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          letterSpacing: 0.27,
-                          color: AppTheme.darkerText,
-                        )),
+                    Text(
+                      'Categorias',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        letterSpacing: 0.27,
+                        color: AppTheme.darkerText,
+                      ),
+                    ),
                   ],
                 ),
                 ElevatedButton(
@@ -158,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ]),
         ),
         const SizedBox(
-          height: 16,
+          height: 26,
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -248,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 60,
                     child: IconButton(
                       onPressed: () {
-                        // showSearch(context: context, delegate: Search());
+                        moveToSeeAll();
                       },
                       icon: Icon(Icons.search),
                       color: HexColor('#B9BABC'),
@@ -272,74 +278,68 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           CarouselSlider(
             items: <Widget>[
-              Expanded(
-                child: Container(
-                  width: 300,
-                  alignment: Alignment.topCenter,
-                  margin: EdgeInsets.only(top: 20, bottom: 30),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/python.jpg"),
-                          fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black87,
-                            blurRadius: 15,
-                            offset: Offset(10, 10))
-                      ]),
+              Container(
+                width: 300,
+                alignment: Alignment.topCenter,
+                margin: EdgeInsets.only(top: 20, bottom: 30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/python.jpg"),
+                      fit: BoxFit.cover),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black87,
+                      blurRadius: 15,
+                      offset: Offset(10, 10),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  width: 300,
-                  margin: EdgeInsets.only(top: 20, bottom: 30),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/gambit.jpg"),
-                          fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black87,
-                            blurRadius: 15,
-                            offset: Offset(10, 10))
-                      ]),
-                ),
+              Container(
+                width: 300,
+                margin: EdgeInsets.only(top: 20, bottom: 30),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/gambit.jpg"),
+                        fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black87,
+                          blurRadius: 15,
+                          offset: Offset(10, 10))
+                    ]),
               ),
-              Expanded(
-                child: Container(
-                  width: 300,
-                  margin: EdgeInsets.only(top: 20, bottom: 30),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/powerbi.png"),
-                          fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black87,
-                            blurRadius: 15,
-                            offset: Offset(10, 10))
-                      ]),
-                ),
+              Container(
+                width: 300,
+                margin: EdgeInsets.only(top: 20, bottom: 30),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/powerbi.png"),
+                        fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black87,
+                          blurRadius: 15,
+                          offset: Offset(10, 10))
+                    ]),
               ),
-              Expanded(
-                child: Container(
-                  width: 300,
-                  margin: EdgeInsets.only(top: 20, bottom: 30),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/sql.jpg"),
-                          fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black87,
-                            blurRadius: 15,
-                            offset: Offset(10, 10))
-                      ]),
-                ),
+              Container(
+                width: 300,
+                margin: EdgeInsets.only(top: 20, bottom: 30),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/sql.jpg"),
+                        fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black87,
+                          blurRadius: 15,
+                          offset: Offset(10, 10))
+                    ]),
               ),
             ],
             options: CarouselOptions(autoPlay: false),
@@ -351,7 +351,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget getPopularCourseUI() {
     var size = MediaQuery.of(context).size;
-
     return Column(
       children: <Widget>[
         Padding(
@@ -371,13 +370,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               ElevatedButton(
-                  child: Text(
-                    'Veja mais',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    moveToSeeAll();
-                  }),
+                child: Text(
+                  'Veja mais',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  moveToSeeAll();
+                },
+              ),
             ],
           ),
         ),

@@ -98,9 +98,6 @@ class CategorieDataView extends StatelessWidget {
                                                       color: Colors.grey
                                                           .withOpacity(0.8)),
                                                 ),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
                                                 Expanded(
                                                   child: Text(
                                                     'Julia Rodrigues',

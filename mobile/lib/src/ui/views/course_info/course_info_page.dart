@@ -49,15 +49,38 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     return Container(
       color: AppTheme.nearlyWhite,
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Comprar cursos',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                letterSpacing: 0.27,
+                color: AppTheme.darkerText,
+              )),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 1.2,
-                  child: Image.asset('assets/images/webInterFace.png'),
-                ),
+                Container(
+                  height: 320,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/webdesign.jpg"),
+                        fit: BoxFit.fill),
+                  ),
+                )
+                // AspectRatio(
+                //   aspectRatio: 1.1,
+                //   child: Image.asset('assets/images/webdesign.jpg'),
+                // ),
               ],
             ),
             Positioned(
@@ -82,11 +105,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: SingleChildScrollView(
                     child: Container(
-                      constraints: BoxConstraints(
-                          minHeight: infoHeight,
-                          maxHeight: tempHeight > infoHeight
-                              ? tempHeight
-                              : infoHeight),
+                      height: 380,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +135,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   'R\$159,99',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w200,
+                                    fontWeight: FontWeight.w300,
                                     fontSize: 22,
                                     letterSpacing: 0.27,
                                     color: Colors.black,
@@ -126,13 +145,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        '4.3',
+                                        '4.4',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w200,
+                                          fontWeight: FontWeight.w300,
                                           fontSize: 22,
                                           letterSpacing: 0.27,
-                                          color: AppTheme.grey,
+                                          color: Colors.black,
                                         ),
                                       ),
                                       Icon(
@@ -170,10 +189,10 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   'Comece do 0 ao avançado no curso de Web Design, que foi feito para você iniciante entender fácilmente toda a base até o avançado!',
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w200,
+                                    fontWeight: FontWeight.w300,
                                     fontSize: 14,
                                     letterSpacing: 0.27,
-                                    color: AppTheme.grey,
+                                    color: Colors.black,
                                   ),
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
@@ -191,29 +210,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: AppTheme.nearlyWhite,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(16.0),
-                                        ),
-                                        border: Border.all(
-                                            color:
-                                                AppTheme.grey.withOpacity(0.2)),
-                                      ),
-                                      child: Icon(
-                                        Icons.add,
-                                        color: AppTheme.nearlyBlue,
-                                        size: 28,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
                                   Expanded(
                                     child: Container(
                                       height: 48,
@@ -265,23 +261,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                 alignment: Alignment.center,
                 scale: CurvedAnimation(
                     parent: animationController, curve: Curves.fastOutSlowIn),
-                child: Card(
-                  color: AppTheme.nearlyBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0)),
-                  elevation: 10.0,
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    child: Center(
-                      child: Icon(
-                        Icons.favorite,
-                        color: AppTheme.nearlyWhite,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                ),
               ),
             ),
             Padding(
@@ -289,20 +268,20 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
               child: SizedBox(
                 width: AppBar().preferredSize.height,
                 height: AppBar().preferredSize.height,
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius:
-                        BorderRadius.circular(AppBar().preferredSize.height),
-                    // child: Icon(
-                    //   Icons.arrow_back_ios,
-                    //   color: AppTheme.nearlyBlack,
-                    // ),
-                    // onTap: () {
-                    //   Navigator.pop(context);
-                    // },
-                  ),
-                ),
+                // child: Material(
+                //   color: Colors.transparent,
+                //   child: InkWell(
+                //     borderRadius:
+                //         BorderRadius.circular(AppBar().preferredSize.height),
+                //     // child: Icon(
+                //     //   Icons.arrow_back_ios,
+                //     //   color: AppTheme.nearlyBlack,
+                //     // ),
+                //     // onTap: () {
+                //     //   Navigator.pop(context);
+                //     // },
+                //   ),
+                // ),
               ),
             )
           ],
@@ -346,10 +325,10 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                 txt2,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w300,
                   fontSize: 14,
                   letterSpacing: 0.27,
-                  color: AppTheme.grey,
+                  color: Colors.black,
                 ),
               ),
             ],

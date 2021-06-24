@@ -52,9 +52,8 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
       child: Container(
         child: Scaffold(
           appBar: AppBar(
-            // AnimatedIcons.arrow_menu,
             title: Text(
-              'Mais cursos',
+              'Resultado da pesquisa',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 22,
@@ -80,6 +79,7 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                 },
                 child: Column(
                   children: <Widget>[
+                    getSearchBarUI(),
                     Expanded(
                       child: NestedScrollView(
                         controller: _scrollController,
@@ -88,13 +88,8 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                           return <Widget>[
                             SliverList(
                               delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                return Column(
-                                  children: <Widget>[
-                                    getSearchBarUI(),
-                                  ],
-                                );
-                              }, childCount: 1),
+                                  (BuildContext context, int index) {},
+                                  childCount: 1),
                             ),
                           ];
                         },
@@ -138,6 +133,15 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
     );
   }
 
+  void moveToSeeAll() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CoursesHomeScreen(),
+      ),
+    );
+  }
+
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
@@ -149,70 +153,73 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
   }
 
   Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 1, left: 49),
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(left: 30, right: 25, top: 15),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 320,
-            height: 75,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 18, bottom: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(13.0),
-                    bottomLeft: Radius.circular(13.0),
-                    topLeft: Radius.circular(13.0),
-                    topRight: Radius.circular(13.0),
-                  ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(left: 2, right: 10),
+              width: 5,
+              height: 50,
+              decoration: BoxDecoration(
+                color: HexColor('#f2f1f0'),
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(13.0),
+                  bottomLeft: Radius.circular(13.0),
+                  topLeft: Radius.circular(13.0),
+                  topRight: Radius.circular(13.0),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 16, right: 10),
-                        child: TextFormField(
-                          style: TextStyle(
-                            fontFamily: 'WorkSans',
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 16, right: 10),
+                      child: TextFormField(
+                        style: TextStyle(
+                          fontFamily: 'WorkSans',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: AppTheme.nearlyBlue,
+                        ),
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Procurar por curso',
+                          border: InputBorder.none,
+                          helperStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: AppTheme.nearlyBlue,
+                            color: HexColor('#B9BABC'),
                           ),
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: 'Procurar por curso',
-                            border: InputBorder.none,
-                            helperStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: HexColor('#B9BABC'),
-                            ),
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              letterSpacing: 0.2,
-                              color: HexColor('#B9BABC'),
-                            ),
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            letterSpacing: 0.2,
+                            color: HexColor('#B9BABC'),
                           ),
-                          onEditingComplete: () {},
                         ),
+                        onEditingComplete: () {},
                       ),
                     ),
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Icon(Icons.search, color: HexColor('#B9BABC')),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: IconButton(
+                      onPressed: () {
+                        moveToSeeAll();
+                      },
+                      icon: Icon(Icons.search),
+                      color: HexColor('#B9BABC'),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
-          const Expanded(
-            child: SizedBox(),
-          )
         ],
       ),
     );
@@ -295,32 +302,8 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
               height: AppBar().preferredSize.height,
               child: Material(
                 color: Colors.transparent,
-                // Icone de voltar da página
-                // child: InkWell(
-                //   borderRadius: const BorderRadius.all(
-                //     Radius.circular(32.0),
-                //   ),
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //   },
-                //   // child: Padding(
-                //   //   padding: const EdgeInsets.all(8.0),
-                //   //   child: Icon(Icons.arrow_back),
-                //   // ),
-                // ),
               ),
             ),
-            // Expanded(
-            //   child: Center(
-            //     child: Text(
-            //       'Explore',
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.w600,
-            //         fontSize: 22,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Container(
               width: AppBar().preferredSize.height + 40,
               height: AppBar().preferredSize.height,

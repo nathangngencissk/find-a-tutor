@@ -49,8 +49,9 @@ class _LoginPageState extends State<LoginPage> {
               height: 100,
               alignment: Alignment.bottomCenter,
               child: FlatButton(
-                  onPressed: widget.shouldShowSignUp,
-                  child: Text('Não possui conta? Cadastre-se.')),
+                onPressed: widget.shouldShowSignUp,
+                child: Text('Não possui conta? Cadastre-se.'),
+              ),
             )
           ],
         ),

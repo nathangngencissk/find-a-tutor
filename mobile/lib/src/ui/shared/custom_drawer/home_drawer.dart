@@ -51,6 +51,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
         labelName: 'Convide um amigo',
         icon: Icon(Icons.group),
       ),
+      DrawerList(
+        index: DrawerIndex.Profile,
+        labelName: 'Meu perfil',
+        icon: Icon(Icons.account_circle_rounded),
+      ),
     ];
   }
 
@@ -172,10 +177,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
     );
   }
 
-  void onTapped() {
-    print('Fazendo algo');
-  }
-
   Widget inkwell(DrawerList listData) {
     return Material(
       color: Colors.transparent,
@@ -277,9 +278,8 @@ enum DrawerIndex {
   FeedBack,
   Help,
   Share,
-  About,
   Invite,
-  Testing,
+  Profile,
 }
 
 class DrawerList {

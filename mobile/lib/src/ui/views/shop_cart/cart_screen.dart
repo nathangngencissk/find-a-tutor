@@ -48,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Container(
-            height: 16,
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-      margin: EdgeInsets.only(top: 10, bottom: 50),
+      margin: EdgeInsets.only(top: 10, bottom: 25),
     );
   }
 

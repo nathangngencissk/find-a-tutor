@@ -6,6 +6,7 @@ import 'package:find_a_tutor/src/ui/views/help/help_screen.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
 import 'package:find_a_tutor/src/ui/views/home/navigationBar.dart';
 import 'package:find_a_tutor/src/ui/views/invite_friend/invite_friend_screen.dart';
+import 'package:find_a_tutor/src/ui/views/myProfile/profile.dart';
 import 'package:flutter/material.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
@@ -23,8 +24,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   @override
   void initState() {
-    drawerIndex = DrawerIndex.Help;
-    screenView = MyBottomNavigatonBar();
+    drawerIndex = DrawerIndex.HOME;
+    screenView = MyBottomNavigationBar();
     super.initState();
   }
 
@@ -60,7 +61,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         });
       } else if (drawerIndex == DrawerIndex.HOME) {
         setState(() {
-          screenView = MyBottomNavigatonBar();
+          screenView = MyBottomNavigationBar();
         });
       } else if (drawerIndex == DrawerIndex.FeedBack) {
         setState(() {
@@ -69,6 +70,10 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       } else if (drawerIndex == DrawerIndex.Invite) {
         setState(() {
           screenView = InviteFriend();
+        });
+      } else if (drawerIndex == DrawerIndex.Profile) {
+        setState(() {
+          screenView = Profile();
         });
       }
     }

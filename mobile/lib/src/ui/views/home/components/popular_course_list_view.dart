@@ -158,7 +158,7 @@ class CategoryView extends StatelessWidget {
                                                   '${category.lessonCount} avaliações',
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
-                                                    fontWeight: FontWeight.w200,
+                                                    fontWeight: FontWeight.w400,
                                                     fontSize: 12,
                                                     letterSpacing: 0.27,
                                                     color: Colors.grey[600],
@@ -173,7 +173,7 @@ class CategoryView extends StatelessWidget {
                                                             TextAlign.left,
                                                         style: TextStyle(
                                                           fontWeight:
-                                                              FontWeight.w200,
+                                                              FontWeight.w300,
                                                           fontSize: 18,
                                                           letterSpacing: 0.27,
                                                           color: AppTheme.grey,
@@ -227,7 +227,7 @@ class CategoryView extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16.0)),
                             child: AspectRatio(
-                                aspectRatio: 1.28,
+                                aspectRatio: 1.29,
                                 child: Image.asset(category.imagePath)),
                           ),
                         ),

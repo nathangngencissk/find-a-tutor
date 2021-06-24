@@ -32,17 +32,17 @@ class _NavigationBarState extends State<NavigationBar> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: MyBottomNavigatonBar(),
+      home: MyBottomNavigationBar(),
     );
   }
 }
 
-class MyBottomNavigatonBar extends StatefulWidget {
+class MyBottomNavigationBar extends StatefulWidget {
   @override
-  _MyBottomNavigatonBarState createState() => _MyBottomNavigatonBarState();
+  _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
 }
 
-class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
+class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [

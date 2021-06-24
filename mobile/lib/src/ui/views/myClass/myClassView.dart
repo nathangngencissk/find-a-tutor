@@ -143,7 +143,18 @@ class _MyClassViewState extends State<MyClassView> {
                                         child: Column(
                                           children: <Widget>[
                                             Container(
-                                              height: 25,
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              'Em andamento',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 2,
                                             ),
                                             Row(
                                               children: <Widget>[
