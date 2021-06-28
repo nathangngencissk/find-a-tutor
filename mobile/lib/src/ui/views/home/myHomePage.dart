@@ -342,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]),
               ),
             ],
-            options: CarouselOptions(autoPlay: false),
+            options: CarouselOptions(autoPlay: true),
           )
         ],
       ),

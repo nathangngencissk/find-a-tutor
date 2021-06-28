@@ -226,7 +226,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 flex: 100,
-              )
+              ),
             ],
           ),
         ),

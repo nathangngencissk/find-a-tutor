@@ -11,7 +11,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.white,
         title: const Text(
           'Meu perfil',
           style: TextStyle(
@@ -66,112 +66,94 @@ class _ProfileState extends State<Profile> {
           SizedBox(
             height: 40,
           ),
-          ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              ExpansionTile(
-                title: Text('Nome de usuário'),
-                children: <Widget>[
-                  Container(
-                    width: 350,
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'Nome'),
+          Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Nome de usuário',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      letterSpacing: 0.27,
+                      color: AppTheme.darkerText,
                     ),
                   ),
-                  Container(
-                    width: 350,
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'Sobrenome'),
+                ),
+                Container(
+                  width: 350,
+                  child: TextField(
+                    decoration: InputDecoration(labelText: 'Nome'),
+                  ),
+                ),
+                Container(
+                  width: 350,
+                  child: TextField(
+                    decoration: InputDecoration(labelText: 'Sobrenome'),
+                  ),
+                ),
+                Container(
+                  height: 15,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: ElevatedButton(
+                    child: Text(
+                      'Salvar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    'Mudar senha',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      letterSpacing: 0.27,
+                      color: AppTheme.darkerText,
                     ),
                   ),
-                  Container(
-                    height: 15,
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 20, left: 10),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.lock), labelText: 'Senha atual'),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
-                    child: ElevatedButton(
-                      child: Text(
-                        'Salvar',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
-              ),
-              ExpansionTile(
-                title: Text('Foto de perfil'),
-                children: <Widget>[
-                  Container(
-                    child: SizedBox(
-                      height: 95,
-                      width: 90,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        fit: StackFit.expand,
-                        overflow: Overflow.visible,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/userImage.png"),
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 20, left: 10),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.lock), labelText: 'Nova senha'),
                   ),
-                  SizedBox(
-                    height: 15,
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 20, left: 10),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.lock),
+                        labelText: 'Confirme sua senha'),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    child: ElevatedButton(
-                      child: Text(
-                        'Mudar Foto',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {},
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: ElevatedButton(
+                    child: Text(
+                      'Salvar',
+                      style: TextStyle(color: Colors.white),
                     ),
-                  )
-                ],
-              ),
-              ExpansionTile(
-                title: Text('Mudar senha'),
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(right: 20, left: 10),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          icon: Icon(Icons.lock), labelText: 'Senha atual'),
-                    ),
+                    onPressed: () {},
                   ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20, left: 10),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          icon: Icon(Icons.lock), labelText: 'Nova senha'),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20, left: 10),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          icon: Icon(Icons.lock),
-                          labelText: 'Confirme sua senha'),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
-                    child: ElevatedButton(
-                      child: Text(
-                        'Salvar',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              )
-            ],
+                ),
+              ],
+            ),
           )
         ],
       ),

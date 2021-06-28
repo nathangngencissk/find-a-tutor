@@ -105,8 +105,8 @@ class CategorieDataView extends StatelessWidget {
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                         fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                                        color:
+                                                            Colors.grey[500]),
                                                   ),
                                                 ),
                                               ],
@@ -122,12 +122,9 @@ class CategorieDataView extends StatelessWidget {
                                                     rating:
                                                         categorieData.rating,
                                                     size: 20,
-                                                    color: CoursesAppTheme
-                                                            .buildLightTheme()
-                                                        .primaryColor,
-                                                    borderColor: CoursesAppTheme
-                                                            .buildLightTheme()
-                                                        .primaryColor,
+                                                    color: Colors.lightBlue,
+                                                    borderColor:
+                                                        Colors.lightBlue,
                                                   ),
                                                   Text(
                                                     ' ${categorieData.reviews} Reviews',

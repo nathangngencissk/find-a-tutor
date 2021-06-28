@@ -210,25 +210,26 @@ class CategoryView extends StatelessWidget {
                     ),
                     Container(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 24, right: 16, left: 16),
+                        padding: const EdgeInsets.only(
+                            top: 24, right: 16, left: 16, bottom: 20),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16.0)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: AppTheme.grey.withOpacity(0.2),
-                                  offset: const Offset(0.0, 0.0),
+                                  color: AppTheme.grey.withOpacity(0.4),
+                                  offset: const Offset(8, 6),
                                   blurRadius: 6.0),
                             ],
                           ),
                           child: ClipRRect(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(16.0)),
+                                const BorderRadius.all(Radius.circular(20.0)),
                             child: AspectRatio(
-                                aspectRatio: 1.29,
-                                child: Image.asset(category.imagePath)),
+                              aspectRatio: 1.5,
+                              child: Image.asset(category.imagePath),
+                            ),
                           ),
                         ),
                       ),

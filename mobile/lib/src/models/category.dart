@@ -60,8 +60,8 @@ class Category {
       rating: 4.9,
     ),
     Category(
-      imagePath: 'assets/images/cuidarpet.jpg',
-      title: 'Adestramento de Cães',
+      imagePath: 'assets/images/redes.jpg',
+      title: 'Redes de compuradores',
       lessonCount: 12,
       money: 25,
       rating: 4.8,

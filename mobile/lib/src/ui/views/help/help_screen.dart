@@ -52,7 +52,7 @@ class _HelpScreenState extends State<HelpScreen> {
               Container(
                 padding: const EdgeInsets.only(top: 16),
                 child: const Text(
-                  'douglas@hotmail.com',
+                  'findtutor@gmail.com',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 22,

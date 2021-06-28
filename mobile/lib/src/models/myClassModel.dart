@@ -19,7 +19,7 @@ class MyClassModel {
 
   static List<MyClassModel> myClassList = <MyClassModel>[
     MyClassModel(
-      imagePath: 'assets/images/infra.jpg',
+      imagePath: 'assets/images/redes.jpg',
       titleTxt: 'Infraestrutura',
       dist: 2.0,
       reviews: 80,
