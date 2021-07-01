@@ -9,6 +9,29 @@ class MyWatchClass extends StatefulWidget {
 }
 
 class _MyWatchClassState extends State<MyWatchClass> {
+  List data = [
+    {
+      'title': 'Aula 01 - Introdução a Web Design',
+      'desc':
+          'Você entenderá quais os conceitos de web design e de onde surgiu.\n',
+    },
+    {
+      'title': 'Aula 02 - Instalando o ambiente',
+      'desc': 'Você irá aprender como instalar as ferramentas necessárias.\n',
+    },
+    {
+      'title': 'Aula 03 - Primeiros passos ',
+      'desc': 'Aprenda os primeiros passos na carreira de Web Design.\n'
+    },
+    {
+      'title': 'Aula 04 - Boas práticas',
+      'desc':
+          'Você aprenderá a desenvolver e modificar layouts da melhor maneira possível.\n',
+    }
+  ];
+
+  String selectedData;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -88,49 +111,55 @@ class _MyWatchClassState extends State<MyWatchClass> {
             Expanded(
               child: TabBarView(
                 children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 1: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: ExpansionPanelList(
+                        children: data.map((e) {
+                          return ExpansionPanel(
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
+                              return ListTile(
+                                title: Text(
+                                  e['title'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    letterSpacing: 0.27,
+                                    color: AppTheme.darkerText,
+                                  ),
+                                ),
+                              );
+                            },
+                            body: ListTile(
+                              title: Text(e['desc']),
+                              subtitle: Text(
+                                'Assistir aula',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
+                                    fontSize: 18),
+                              ),
+                            ),
+                            isExpanded:
+                                selectedData == e['title'] ? true : false,
+                          );
+                        }).toList(),
+                        expansionCallback: (int index, bool isExpanded) {
+                          if (isExpanded == false) {
+                            setState(() {
+                              selectedData = data[index]['title'];
+                            });
+                          } else {
+                            setState(() {
+                              selectedData = '';
+                            });
+                          }
+                        },
+                        animationDuration: Duration(milliseconds: 300),
+                        expandedHeaderPadding: EdgeInsets.all(2),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 2: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 3: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 4: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, right: 120),
-                        child: Text(
-                          'Aula 5: Texto de exemplo ',
-                          style: TextStyle(color: Colors.black, fontSize: 23),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   GridView.count(
                     primary: false,

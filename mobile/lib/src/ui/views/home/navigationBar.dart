@@ -65,6 +65,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         child: _children[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        iconSize: 30,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey[500],
         showUnselectedLabels: true,

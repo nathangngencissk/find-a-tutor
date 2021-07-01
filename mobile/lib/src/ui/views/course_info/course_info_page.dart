@@ -70,17 +70,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
             Column(
               children: <Widget>[
                 Container(
-                  height: 320,
+                  height: 350,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/webdesign.jpg"),
+                        image: AssetImage("assets/images/devgame.png"),
                         fit: BoxFit.fill),
                   ),
                 )
-                // AspectRatio(
-                //   aspectRatio: 1.1,
-                //   child: Image.asset('assets/images/webdesign.jpg'),
-                // ),
               ],
             ),
             Positioned(
@@ -114,7 +110,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             padding: const EdgeInsets.only(
                                 top: 32.0, left: 18, right: 16),
                             child: Text(
-                              'Web Design',
+                              'Desenvolvimento de games',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -186,7 +182,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
-                                  'Comece do 0 ao avançado no curso de Web Design, que foi feito para você iniciante entender fácilmente toda a base até o avançado!',
+                                  'Comece do 0 ao avançado no curso de Desenvolvimento de games, que foi feito para você iniciante entender fácilmente toda a base até o avançado!',
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w300,

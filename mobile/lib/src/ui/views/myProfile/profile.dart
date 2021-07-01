@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
                 overflow: Overflow.visible,
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/userImage.png"),
+                    backgroundImage: AssetImage("assets/images/szostak.jpg"),
                   ),
                   Positioned(
                     right: -16,

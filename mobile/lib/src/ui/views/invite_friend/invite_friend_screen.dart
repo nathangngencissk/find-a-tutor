@@ -42,7 +42,7 @@ class _InviteFriendState extends State<InviteFriend> {
               Container(
                 padding: const EdgeInsets.only(top: 16),
                 child: const Text(
-                  'Convide um amigo para receber prêmios incríveis!',
+                  'Convide seus amigos para conhecer o app!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -50,8 +50,8 @@ class _InviteFriendState extends State<InviteFriend> {
                 ),
               ),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: EdgeInsets.only(top: 5),
                   child: Center(
                     child: Container(
                       width: 120,

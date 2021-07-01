@@ -40,14 +40,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Photo Gallery App',
+      title: 'Find a tutor',
       theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-      // 2
       home: StreamBuilder<AuthState>(
-          // 2
           stream: _authService.authStateController.stream,
           builder: (context, snapshot) {
-            // 3
             if (snapshot.hasData) {
               return Navigator(
                 pages: [

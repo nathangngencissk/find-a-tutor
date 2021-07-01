@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-
 import 'package:find_a_tutor/src/utils/auth_credentials.dart';
 
 class LoginPage extends StatefulWidget {
@@ -65,8 +64,8 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         TextField(
           controller: _usernameController,
-          decoration: InputDecoration(
-              icon: Icon(Icons.mail), labelText: 'Nome de usuário'),
+          decoration:
+              InputDecoration(icon: Icon(Icons.mail), labelText: 'E-mail'),
         ),
         // Password TextField
         TextField(
@@ -117,11 +116,21 @@ class _LoginPageState extends State<LoginPage> {
               mini: true,
               onPressed: () {},
             ),
-            SignInButton(
-              Buttons.Email,
-              mini: true,
-              onPressed: () {},
+            SizedBox(
+              width: 1,
             ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image(
+                  image: AssetImage("assets/images/google.png"),
+                  height: 36.0,
+                ),
+              ),
+            ),
+            // backgroundColor:
+            //     button == Buttons.Google ? Color(0xFFFFFFFF) : Color(0xFF4285F4),
           ],
         ))
       ],

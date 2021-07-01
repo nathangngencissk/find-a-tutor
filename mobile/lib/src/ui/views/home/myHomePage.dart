@@ -2,13 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../main.dart';
 import 'components/category_list_view.dart';
 import 'components/popular_course_list_view.dart';
-import 'navigationBar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -85,10 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var icon;
     if (CategoryType.ui == categoryTypeData) {
       txt = 'Ui/Ux';
-      icon = Icon(Icons.menu_book_rounded);
     } else if (CategoryType.coding == categoryTypeData) {
       txt = 'Codar';
-      Icon(Icons.menu_book_rounded);
     } else if (CategoryType.basic == categoryTypeData) {
       txt = 'Web Design';
     }
@@ -159,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                      moveToSeeAll();
+                      moveToCateScreen();
                     }),
               ]),
         ),
@@ -186,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         CategoryListView(
           callBack: () {
-            moveTo();
+            moveToInfoScreen();
           },
         ),
       ],
@@ -194,10 +191,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getSearchBarUI() {
-    const historyLenght = 5;
-
-    List<String> _searchHistory = ['Web design', 'flutter', 'C#'];
-
     var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.only(left: 45, right: 10),
@@ -385,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: size.height - 500,
           child: PopularCourseListView(
             callBack: () {
-              moveTo();
+              moveToInfoScreen();
             },
           ),
         )
@@ -393,11 +386,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void moveTo() {
+  void moveToInfoScreen() {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => CourseInfoScreen(),
+      ),
+    );
+  }
+
+  void moveToCateScreen() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CategoriesScreen(),
       ),
     );
   }
@@ -409,69 +411,6 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context) => CoursesHomeScreen(),
       ),
     );
-  }
-}
-
-class Search extends SearchDelegate {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        icon: Icon(Icons.close),
-        onPressed: () {
-          query:
-          "";
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  String selectedResult;
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(selectedResult),
-      ),
-    );
-  }
-
-  final List<String> listExample;
-  Search(this.listExample);
-
-  List<String> recentList = ['Text 4', 'Text 3'];
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList
-        : suggestionList.addAll(listExample.where(
-            (element) => element.contains(query),
-          ));
-    return ListView.builder(
-        itemCount: suggestionList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              suggestionList[index],
-            ),
-            onTap: () {
-              selectedResult = suggestionList[index];
-              showResults(context);
-            },
-          );
-        });
   }
 }
 
