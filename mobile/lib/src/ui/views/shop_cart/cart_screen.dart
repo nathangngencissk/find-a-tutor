@@ -69,7 +69,7 @@ class _CartScreenState extends State<CartScreen> {
               Container(
                 margin: EdgeInsets.only(right: 30),
                 child: Text(
-                  "R\$1196,00",
+                  "R\$398,00",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,
@@ -128,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
     return Container(
       alignment: Alignment.topLeft,
       child: Text(
-        "Total(4) Items",
+        "Total(2) Items",
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22,

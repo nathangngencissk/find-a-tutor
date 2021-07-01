@@ -19,7 +19,7 @@ class AndamentCourse {
 
   static List<AndamentCourse> myCourseList = <AndamentCourse>[
     AndamentCourse(
-      imagePath: 'assets/images/webdesign.jpg',
+      imagePath: 'assets/images/redes.jpg',
       titleTxt: 'Web Design',
       dist: 2.0,
       reviews: 80,

@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 
@@ -222,15 +223,17 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               blurRadius: 10.0),
                                         ],
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          'Comprar Curso',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                            letterSpacing: 0.0,
-                                            color: AppTheme.nearlyWhite,
+                                      child: SizedBox.expand(
+                                        child: FlatButton(
+                                          onPressed: () {
+                                            moveToShopCart();
+                                          },
+                                          child: Text(
+                                            'Adicionar ao carrinho',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 17),
                                           ),
                                         ),
                                       ),
@@ -268,6 +271,15 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
             )
           ],
         ),
+      ),
+    );
+  }
+
+  void moveToShopCart() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CartScreen(),
       ),
     );
   }

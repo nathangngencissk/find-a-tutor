@@ -191,7 +191,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget getSearchBarUI() {
-    var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.only(left: 45, right: 10),
       child: Row(
@@ -278,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
-                      image: AssetImage("assets/images/python.jpg"),
+                      image: AssetImage("assets/images/programacao.jpg"),
                       fit: BoxFit.cover),
                   boxShadow: [
                     BoxShadow(
@@ -295,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                        image: AssetImage("assets/images/gambit.jpg"),
+                        image: AssetImage("assets/images/powerbi.png"),
                         fit: BoxFit.cover),
                     boxShadow: [
                       BoxShadow(
@@ -310,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                        image: AssetImage("assets/images/powerbi.png"),
+                        image: AssetImage("assets/images/gambit.jpg"),
                         fit: BoxFit.cover),
                     boxShadow: [
                       BoxShadow(

@@ -1,4 +1,5 @@
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/checkbox_state.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,8 +22,6 @@ DateTime focusedDay = DateTime.now();
 class _DetailClassState extends State<DetailClass> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -53,7 +52,7 @@ class _DetailClassState extends State<DetailClass> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                    image: AssetImage("assets/images/webdesign.jpg"),
+                    image: AssetImage("assets/images/redes.jpg"),
                     fit: BoxFit.fitWidth),
                 boxShadow: [
                   BoxShadow(
@@ -65,9 +64,9 @@ class _DetailClassState extends State<DetailClass> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 25, left: 0, right: 222),
+              padding: EdgeInsets.only(top: 25, left: 20, right: 222),
               child: Text(
-                'Web Design',
+                'Redes de computadores',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
@@ -194,7 +193,7 @@ class _DetailClassState extends State<DetailClass> {
       );
 
   Widget buildSingleCheckBox(CheckBoxState checkbox) => CheckboxListTile(
-        title: Text('Título'),
+        title: Text(checkbox.title),
         subtitle: Text("Subtítulo, descrição da postagem realizada!"),
         controlAffinity: ListTileControlAffinity.leading,
         value: checkbox.value,
@@ -202,10 +201,38 @@ class _DetailClassState extends State<DetailClass> {
           setState(
             () {
               checkbox.value = value;
+              createAlertDialog(checkbox);
             },
           );
         },
         activeColor: Colors.blue,
         checkColor: Colors.white,
       );
+
+  createAlertDialog(CheckBoxState checkbox) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(checkbox.title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Descrição da postagem realizada pelo tutor'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

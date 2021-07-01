@@ -11,9 +11,8 @@ class MyWatchClass extends StatefulWidget {
 class _MyWatchClassState extends State<MyWatchClass> {
   List data = [
     {
-      'title': 'Aula 01 - Introdução a Web Design',
-      'desc':
-          'Você entenderá quais os conceitos de web design e de onde surgiu.\n',
+      'title': 'Aula 01 - Introdução a Redes',
+      'desc': 'Você entenderá quais os conceitos de redes e de onde surgiu.\n',
     },
     {
       'title': 'Aula 02 - Instalando o ambiente',
@@ -21,7 +20,7 @@ class _MyWatchClassState extends State<MyWatchClass> {
     },
     {
       'title': 'Aula 03 - Primeiros passos ',
-      'desc': 'Aprenda os primeiros passos na carreira de Web Design.\n'
+      'desc': 'Aprenda os primeiros passos na carreira de Redes.\n'
     },
     {
       'title': 'Aula 04 - Boas práticas',
@@ -69,7 +68,7 @@ class _MyWatchClassState extends State<MyWatchClass> {
             Container(
               padding: EdgeInsets.only(left: 0, right: 222),
               child: Text(
-                'Web Design: Aula 1',
+                'Redes: Aula 1',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
@@ -193,15 +192,15 @@ class _MyWatchClassState extends State<MyWatchClass> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  "Início: 2021-11-21",
+                                  "Início: 2021-01-01",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Término: 2021-12-22",
+                                  "Término: 2021-05-12",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Dia: Segunda-feira",
+                                  "Segunda-feira",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
@@ -244,11 +243,11 @@ class _MyWatchClassState extends State<MyWatchClass> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Dia: Segunda-feira",
+                                  "Terça-feira",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Horário: 14:00",
+                                  "Horário: 19:00",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -287,11 +286,11 @@ class _MyWatchClassState extends State<MyWatchClass> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Dia: Segunda-feira",
+                                  "Sexta-feira",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Horário: 14:00",
+                                  "Horário: 18:00",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -322,19 +321,19 @@ class _MyWatchClassState extends State<MyWatchClass> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text(
-                                  "Início: 2021-07-21",
+                                  "Início: 2021-07-01",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Término: 2021-10-25",
+                                  "Término: 2021-10-08",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Dia: Segunda-feira",
+                                  "Segunda-feira",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Horário: 14:00",
+                                  "Horário: 13:00",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],

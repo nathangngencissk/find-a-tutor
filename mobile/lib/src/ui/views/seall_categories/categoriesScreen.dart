@@ -1,4 +1,6 @@
+import 'package:find_a_tutor/src/ui/shared/hex_color.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -15,15 +17,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Categorias',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 22,
-            letterSpacing: 0.27,
-            color: AppTheme.darkerText,
-          ),
-        ),
+        title: getSearchBarUI(),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
@@ -83,6 +77,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               ),
               getButtonUI(
                   CategoryType.basic, categoryType == CategoryType.basic),
+              const SizedBox(
+                width: 10,
+              ),
+              getButtonUI(
+                  CategoryType.csharp, categoryType == CategoryType.csharp),
             ],
           ),
         ),
@@ -93,17 +92,41 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: <Widget>[
-              getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
+              getButtonUI(
+                  CategoryType.redes, categoryType == CategoryType.redes),
+              const SizedBox(
+                width: 17,
+              ),
+              getButtonUI(CategoryType.py, categoryType == CategoryType.py),
               const SizedBox(
                 width: 17,
               ),
               getButtonUI(
-                  CategoryType.coding, categoryType == CategoryType.coding),
+                  CategoryType.webdev, categoryType == CategoryType.webdev),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Row(
+            children: <Widget>[
+              getButtonUI(CategoryType.java, categoryType == CategoryType.java),
               const SizedBox(
                 width: 17,
               ),
               getButtonUI(
-                  CategoryType.basic, categoryType == CategoryType.basic),
+                  CategoryType.vuejs, categoryType == CategoryType.vuejs),
+              const SizedBox(
+                width: 17,
+              ),
+              getButtonUI(
+                  CategoryType.pentaho, categoryType == CategoryType.pentaho),
+              const SizedBox(
+                width: 17,
+              ),
             ],
           ),
         ),
@@ -111,15 +134,37 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
+  void moveToSeeAll() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CoursesHomeScreen(),
+      ),
+    );
+  }
+
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
     String txt = '';
-    var icon;
     if (CategoryType.ui == categoryTypeData) {
       txt = 'Ui/Ux';
     } else if (CategoryType.coding == categoryTypeData) {
       txt = 'Codar';
     } else if (CategoryType.basic == categoryTypeData) {
-      txt = 'Web Design';
+      txt = '  Web Design';
+    } else if (CategoryType.csharp == categoryTypeData) {
+      txt = 'Csharp';
+    } else if (CategoryType.webdev == categoryTypeData) {
+      txt = 'Web';
+    } else if (CategoryType.py == categoryTypeData) {
+      txt = 'Python';
+    } else if (CategoryType.redes == categoryTypeData) {
+      txt = 'Redes';
+    } else if (CategoryType.java == categoryTypeData) {
+      txt = 'Java';
+    } else if (CategoryType.vuejs == categoryTypeData) {
+      txt = 'VueJs';
+    } else if (CategoryType.pentaho == categoryTypeData) {
+      txt = 'Pentaho';
     }
 
     return Expanded(
@@ -162,8 +207,87 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 }
 
+Widget getSearchBarUI() {
+  return Container(
+    padding: const EdgeInsets.only(right: 10),
+    child: Row(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(left: 2, right: 10),
+            width: 5,
+            height: 50,
+            decoration: BoxDecoration(
+              color: HexColor('#f2f1f0'),
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(13.0),
+                bottomLeft: Radius.circular(13.0),
+                topLeft: Radius.circular(13.0),
+                topRight: Radius.circular(13.0),
+              ),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, right: 10),
+                    child: TextFormField(
+                      style: TextStyle(
+                        fontFamily: 'WorkSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppTheme.nearlyBlue,
+                      ),
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Procurar por curso',
+                        border: InputBorder.none,
+                        helperStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: HexColor('#B9BABC'),
+                        ),
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          letterSpacing: 0.2,
+                          color: HexColor('#B9BABC'),
+                        ),
+                      ),
+                      onEditingComplete: () {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: IconButton(
+                    onPressed: () {
+                      // moveToSeeAll();
+                    },
+                    icon: Icon(Icons.search),
+                    color: HexColor('#B9BABC'),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 enum CategoryType {
   ui,
   coding,
   basic,
+  webdev,
+  webdesign,
+  py,
+  csharp,
+  redes,
+  java,
+  vuejs,
+  pentaho
 }
