@@ -1,5 +1,7 @@
 import Vue from 'vue';
-import Amplify from 'aws-amplify';
+import gql from 'graphql-tag';
+import Amplify, { Auth } from 'aws-amplify';
+import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 import './plugins/base';
 import './plugins/chartist';
 import './plugins/lodash';
@@ -21,6 +23,15 @@ Vue.mixin(titleMixin);
 
 Amplify.configure(aws_exports);
 
+const client = new AWSAppSyncClient({
+  url: aws_exports.aws_appsync_graphqlEndpoint,
+  region: aws_exports.aws_appsync_region,
+  auth: {
+    type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
+    jwtToken: async () => (await Auth.currentSession()).getIdToken().getJwtToken(),
+  },
+});
+
 Vue.use(VuePlyr, {
   plyr: {},
 });
@@ -31,6 +42,10 @@ Vue.use({
     Vue.prototype.$marked = marked;
     Vue.parser = parser;
     Vue.prototype.$parser = parser;
+    Vue.gql = gql;
+    Vue.prototype.$gql = gql;
+    Vue.gqlClient = client;
+    Vue.prototype.$gqlClient = client;
   },
 });
 
