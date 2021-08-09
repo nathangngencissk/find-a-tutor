@@ -55,9 +55,48 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties:
       FunctionName: !Sub "${AWS::StackName}-get-all-course-categories"
-      CodeUri: "../find-a-tutor/handlers/courses_categories/get_all"
-      Handler: "get_all.handle"
+      CodeUri: "../find-a-tutor/handlers/get_all_courses_categories"
+      Handler: "get_all_courses_categories.handle"
       Role: !GetAtt ExecutionRoleGetAllCourseCategories.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:7"
+
+  ExecutionRoleGetPopularCourses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-get-popular-courses-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPopularCoursesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-get-all-course-categories"
+      CodeUri: "../find-a-tutor/handlers/get_popular_courses"
+      Handler: "get_popular_courses.handle"
+      Role: !GetAtt ExecutionRoleGetPopularCourses.Arn
       Environment:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
