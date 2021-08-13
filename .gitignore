@@ -83,3 +83,6 @@ amplifyconfiguration.dart
 
 # aws sam
 .aws-sam
+
+# notebooks
+*.ipynb
