@@ -11,28 +11,6 @@ class MyClass extends StatefulWidget {
   _MyClassState createState() => _MyClassState();
 }
 
-// class Item {
-//   Item({
-//     this.expandedValue,
-//     this.headerValue,
-//     this.isExpanded = false,
-//   });
-
-//   String expandedValue;
-//   String headerValue;
-//   bool isExpanded;
-// }
-
-// List<Item> generateItems(int numberOfItems) {
-//   return List<Item>.generate(numberOfItems, (int index) {
-//     index + 1;
-//     return Item(
-//       headerValue: 'Turma $index',
-//       expandedValue: 'Essa é a turma  $index',
-//     );
-//   });
-// }
-
 class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
   // final List<Item> _data = generateItems(8);
 

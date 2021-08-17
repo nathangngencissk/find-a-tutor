@@ -1,13 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
+
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
-import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
+import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
-import 'components/category_list_view.dart';
-import 'components/popular_course_list_view.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -181,11 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        CategoryListView(
-          callBack: () {
-            moveToInfoScreen();
-          },
-        ),
+        // PopularCourseListView()(
+        //   callBack: () {
+        //     moveToInfoScreen();
+        //   },
+        // ),
       ],
     );
   }
@@ -375,8 +376,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         SizedBox(
           height: size.height - 500,
-          child: PopularCourseListView(
-            callBack: () {
+          child: PopularCourseView(
+            callback: () {
               moveToInfoScreen();
             },
           ),
