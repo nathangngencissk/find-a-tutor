@@ -1,5 +1,5 @@
 select c.*,
-	   string_agg(distinct cc.schedule, '|') as classes,
+	   string_agg(distinct CONCAT(cc.start_date::varchar, ' - ', cc.schedule), '|') as classes,
 	   cat.name as category_name,
 	   count(r.*) as reviews,
 	   avg(r.rating) as avg_rating

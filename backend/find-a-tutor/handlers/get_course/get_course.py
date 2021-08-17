@@ -1,6 +1,7 @@
 import json
 import os
 
+import boto3
 from cron_descriptor import get_description, Options
 
 from utils.database import Database
@@ -13,13 +14,28 @@ options.locale_code = "pt_PT"
 
 db = Database(conn_string=CONN_STRING)
 
+cognito_idp = boto3.client("cognito-idp", region_name="us-east-1")
+
 
 def handle(event, context):
+
+    response_user = cognito_idp.admin_get_user(
+        UserPoolId="us-east-1_bJZNUFkda", Username=event["arguments"]["user_id"]
+    )
+
+    user = {
+        "username": response_user["Username"],
+        "created_at": response_user["UserCreateDate"].strftime("%d/%m/%Y"),
+        "updated_at": response_user["UserLastModifiedDate"].strftime("%d/%m/%Y"),
+    }
+
+    for attribute in response_user["Username"]["UserAttributes"]:
+        user[attribute["Name"]] = attribute["Value"]
 
     with open("get_course.sql", "r") as f:
         query = f.read()
 
-    arguments = {"course_id": event["arguments"]["id"]}
+    arguments = {"course_id": event["arguments"]["id"], "user_id": user["username"]}
 
     result = db.query(query=query, arguments=arguments)
 
@@ -35,6 +51,7 @@ def handle(event, context):
         )
 
     course["classes"] = course_classes
+    course["owner_name"] = f'{user["name"]} {user["family_name"]}'
 
     response = json.dumps(course, cls=DateTimeEncoder)
 

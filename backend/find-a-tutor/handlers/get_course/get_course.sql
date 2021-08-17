@@ -23,7 +23,9 @@ select c.*,
 	   cte_reviews.rating_3 as rating_3,
 	   cte_reviews.rating_4 as rating_4,
 	   cte_reviews.rating_5 as rating_5,
-	   avg(r.rating) as avg_rating
+	   avg(r.rating) as avg_rating,
+       (select avg(r.rating) from reviews r inner join courses c on c.id = r.course_id where c.owner_id = :user_id) as avg_rating_owner,
+       (select count(*) from courses c where c.owner_id = :user_id) as count_user_courses
 from courses c
 join cte_total on cte_total.course_id = c.id
 join cte_reviews on cte_reviews.course_id = c.id

@@ -11,7 +11,7 @@ db = Database(conn_string=CONN_STRING)
 
 def handle(event, context):
 
-    with open("get_others_are_studying.sql", "r") as f:
+    with open("get_studying_now.sql", "r") as f:
         query = f.read()
 
     others_are_studying = db.query(query=query)

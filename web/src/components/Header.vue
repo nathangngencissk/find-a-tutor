@@ -286,10 +286,9 @@ export default {
         .query({
           query: this.$gql(echoFunction),
         })
-        .then(({ data: { echo } }) => {
-          console.log(typeof echo);
-          const body = JSON.parse(echo);
-          console.log(body.body);
+        .then((response) => {
+          const echo = JSON.parse(response.data.echo);
+          console.log(echo);
         });
     },
     changeToStudent() {
