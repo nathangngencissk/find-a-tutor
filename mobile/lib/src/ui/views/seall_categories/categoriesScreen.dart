@@ -1,6 +1,6 @@
 import 'package:find_a_tutor/src/ui/shared/hex_color.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/seeall_courses/courses_home_screen.dart';
+import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesScreen extends StatefulWidget {
