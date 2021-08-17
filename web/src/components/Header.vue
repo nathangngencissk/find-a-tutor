@@ -210,6 +210,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { echo as echoFunction } from '@/graphql/queries';
 
 export default {
   name: 'Header',
@@ -281,6 +282,15 @@ export default {
     changeToTutor() {
       this.$store.dispatch('common/changeToTutor');
       this.snackbar = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(echoFunction),
+        })
+        .then(({ data: { echo } }) => {
+          console.log(typeof echo);
+          const body = JSON.parse(echo);
+          console.log(body.body);
+        });
     },
     changeToStudent() {
       this.$store.dispatch('common/changeToStudent');
