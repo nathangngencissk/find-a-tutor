@@ -66,13 +66,13 @@ export default {
     events: [
       {
         name: 'Programação C#',
-        start: '2019-01-07 19:00',
-        end: '2019-01-07 21:00',
+        start: '2019-01-07 19:00:00',
+        end: '2019-01-07 21:00:00',
       },
       {
         name: 'Redes de Computadores',
-        start: '2019-01-09 19:00',
-        end: '2019-01-09 22:30',
+        start: '2019-01-09 19:00:00',
+        end: '2019-01-09 22:30:00',
       },
     ],
     classes: [

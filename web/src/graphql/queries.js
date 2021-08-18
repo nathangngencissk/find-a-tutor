@@ -17,14 +17,14 @@ export const getStudyingNow = /* GraphQL */ `
   }
 `;
 export const getCourse = /* GraphQL */ `
-  query GetCourse($id: String, $user_id: String) {
-    getCourse(id: $id, user_id: $user_id)
+  query GetCourse($id: String) {
+    getCourse(id: $id)
   }
 `;
 export const searchCourse = /* GraphQL */ `
   query SearchCourse(
     $keywords: [String]
-    $category_id: String
+    $category_id: Int
     $order_by: String
     $min_eval: Float
     $max_eval: Float
@@ -45,5 +45,60 @@ export const searchCourse = /* GraphQL */ `
 export const myCourses = /* GraphQL */ `
   query MyCourses($id: String) {
     myCourses(id: $id)
+  }
+`;
+export const myCourseClasses = /* GraphQL */ `
+  query MyCourseClasses($id: String) {
+    myCourseClasses(id: $id)
+  }
+`;
+export const searchPath = /* GraphQL */ `
+  query SearchPath(
+    $keywords: [String]
+    $order_by: String
+    $min_eval: Float
+    $max_eval: Float
+  ) {
+    searchPath(
+      keywords: $keywords
+      order_by: $order_by
+      min_eval: $min_eval
+      max_eval: $max_eval
+    )
+  }
+`;
+export const getMySavedPaths = /* GraphQL */ `
+  query GetMySavedPaths($id: String) {
+    getMySavedPaths(id: $id)
+  }
+`;
+export const savePath = /* GraphQL */ `
+  query SavePath($user_id: String, $path_id: Int) {
+    savePath(user_id: $user_id, path_id: $path_id)
+  }
+`;
+export const unsavePath = /* GraphQL */ `
+  query UnsavePath($user_id: String, $path_id: Int) {
+    unsavePath(user_id: $user_id, path_id: $path_id)
+  }
+`;
+export const ratePath = /* GraphQL */ `
+  query RatePath($user_id: String, $path_id: Int, $rating: Float) {
+    ratePath(user_id: $user_id, path_id: $path_id, rating: $rating)
+  }
+`;
+export const getPath = /* GraphQL */ `
+  query GetPath($id: String) {
+    getPath(id: $id)
+  }
+`;
+export const getPathRate = /* GraphQL */ `
+  query GetPathRate($user_id: String, $path_id: String) {
+    getPathRate(user_id: $user_id, path_id: $path_id)
+  }
+`;
+export const getPathCourses = /* GraphQL */ `
+  query GetPathCourses($path_id: String) {
+    getPathCourses(path_id: $path_id)
   }
 `;

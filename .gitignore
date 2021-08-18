@@ -86,3 +86,4 @@ amplifyconfiguration.dart
 
 # notebooks
 *.ipynb
+.ipynb_checkpoints
