@@ -14,13 +14,6 @@ db = Database(conn_string=CONN_STRING)
 
 def handle(event, context):
 
-    with open("get_my_course_classes.sql", "r") as f:
-        query = f.read()
-
-    arguments = {"user_id": event["arguments"]["id"]}
-
-    my_course_classes = db.query(query=query, arguments=arguments)
-
     now = datetime.now()
     start = now - timedelta(days=now.weekday())
     end = start + timedelta(days=6)

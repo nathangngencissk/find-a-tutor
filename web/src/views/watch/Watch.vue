@@ -23,11 +23,6 @@
           </v-tabs>
           <v-tabs-items v-model="tab" id="tabs-items">
             <v-tab-item>
-              <v-card color="basil" flat min-height="200px" class="pa-4">
-                <div v-html="compiledMarkdown"></div>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
               <v-card color="basil" flat min-height="200px">
                 <CourseNotes id="1" />
               </v-card>
@@ -78,10 +73,6 @@ export default {
   data: () => ({
     tab: null,
     items: [
-      {
-        name: 'Descrição',
-        body: '',
-      },
       {
         name: 'Anotações',
         body: '',

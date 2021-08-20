@@ -102,3 +102,13 @@ export const getPathCourses = /* GraphQL */ `
     getPathCourses(path_id: $path_id)
   }
 `;
+export const getExerciseLists = /* GraphQL */ `
+  query GetExerciseLists($user_id: String) {
+    getExerciseLists(user_id: $user_id)
+  }
+`;
+export const getExerciseList = /* GraphQL */ `
+  query GetExerciseList($id: String) {
+    getExerciseList(id: $id)
+  }
+`;
