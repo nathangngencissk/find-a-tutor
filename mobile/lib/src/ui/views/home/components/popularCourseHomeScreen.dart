@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:find_a_tutor/src/models/popularCourse.dart';
-import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
-import 'package:find_a_tutor/src/ui/theme/theme.dart';
+// import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
@@ -18,9 +17,9 @@ class _PopularCourseScreenState extends State<PopularCourseScreen>
   AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
 
-  Widget tabBody = Container(
-    color: CoursesAppTheme.background,
-  );
+  // Widget tabBody = Container(
+  //   color: CoursesAppTheme.background,
+  // );
 
   @override
   void initState() {
@@ -47,72 +46,74 @@ class _PopularCourseScreenState extends State<PopularCourseScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: CoursesAppTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {},
-                                  childCount: 1),
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, Widget child) {
+        return Container(
+          child: Scaffold(
+            body: Stack(
+              children: <Widget>[
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: NestedScrollView(
+                          controller: _scrollController,
+                          headerSliverBuilder:
+                              (BuildContext context, bool innerBoxIsScrolled) {
+                            return <Widget>[
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {},
+                                    childCount: 1),
+                              ),
+                            ];
+                          },
+                          body: Container(
+                            // color:
+                            //     CoursesAppTheme.buildLightTheme().backgroundColor,
+                            child: ListView.builder(
+                              itemCount: popularCourseList.length,
+                              padding: const EdgeInsets.only(top: 8),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int index) {
+                                final int count = popularCourseList.length > 10
+                                    ? 10
+                                    : popularCourseList.length;
+                                final Animation<double> animation =
+                                    Tween<double>(begin: 0.0, end: 1.0).animate(
+                                        CurvedAnimation(
+                                            parent: animationController,
+                                            curve: Interval(
+                                                (1 / count) * index, 1.0,
+                                                curve: Curves.fastOutSlowIn)));
+                                animationController.forward();
+                                return PopularCourseView(
+                                  callback: () {},
+                                  popularCourseData: popularCourseList[index],
+                                  // animation: animation,
+                                  // animationController: animationController,
+                                );
+                              },
                             ),
-                          ];
-                        },
-                        body: Container(
-                          color:
-                              CoursesAppTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: popularCourseList.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count = popularCourseList.length > 10
-                                  ? 10
-                                  : popularCourseList.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController.forward();
-                              return PopularCourseView(
-                                callback: () {},
-                                popularCourseData: popularCourseList[index],
-                                animation: animation,
-                                animationController: animationController,
-                              );
-                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

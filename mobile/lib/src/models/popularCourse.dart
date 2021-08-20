@@ -1,27 +1,27 @@
 class PopularCourse {
   PopularCourse({
-    this.titleTxt = '',
     this.imagePath = '',
+    this.titleTxt = '',
     this.lessonCount = 0,
     this.money = 0,
     this.rating = 0.0,
-    this.subTxt = "",
+    this.price = '',
+    this.subTxt = '',
     this.reviews = 80,
-    this.price = "",
   });
 
+  String imagePath;
   String titleTxt;
   int lessonCount;
   int money;
   double rating;
-  String imagePath;
-  String subTxt;
   int reviews;
+  String subTxt;
   String price;
 
   static List<PopularCourse> popularCourseList = <PopularCourse>[
     PopularCourse(
-      imagePath: 'assets/images/daytrade.jpg',
+      imagePath: './assets/images/daytrade.jpg',
       titleTxt: 'Curso de Day Trade',
       lessonCount: 12,
       money: 25,

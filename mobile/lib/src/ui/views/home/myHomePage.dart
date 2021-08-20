@@ -3,6 +3,7 @@ import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/models/tabicon_data.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
@@ -16,6 +17,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  PopularCourseScreen popularCourseScreen;
   CategoryType categoryType = CategoryType.ui;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   Widget screenView;
@@ -376,11 +378,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         SizedBox(
           height: size.height - 500,
-          child: PopularCourseView(
-            callback: () {
-              moveToInfoScreen();
-            },
-          ),
+          child: PopularCourseScreen(
+              // callback: () {
+              //   moveToInfoScreen();
+              // },
+              ),
         )
       ],
     );
