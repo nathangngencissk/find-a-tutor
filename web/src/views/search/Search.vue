@@ -7,17 +7,17 @@
         >
       </v-col>
       <v-col xl="9" lg="8" cols="12">
-        <v-text-field
-          label="Pesquisar"
-          append-icon="fas fa-search"
-          v-model="search"
-          filled
-        ></v-text-field>
+        <v-subheader color="primary" class="mt-4 mb-2"
+          >{{ this.courses.length }} resultado(s) encontrado(s) ({{
+            this.loadTime
+          }}
+          segundos)</v-subheader
+        >
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col xl="3" lg="4" cols="12">
+      <v-col xl="3" lg="3" md="12" sm="12" xs="12">
         <v-sheet elevation="1" width="100%">
           <v-container>
             <v-subheader color="primary">Palavras-chave</v-subheader>
@@ -25,10 +25,10 @@
               v-model="selectedKeywords"
               :items="keywords"
               :search-input.sync="search"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
               hide-selected
               multiple
               small-chips
-              class="mx-2"
             >
               <template v-slot:no-data>
                 <v-list-item>
@@ -44,28 +44,26 @@
             <v-subheader color="primary">Categorias</v-subheader>
             <v-list>
               <v-list-group
-                v-for="item in items"
-                :key="item.title"
-                v-model="item.active"
-                :prepend-icon="item.action"
+                v-for="category in categories"
+                :key="category.id"
+                @click="activeCategory = category.name"
+                v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
+                :prepend-icon="category.icon"
                 no-action
               >
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                    <v-list-item-title v-text="category.name"></v-list-item-title>
                   </v-list-item-content>
                 </template>
-
-                <v-list-item v-for="child in item.items" :key="child.title">
-                  <v-list-item-content>
-                    <v-list-item-title v-text="child.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
               </v-list-group>
             </v-list>
             <v-divider></v-divider>
             <v-subheader color="primary">Ordenar por</v-subheader>
-            <v-radio-group v-model="orderBy">
+            <v-radio-group
+              v-model="orderBy"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
+            >
               <v-radio label="Avaliação" value="ratings"></v-radio>
               <v-radio label="Quantidade de avaliações" value="reviews"></v-radio>
               <v-radio label="Preço" value="price"></v-radio>
@@ -77,59 +75,49 @@
               step="0.5"
               max="5"
               min="1"
-              :value="[1, 5]"
               :tick-labels="ratings"
+              v-model="ratingsRange"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
             ></v-range-slider>
-            <v-divider></v-divider>
-            <v-subheader color="primary">Preço</v-subheader>
-            <v-checkbox
-              class="my-0"
-              v-model="price"
-              label="100-200"
-              value="[100, 200]"
-            ></v-checkbox>
-            <v-checkbox class="my-0" v-model="price" label=">300" value="[300, 0]"></v-checkbox>
-            <v-divider></v-divider>
-            <v-subheader color="primary">Idioma</v-subheader>
-            <v-checkbox
-              class="my-0"
-              v-model="language"
-              label="Português"
-              value="pt-br"
-            ></v-checkbox>
-            <v-checkbox class="my-0" v-model="language" label="Inglês" value="en"></v-checkbox>
           </v-container>
         </v-sheet>
       </v-col>
-      <v-col xl="9" lg="8" cols="12">
-        <v-row justify="space-around">
-          <v-col xl="3" lg="6" md="6" cols="12" v-for="n in 9" :key="n">
+      <v-col xl="9" lg="9" md="12" sm="12" xs="12">
+        <v-row justify="start">
+          <v-col cols="12" lg="4" md="6" v-for="course in filteredCourses" :key="course.id">
             <CourseCardFull
-              courseName="Programação C#"
-              courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-              courseRating="4.5"
-              courseReviews="413"
-              courseCategory="Tecnologia"
-              courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-              courseId="2"
+              :courseName="course.name"
+              :courseImage="course.image"
+              :courseRating="course.avg_rating"
+              :courseReviews="course.reviews"
+              :courseCategory="course.category_name"
+              :courseDescription="course.short_description"
+              :courseId="course.id"
+              :courseCost="course.price"
               courseLanguage="pt-br"
-              courseCost="150"
             />
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <div class="text-center my-10">
-      <v-pagination v-model="page" :length="4" circle></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CourseCardFull from '@/components/CourseCardFull.vue';
+import { searchCourse, getAllCourseCategories } from '@/graphql/queries';
 
 export default {
-  name: 'StudyingCourses',
+  name: 'Search',
 
   title: 'Busca | Find a Tutor',
 
@@ -139,6 +127,8 @@ export default {
 
   data: () => ({
     page: 1,
+    pagesLength: 1,
+    pages: [],
     keywords: ['Programação', 'Python', 'Jogos', 'Música'],
     selectedKeywords: [],
     search: null,
@@ -146,48 +136,86 @@ export default {
     orderBy: ['ratings'],
     price: [],
     language: [],
-    items: [
-      {
-        action: 'mdi-ticket',
-        items: [{ title: 'List Item' }],
-        title: 'Attractions',
-      },
-      {
-        action: 'mdi-silverware-fork-knife',
-        active: true,
-        items: [{ title: 'Breakfast & brunch' }, { title: 'New American' }, { title: 'Sushi' }],
-        title: 'Dining',
-      },
-      {
-        action: 'mdi-school',
-        items: [{ title: 'List Item' }],
-        title: 'Education',
-      },
-      {
-        action: 'mdi-run',
-        items: [{ title: 'List Item' }],
-        title: 'Family',
-      },
-      {
-        action: 'mdi-bottle-tonic-plus',
-        items: [{ title: 'List Item' }],
-        title: 'Health',
-      },
-      {
-        action: 'mdi-content-cut',
-        items: [{ title: 'List Item' }],
-        title: 'Office',
-      },
-      {
-        action: 'mdi-tag',
-        items: [{ title: 'List Item' }],
-        title: 'Promotions',
-      },
-    ],
+    categories: [],
+    activeCategory: '',
+    courses: [],
+    filteredCourses: [],
+    ratingsRange: [1, 5],
   }),
 
   props: ['searchText'],
 
-  methods: {},
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+    loadTime() {
+      return (
+        (window.performance.timing.domContentLoadedEventEnd -
+          window.performance.timing.navigationStart) /
+        1000
+      );
+    },
+  },
+  methods: {
+    searchCourse() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(searchCourse),
+          variables: { keywords: [this.searchText] },
+        })
+        .then((response) => {
+          const courses = JSON.parse(response.data.searchCourse);
+          this.courses = courses;
+          this.filteredCourses = courses;
+          this.paginate();
+        });
+    },
+    getCategories() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getAllCourseCategories),
+        })
+        .then((response) => {
+          const categories = JSON.parse(response.data.getAllCourseCategories);
+          this.categories = categories;
+        });
+    },
+    filter(selectedKeywords, activeCategory, ratingsRange, orderBy) {
+      let filteredCourses = this.courses.filter(
+        (course) => course.avg_rating >= ratingsRange[0] && course.avg_rating <= ratingsRange[1]
+      );
+      if (activeCategory !== '') {
+        filteredCourses = filteredCourses.filter(
+          (course) => course.category_name === activeCategory
+        );
+      }
+      if (selectedKeywords.length > 0) {
+        filteredCourses = filteredCourses.filter(
+          (course) =>
+            selectedKeywords.every((keyword) => course.name.includes(keyword)) ||
+            selectedKeywords.every((keyword) => course.short_description.includes(keyword)) ||
+            selectedKeywords.every((keyword) => course.category_name.includes(keyword))
+        );
+      }
+      if (orderBy !== '') {
+        filteredCourses.sort((a, b) => a[orderBy] - b[orderBy]);
+      }
+      this.filteredCourses = filteredCourses;
+    },
+    paginate() {
+      const numPages = Math.ceil(this.filteredCourses.length / 12);
+      const paginated = this.$chunkify(this.filteredCourses, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredCourses = paginated[0];
+    },
+    changePage() {
+      this.filteredCourses = this.pages[this.page - 1];
+    },
+  },
+  created() {
+    this.searchCourse();
+    this.getCategories();
+  },
 };
 </script>

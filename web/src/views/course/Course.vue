@@ -8,16 +8,9 @@
           <div v-html="compiledMarkdown"></div>
         </v-sheet>
         <h3 class="mt-4">Turmas disponíveis em breve</h3>
-        <v-subheader> 20/07 </v-subheader>
         <v-chip-group column>
-          <v-chip v-for="c in classes" :key="c">
-            {{ c }}
-          </v-chip>
-        </v-chip-group>
-        <v-subheader> 14/08 </v-subheader>
-        <v-chip-group column>
-          <v-chip v-for="c in classes" :key="c">
-            {{ c }}
+          <v-chip v-for="c in classes" :key="c.id">
+            {{ c.schedule }}
           </v-chip>
         </v-chip-group>
         <h3 class="mt-4">Requisitos</h3>
@@ -27,13 +20,11 @@
         </ul>
         <h3 class="my-4">Conteúdos</h3>
         <v-expansion-panels popout>
-          <v-expansion-panel v-for="(item, i) in 11" :key="i">
-            <v-expansion-panel-header> Aula {{ i }} </v-expansion-panel-header>
+          <v-expansion-panel v-for="step in courseSteps" :key="step.id">
+            <v-expansion-panel-header> {{ step.name }} </v-expansion-panel-header>
             <v-expansion-panel-content>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                {{ step.description }}
               </p>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -43,17 +34,14 @@
           <v-row justify="center" align="center">
             <v-col xl="3" lg="4" md="6" sm="12" xs="12">
               <v-avatar width="150" height="150">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTohhzqvuj_Z-Erq0V3pDbboZq1Xvy5zYS4UA&usqp=CAU"
-                  alt="Gustavo"
-                />
+                <img :src="ownerPicture" alt="Foto do criador do curso" />
               </v-avatar>
             </v-col>
             <v-col xl="9" lg="8" md="6" sm="12" xs="12">
-              <h4 class="mb-4">Gustavo Gambit</h4>
+              <h4 class="mb-4">{{ ownerName }}</h4>
               <ul>
-                <li>Número de cursos na plataforma: 8</li>
-                <li>Média de avaliações: 4.7</li>
+                <li>Número de cursos na plataforma: {{ countUserCourses }}</li>
+                <li>Média de avaliações: {{ avgRatingOwner }}</li>
                 <li>Membro desde Maio/2021</li>
               </ul>
             </v-col>
@@ -227,12 +215,9 @@
               {{ courseShortDescription }}
             </div>
             <v-avatar size="56" class="mt-10">
-              <img
-                alt="user"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTohhzqvuj_Z-Erq0V3pDbboZq1Xvy5zYS4UA&usqp=CAU"
-              />
+              <img alt="Foto do criador do curso" :src="ownerPicture" />
             </v-avatar>
-            <p class="my-2">Gustavo Gambit</p>
+            <p class="my-2">{{ ownerName }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -241,86 +226,119 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getCourse, getCourseSteps, getCourseClasses, getCourseReviews } from '@/graphql/queries';
+
 export default {
   name: 'Course',
   title: 'Programação C# | Find a Tutor',
   data: () => ({
-    classes: [
-      'Segunda-feira 5:30PM',
-      'Segunda-feira 7:30PM',
-      'Quinta-feira 8:00PM',
-      'Domingo 9:00PM',
-    ],
-    courseName: 'Programação C#',
-    courseImage: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
-    courseRating: '4.5',
-    courseReviews: '413',
-    courseCategory: 'Tecnologia',
-    courseShortDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla! ',
-    courseDescription: `# h1 Heading 8-)
-<h2> h2 Heading by HTML</h2>
-## h2 Heading
-### h3 Heading
-
-## Horizontal Rules
-
-___
-
----
-
-***
-
-## Typographic replacements
-
-Enable typographer option to see result.
-
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
-
-test.. test... test..... test?..... test!....
-
-!!!!!! ???? ,,  -- ---
-
-"Smartypants, double quotes" and 'single quotes'
-
-
-## Emphasis
-
-**This is bold text**
-
-__This is bold text__
-
-*This is italic text*
-
-_This is italic text_
-
-~~Strikethrough~~
-
-
-## Blockquotes
-
-
-> Blockquotes can also be nested...
->> ...by using additional greater-than signs right next to each other...
-> > > ...or with spaces between arrows.`,
+    classes: [],
+    courseName: '',
+    courseImage: '',
+    courseRating: '',
+    courseRating1: '',
+    courseRating2: '',
+    courseRating3: '',
+    courseRating4: '',
+    courseRating5: '',
+    courseReviews: '',
+    courseCategory: '',
+    courseShortDescription: '',
+    courseDescription: '',
     courseId: '1',
     courseLanguage: 'pt-br',
-    courseCost: '150',
+    courseCost: '',
+    countUserCourses: '',
+    ownerName: '',
+    ownerPicture: '',
+    avgRatingOwner: '',
+    courseSteps: [],
+    reviews: [],
   }),
 
   computed: {
-    flagLanguage() {
-      return `@/assets/flags/${this.courseLanguage}.png`;
-    },
     courseRatingFloat() {
       return parseFloat(this.courseRating);
     },
     compiledMarkdown() {
       return this.$marked(this.courseDescription, { sanitize: true });
     },
+    ...mapGetters('auth', ['currentUser']),
   },
 
-  methods: {},
+  methods: {
+    getCourse() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourse),
+          variables: { id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourse);
+          this.courseName = result.name;
+          this.courseImage = result.image;
+          this.courseRating = result.avg_rating;
+          this.courseRating1 = result.rating_1;
+          this.courseRating2 = result.rating_2;
+          this.courseRating3 = result.rating_3;
+          this.courseRating4 = result.rating_4;
+          this.courseRating5 = result.rating_5;
+          this.courseReviews = result.reviews;
+          this.courseCategory = result.category_name;
+          this.courseShortDescription = result.short_description;
+          this.courseDescription = result.description;
+          this.courseId = result.id;
+          this.courseCost = result.price;
+          this.countUserCourses = result.count_user_courses;
+          this.avgRatingOwner = result.avg_rating_owner;
+          this.ownerName = result.owner_name;
+          this.ownerPicture = result.owner_picture;
+          this.classes = result.classes;
+        });
+    },
+    getCourseSteps() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseSteps),
+          variables: { course_id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseSteps);
+          this.courseSteps = result;
+        });
+    },
+    getCourseClasses() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseClasses),
+          variables: {
+            course_id: this.$route.params.id,
+            user_id: this.currentUser.username,
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseClasses);
+          this.classes = result;
+        });
+    },
+    getCourseReviews() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseReviews),
+          variables: { course_id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseReviews);
+          this.reviews = result;
+        });
+    },
+  },
+  created() {
+    this.getCourse();
+    this.getCourseSteps();
+    this.getCourseReviews();
+  },
 };
 </script>
 

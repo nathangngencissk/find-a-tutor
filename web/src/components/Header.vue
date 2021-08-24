@@ -35,6 +35,7 @@
                   append-icon="fas fa-search"
                   v-model="search"
                   @click:append="pushSearch"
+                  @keydown.enter="pushSearch"
                   filled
                 ></v-text-field>
               </v-col>
@@ -210,7 +211,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { echo as echoFunction } from '@/graphql/queries';
 
 export default {
   name: 'Header',
@@ -282,14 +282,6 @@ export default {
     changeToTutor() {
       this.$store.dispatch('common/changeToTutor');
       this.snackbar = true;
-      this.$gqlClient
-        .query({
-          query: this.$gql(echoFunction),
-        })
-        .then((response) => {
-          const echo = JSON.parse(response.data.echo);
-          console.log(echo);
-        });
     },
     changeToStudent() {
       this.$store.dispatch('common/changeToStudent');

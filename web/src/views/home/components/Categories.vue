@@ -2,8 +2,8 @@
   <v-row justify="space-around" align="center" class="mt-2">
     <v-col xl="10" lg="10" md="8" sm="6" xs="6">
       <v-chip-group multiple active-class="primary--text">
-        <v-chip v-for="tag in tags" :key="tag" to="/search">
-          {{ tag }}
+        <v-chip v-for="category in categories" :key="category.id" to="/search">
+          {{ category.name }}
         </v-chip>
       </v-chip-group>
     </v-col>
@@ -14,28 +14,26 @@
 </template>
 
 <script>
+import { getAllCourseCategories } from '@/graphql/queries';
+
 export default {
   data: () => ({
-    tags: [
-      'Tecnologia',
-      'Decoração',
-      'Economia',
-      'Culinária',
-      'Arte',
-      'Escrita',
-      'Pintura',
-      'Finanças Pessoais',
-      'Inglês',
-      'Fotografia',
-      'Exercícios',
-      'Matemática',
-      'Filosofia',
-      'Biologia',
-      'Química',
-      'Português',
-      'História',
-      'Física',
-    ],
+    categories: [],
   }),
+  methods: {
+    getCategories() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getAllCourseCategories),
+        })
+        .then((response) => {
+          const categories = JSON.parse(response.data.getAllCourseCategories);
+          this.categories = categories;
+        });
+    },
+  },
+  created() {
+    this.getCategories();
+  },
 };
 </script>

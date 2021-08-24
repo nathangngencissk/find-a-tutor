@@ -9,6 +9,7 @@
               v-model="selectedKeywords"
               :items="keywords"
               :search-input.sync="search"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
               hide-selected
               multiple
               small-chips
@@ -27,28 +28,26 @@
             <v-subheader color="primary">Categorias</v-subheader>
             <v-list>
               <v-list-group
-                v-for="item in items"
-                :key="item.title"
-                v-model="item.active"
-                :prepend-icon="item.action"
+                v-for="category in categories"
+                :key="category.id"
+                @click="activeCategory = category.name"
+                v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
+                :prepend-icon="category.icon"
                 no-action
               >
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                    <v-list-item-title v-text="category.name"></v-list-item-title>
                   </v-list-item-content>
                 </template>
-
-                <v-list-item v-for="child in item.items" :key="child.title">
-                  <v-list-item-content>
-                    <v-list-item-title v-text="child.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
               </v-list-group>
             </v-list>
             <v-divider></v-divider>
             <v-subheader color="primary">Ordenar por</v-subheader>
-            <v-radio-group v-model="orderBy">
+            <v-radio-group
+              v-model="orderBy"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
+            >
               <v-radio label="Avaliação" value="ratings"></v-radio>
               <v-radio label="Quantidade de avaliações" value="reviews"></v-radio>
             </v-radio-group>
@@ -59,47 +58,45 @@
               step="0.5"
               max="5"
               min="1"
-              :value="[1, 5]"
               :tick-labels="ratings"
+              v-model="ratingsRange"
+              v-on:change="filter(selectedKeywords, activeCategory, ratingsRange, orderBy)"
             ></v-range-slider>
-            <v-divider></v-divider>
-            <v-subheader color="primary">Idioma</v-subheader>
-            <v-checkbox
-              class="my-0"
-              v-model="language"
-              label="Português"
-              value="pt-br"
-            ></v-checkbox>
-            <v-checkbox class="my-0" v-model="language" label="Inglês" value="en"></v-checkbox>
           </v-container>
         </v-sheet>
       </v-col>
       <v-col xl="9" lg="9" md="12" sm="12" xs="12">
         <v-row justify="start">
-          <v-col cols="12" lg="4" md="6" v-for="course in courses" :key="course.id">
+          <v-col cols="12" lg="4" md="6" v-for="course in filteredCourses" :key="course.id">
             <CourseCardFull
               :courseName="course.name"
               :courseImage="course.image"
-              :courseRating="course.rating"
+              :courseRating="course.avg_rating"
               :courseReviews="course.reviews"
-              :courseCategory="course.category"
-              :courseDescription="course.description"
+              :courseCategory="course.category_name"
+              :courseDescription="course.short_description"
               :courseId="course.id"
               courseLanguage="pt-br"
-              :courseCost="course.value"
             />
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <div class="text-center my-10">
-      <v-pagination v-model="page" :length="4" circle></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CourseCardFull from '@/components/CourseCardFull.vue';
+import { myCourses, getAllCourseCategories } from '@/graphql/queries';
 
 export default {
   name: 'MyCourses',
@@ -112,110 +109,85 @@ export default {
 
   data: () => ({
     page: 1,
+    pagesLength: 1,
+    pages: [],
     keywords: ['Programação', 'Python', 'Jogos', 'Música'],
     selectedKeywords: [],
     search: null,
     ratings: ['1', '', '2', '', '3', '', '4', '', '5'],
-    orderBy: ['ratings'],
+    orderBy: '',
     price: [],
     language: [],
-    items: [
-      {
-        action: 'mdi-ticket',
-        items: [{ title: 'List Item' }],
-        title: 'Attractions',
-      },
-      {
-        action: 'mdi-silverware-fork-knife',
-        active: true,
-        items: [{ title: 'Breakfast & brunch' }, { title: 'New American' }, { title: 'Sushi' }],
-        title: 'Dining',
-      },
-      {
-        action: 'mdi-school',
-        items: [{ title: 'List Item' }],
-        title: 'Education',
-      },
-      {
-        action: 'mdi-run',
-        items: [{ title: 'List Item' }],
-        title: 'Family',
-      },
-      {
-        action: 'mdi-bottle-tonic-plus',
-        items: [{ title: 'List Item' }],
-        title: 'Health',
-      },
-      {
-        action: 'mdi-content-cut',
-        items: [{ title: 'List Item' }],
-        title: 'Office',
-      },
-      {
-        action: 'mdi-tag',
-        items: [{ title: 'List Item' }],
-        title: 'Promotions',
-      },
-    ],
-    courses: [
-      {
-        id: 1,
-        name: 'Programação C#',
-        description:
-          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
-        value: '150',
-        rating: 4.5,
-        reviews: 413,
-        image:
-          'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      },
-      {
-        id: 1,
-        name: 'Programação Básica',
-        description:
-          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
-        value: '120',
-        rating: 4.6,
-        reviews: 22,
-        image:
-          'https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      },
-      {
-        id: 1,
-        name: 'Redes de computadores',
-        description:
-          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
-        value: '200',
-        rating: 4.8,
-        reviews: 111,
-        image:
-          'https://images.unsplash.com/photo-1597733336794-12d05021d510?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80',
-      },
-      {
-        id: 1,
-        name: 'Matemática financeira',
-        description:
-          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
-        value: '180',
-        rating: 4.4,
-        reviews: 98,
-        image:
-          'https://images.unsplash.com/photo-1511377107391-116a9d5d20b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      },
-      {
-        id: 1,
-        name: 'Arduino do básico ao avançado',
-        description:
-          'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam autem, nulla ut pariatur atque, voluptates amet accusamus temporibus totam dignissimos eius quasi ips a veritatis repudiandae eaque, eum fuga facere rerum.',
-        value: '250',
-        rating: 4.9,
-        reviews: 42,
-        image:
-          'https://images.unsplash.com/photo-1557855506-3619a44bab73?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80',
-      },
-    ],
+    categories: [],
+    activeCategory: '',
+    courses: [],
+    filteredCourses: [],
+    ratingsRange: [1, 5],
   }),
-
-  methods: {},
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
+  methods: {
+    myCourses() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(myCourses),
+          variables: { id: this.currentUser.username },
+        })
+        .then((response) => {
+          const courses = JSON.parse(response.data.myCourses);
+          this.courses = courses;
+          this.filteredCourses = courses;
+          this.paginate();
+        });
+    },
+    getCategories() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getAllCourseCategories),
+        })
+        .then((response) => {
+          const categories = JSON.parse(response.data.getAllCourseCategories);
+          this.categories = categories;
+        });
+    },
+    filter(selectedKeywords, activeCategory, ratingsRange, orderBy) {
+      let filteredCourses = this.courses.filter(
+        (course) => course.avg_rating >= ratingsRange[0] && course.avg_rating <= ratingsRange[1]
+      );
+      if (activeCategory !== '') {
+        filteredCourses = filteredCourses.filter(
+          (course) => course.category_name === activeCategory
+        );
+      }
+      if (selectedKeywords.length > 0) {
+        filteredCourses = filteredCourses.filter(
+          (course) =>
+            selectedKeywords.every((keyword) => course.name.includes(keyword)) ||
+            selectedKeywords.every((keyword) => course.short_description.includes(keyword)) ||
+            selectedKeywords.every((keyword) => course.category_name.includes(keyword))
+        );
+      }
+      if (orderBy !== '') {
+        filteredCourses.sort((a, b) => a[orderBy] - b[orderBy]);
+      }
+      this.filteredCourses = filteredCourses;
+    },
+    paginate() {
+      const numPages = Math.ceil(this.filteredCourses.length / 12);
+      const paginated = this.$chunkify(this.filteredCourses, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredCourses = paginated[0];
+    },
+    changePage() {
+      this.filteredCourses = this.pages[this.page - 1];
+    },
+  },
+  created() {
+    this.myCourses();
+    this.getCategories();
+  },
 };
 </script>

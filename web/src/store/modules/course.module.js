@@ -3,7 +3,7 @@
 const namespaced = true;
 
 const state = {
-  userCourses: ['1'],
+  userCourses: ['2'],
 };
 
 const getters = {

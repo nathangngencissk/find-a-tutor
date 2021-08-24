@@ -9,12 +9,12 @@
         {{ courseClass.description }}
       </p>
       <div class="mt-8">
-        de <b>{{ courseClass.start }}</b> até <b>{{ courseClass.end }}</b>
+        de <b>{{ courseClass.start_date }}</b> até <b>{{ courseClass.end_date }}</b>
       </div>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" text to="/class/1/lecture"> Ver Turma </v-btn>
+      <v-btn color="primary" text :to="'/class/' + courseClass.id + '/lecture'"> Ver Turma </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -24,11 +24,5 @@ export default {
   name: 'CourseClassCard',
 
   props: ['courseClass'],
-
-  data: () => ({}),
-
-  computed: {},
-
-  methods: {},
 };
 </script>

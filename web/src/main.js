@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import Amplify, { Auth } from 'aws-amplify';
 import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 import './plugins/base';
+import './plugins/globals';
 import './plugins/chartist';
 import './plugins/lodash';
 import marked from 'marked';

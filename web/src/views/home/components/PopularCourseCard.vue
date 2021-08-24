@@ -15,7 +15,7 @@
         <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
       </v-row>
 
-      <div class="mt-4 mb-2 subtitle-1">R${{ value }}</div>
+      <div class="mt-4 mb-2 subtitle-1">R${{ price }}</div>
 
       <div>
         {{ description }}
@@ -28,18 +28,12 @@
 
     <v-card-text>
       <v-chip-group column>
-        <v-chip>Segunda-feira 5:30PM</v-chip>
-
-        <v-chip>Segunda-feira 7:30PM</v-chip>
-
-        <v-chip>Quinta-feira 8:00PM</v-chip>
-
-        <v-chip>Domingo 9:00PM</v-chip>
+        <v-chip v-for="cl in classes" :key="cl.id">{{ cl.schedule }}</v-chip>
       </v-chip-group>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" @click="reserve" to="/course/2"> Ver Curso </v-btn>
+      <v-btn color="primary" :to="'/course/' + id"> Ver Curso </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -47,7 +41,18 @@
 <script>
 export default {
   name: 'PopularCourses',
-  props: ['id', 'name', 'description', 'value', 'rating', 'reviews', 'image', 'loading'],
+  props: [
+    'id',
+    'name',
+    'category',
+    'classes',
+    'description',
+    'rating',
+    'price',
+    'reviews',
+    'image',
+    'loading',
+  ],
   data: () => ({}),
 };
 </script>

@@ -211,7 +211,7 @@ Resources:
   ExecutionRoleGetCourseReviews:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: !Sub "${AWS::StackName}-get-course-reviews-role"
+      RoleName: "find-a-tutor-get-course-reviews-role"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -246,10 +246,59 @@ Resources:
   GetCourseReviewsHandler:
     Type: "AWS::Serverless::Function"
     Properties:
-      FunctionName: !Sub "${AWS::StackName}-get-course-reviews"
+      FunctionName: "find-a-tutor-get-course-reviews"
       CodeUri: "../find-a-tutor/handlers/get_course_reviews"
       Handler: "get_course_reviews.handle"
       Role: !GetAtt ExecutionRoleGetCourseReviews.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+          USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetMainCourseCategories:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-main-course-categories-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+        - PolicyName: "CognitoIDP"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cognito-idp:AdminGetUser"
+                Resource:
+                  - !Sub "arn:aws:cognito-idp:*:${AWS::AccountId}:userpool/*"
+
+  GetMainCourseCategoriesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-main-course-categories"
+      CodeUri: "../find-a-tutor/handlers/get_main_course_categories"
+      Handler: "get_main_course_categories.handle"
+      Role: !GetAtt ExecutionRoleGetMainCourseCategories.Arn
       Environment:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
