@@ -1,0 +1,297 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+Description: "Find a Tutor Courses Paths"
+
+Globals:
+  Function:
+    Runtime: "python3.8"
+    MemorySize: 128
+    Timeout: 300
+    Environment:
+      Variables:
+        LOG_LEVEL: "INFO"
+        POWERTOOLS_SERVICE_NAME: "find-a-tutor-courses-paths"
+
+Resources:
+  ExecutionRoleGetMySavedPaths:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-my-saved-paths-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetMySavedPathsHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-my-saved-paths"
+      CodeUri: "../find-a-tutor/handlers/get_my_saved_paths"
+      Handler: "get_my_saved_paths.handle"
+      Role: !GetAtt ExecutionRoleGetMySavedPaths.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleSavePath:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-save-path-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  SavePathHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-save-path"
+      CodeUri: "../find-a-tutor/handlers/save_path"
+      Handler: "save_path.handle"
+      Role: !GetAtt ExecutionRoleSavePath.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleUnsavePath:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-unsave-path-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  UnsavePathHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-unsave-path"
+      CodeUri: "../find-a-tutor/handlers/unsave_path"
+      Handler: "unsave_path.handle"
+      Role: !GetAtt ExecutionRoleUnsavePath.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleRatePath:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-rate-path-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  RatePathHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-rate-path"
+      CodeUri: "../find-a-tutor/handlers/rate_path"
+      Handler: "rate_path.handle"
+      Role: !GetAtt ExecutionRoleRatePath.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetPath:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-path-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+        - PolicyName: "CognitoIDP"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cognito-idp:AdminGetUser"
+                Resource:
+                  - !Sub "arn:aws:cognito-idp:*:${AWS::AccountId}:userpool/*"
+
+  GetPathHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-path"
+      CodeUri: "../find-a-tutor/handlers/get_path"
+      Handler: "get_path.handle"
+      Role: !GetAtt ExecutionRoleGetPath.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+          USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetPathRate:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-path-rate-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPathRateHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-path-rate"
+      CodeUri: "../find-a-tutor/handlers/get_path_rate"
+      Handler: "get_path_rate.handle"
+      Role: !GetAtt ExecutionRoleGetPathRate.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetPathCourses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-path-courses-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPathCoursesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-path-courses"
+      CodeUri: "../find-a-tutor/handlers/get_path_courses"
+      Handler: "get_path_courses.handle"
+      Role: !GetAtt ExecutionRoleGetPathCourses.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"

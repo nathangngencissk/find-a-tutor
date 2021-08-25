@@ -11,10 +11,10 @@ db = Database(conn_string=CONN_STRING)
 
 def handle(event, context):
 
-    with open("get_course_steps.sql", "r") as f:
+    with open("get_course_class.sql", "r") as f:
         query = f.read()
 
-    arguments = {"course_id": event["arguments"]["id"]}
+    arguments = {"id": event["arguments"]["id"]}
 
     result = db.query(query=query, arguments=arguments)
 

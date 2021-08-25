@@ -3,4 +3,4 @@ select cs.id,
 	   cs.description,
 	   cs.video
 from courses_steps cs
-where cs.course_id :course_id;
+where cs.course_id = :course_id;

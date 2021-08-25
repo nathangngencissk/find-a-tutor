@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 const namespaced = true;
@@ -12,9 +13,21 @@ const getters = {
   },
 };
 
-const actions = {};
+const actions = {
+  async updateUserCourses({ dispatch, commit, getters, rootGetters }, { courses }) {
+    try {
+      await commit('updateUserCourses', courses);
+    } catch (error) {
+      console.error('Error updating user courses: ', error);
+    }
+  },
+};
 
-const mutations = {};
+const mutations = {
+  updateUserCourses(state, courses) {
+    state.userCourses = courses;
+  },
+};
 
 export default {
   namespaced,

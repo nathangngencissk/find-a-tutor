@@ -8,7 +8,7 @@
             <v-list-item
               v-for="post in posts"
               :key="post.id"
-              :to="{ name: 'ClassPost', params: { postId: post.id } }"
+              :to="{ name: 'ClassPost', params: { post: post } }"
             >
               <template v-slot:default="{ active }">
                 <v-list-item-action>
@@ -17,7 +17,7 @@
 
                 <v-list-item-content>
                   <v-list-item-title>{{ post.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ post.subtitle }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{ post.body }}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-list-item-action-text v-text="post.action"></v-list-item-action-text>
@@ -36,48 +36,32 @@
 </template>
 
 <script>
+import { getCourseClassPosts } from '@/graphql/queries';
+
 export default {
   name: 'ClassPosts',
   title: 'Turma Programação C# | Postagens | Find a Tutor',
   data: () => ({
     settings: [],
-    posts: [
-      {
-        id: 1,
-        action: '15 min',
-        headline: 'Brunch this weekend?',
-        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
-        title: 'Titulo 1',
-      },
-      {
-        id: 2,
-        action: '2 hr',
-        headline: 'Summer BBQ',
-        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
-        title: 'Titulo 2',
-      },
-      {
-        id: 3,
-        action: '6 hr',
-        headline: 'Oui oui',
-        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
-        title: 'Titulo 3',
-      },
-      {
-        id: 4,
-        action: '12 hr',
-        headline: 'Birthday gift',
-        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
-        title: 'Titulo 4',
-      },
-      {
-        id: 5,
-        action: '18hr',
-        headline: 'Recipe to try',
-        subtitle: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio dicta, culpa minima expedita quibusdam repudiandae enim fuga ipsa iste eos, recusandae magnam repellat a incidunt! Repellendus dolor molestiae possimus?`,
-        title: 'Titulo 5',
-      },
-    ],
+    posts: [],
   }),
+  methods: {
+    getCourseClassPosts() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseClassPosts),
+          fetchPolicy: 'network-only',
+          variables: { course_class_id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseClassPosts);
+          this.posts = result;
+          console.log(result);
+        });
+    },
+  },
+  created() {
+    this.getCourseClassPosts();
+  },
 };
 </script>

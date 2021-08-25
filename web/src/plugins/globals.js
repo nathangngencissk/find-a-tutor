@@ -1,16 +1,16 @@
+/* eslint-disable consistent-return */
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-undef */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-unused-vars */
 import Vue from 'vue';
+import { Storage } from 'aws-amplify';
 
 Vue.use({
   install() {
-    // 1. add global method or property
     Vue.cloudfrontUrl = 'd2xja4rap1t567.cloudfront.net';
 
-    // 3. add an instance method
     Vue.prototype.$chunkify = (a, n, balanced) => {
       if (n < 2) return [a];
 
@@ -40,6 +40,32 @@ Vue.use({
       }
 
       return out;
+    };
+    Vue.prototype.$getProfilePicture = async (username, pictureUrl) => {
+      if (username.includes('Facebook')) {
+        const picture = await Storage.get('default-profile-picture.png', {
+          level: 'public',
+        });
+        return picture;
+      }
+      if (username.includes('Google')) {
+        return pictureUrl;
+      }
+      try {
+        if (pictureUrl === 'default-profile-picture.png') {
+          const picture = await Storage.get(pictureUrl, {
+            level: 'public',
+          });
+          return picture;
+        }
+
+        const picture = await Storage.get(pictureUrl, {
+          level: 'private',
+        });
+        return picture;
+      } catch (err) {
+        console.error(err);
+      }
     };
   },
 });

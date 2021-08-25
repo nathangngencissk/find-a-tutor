@@ -13,6 +13,289 @@ Globals:
         POWERTOOLS_SERVICE_NAME: "find-a-tutor-courses"
 
 Resources:
+  ExecutionRoleGetAllCourseCategories:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-all-course-categories-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetAllCourseCategoriesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-all-course-categories"
+      CodeUri: "../find-a-tutor/handlers/get_all_courses_categories"
+      Handler: "get_all_courses_categories.handle"
+      Role: !GetAtt ExecutionRoleGetAllCourseCategories.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetPopularCourses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-popular-courses-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPopularCoursesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-popular-courses"
+      CodeUri: "../find-a-tutor/handlers/get_popular_courses"
+      Handler: "get_popular_courses.handle"
+      Role: !GetAtt ExecutionRoleGetPopularCourses.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetStudyingNow:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-studying-now-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetStudyingNowHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-studying-now"
+      CodeUri: "../find-a-tutor/handlers/get_studying_now"
+      Handler: "get_studying_now.handle"
+      Role: !GetAtt ExecutionRoleGetStudyingNow.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetCourse:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-course-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+        - PolicyName: "CognitoIDP"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cognito-idp:AdminGetUser"
+                Resource:
+                  - !Sub "arn:aws:cognito-idp:*:${AWS::AccountId}:userpool/*"
+
+  GetCourseHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-course"
+      CodeUri: "../find-a-tutor/handlers/get_course"
+      Handler: "get_course.handle"
+      Role: !GetAtt ExecutionRoleGetCourse.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+          USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleSearchCourse:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-search-course-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  SearchCourseHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-search-course"
+      CodeUri: "../find-a-tutor/handlers/search_course"
+      Handler: "search_course.handle"
+      Role: !GetAtt ExecutionRoleSearchCourse.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleMyCourses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-my-courses-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  MyCoursesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-my-courses"
+      CodeUri: "../find-a-tutor/handlers/my_courses"
+      Handler: "my_courses.handle"
+      Role: !GetAtt ExecutionRoleMyCourses.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetMyCourseClasses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-my-course-classes-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetMyCourseClassesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-my-course-classes"
+      CodeUri: "../find-a-tutor/handlers/get_my_course_classes"
+      Handler: "get_my_course_classes.handle"
+      Role: !GetAtt ExecutionRoleGetMyCourseClasses.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
   ExecutionRoleGetCourseSteps:
     Type: "AWS::IAM::Role"
     Properties:
@@ -303,5 +586,44 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
           USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+
+  ExecutionRoleGetUserCourses:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-user-courses-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetUserCoursesHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-user-courses"
+      CodeUri: "../find-a-tutor/handlers/get_user_courses"
+      Handler: "get_user_courses.handle"
+      Role: !GetAtt ExecutionRoleGetUserCourses.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
         - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"

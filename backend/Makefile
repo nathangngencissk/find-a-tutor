@@ -10,7 +10,7 @@ main: ##=> Updates the stack on aws
 		--stack-name=find-a-tutor \
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor \
-		--s3-bucket sam-artifacts601998595272 \
+		--s3-bucket sam-artifacts601998595272
 
 forum: ##=> Updates the stack on aws
 	$(info [*] Updating Find a Tutor Forum)
@@ -24,7 +24,7 @@ forum: ##=> Updates the stack on aws
 		--stack-name=find-a-tutor-forum \
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor-forum \
-		--s3-bucket sam-artifacts601998595272 \
+		--s3-bucket sam-artifacts601998595272
 
 notes: ##=> Updates the stack on aws
 	$(info [*] Updating Find a Tutor Notes)
@@ -38,7 +38,7 @@ notes: ##=> Updates the stack on aws
 		--stack-name=find-a-tutor-notes \
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor-notes \
-		--s3-bucket sam-artifacts601998595272 \
+		--s3-bucket sam-artifacts601998595272
 
 courses: ##=> Updates the stack on aws
 	$(info [*] Updating Find a Tutor Courses)
@@ -52,7 +52,7 @@ courses: ##=> Updates the stack on aws
 		--stack-name=find-a-tutor-courses \
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor-courses \
-		--s3-bucket sam-artifacts601998595272 \
+		--s3-bucket sam-artifacts601998595272
 
 courses_classes: ##=> Updates the stack on aws
 	$(info [*] Updating Find a Tutor Courses Classes)
@@ -65,5 +65,33 @@ courses_classes: ##=> Updates the stack on aws
 		--no-fail-on-empty-changeset \
 		--stack-name=find-a-tutor-courses-classes \
 		--template-file .aws-sam/build/template.yaml \
-		--s3-prefix sam/find-a-tutor-courses-classes \
-		--s3-bucket sam-artifacts601998595272 \
+		--s3-prefix sam/find-a-tutor-courses_classes \
+		--s3-bucket sam-artifacts601998595272
+
+exercises: ##=> Updates the stack on aws
+	$(info [*] Updating Find a Tutor Exercises)
+	sam build \
+		--template cloudformation/exercises.yaml \
+		--use-container
+
+	sam deploy \
+		--capabilities=CAPABILITY_NAMED_IAM \
+		--no-fail-on-empty-changeset \
+		--stack-name=find-a-tutor-exercises \
+		--template-file .aws-sam/build/template.yaml \
+		--s3-prefix sam/find-a-tutor-exercises \
+		--s3-bucket sam-artifacts601998595272
+
+paths: ##=> Updates the stack on aws
+	$(info [*] Updating Find a Tutor Paths)
+	sam build \
+		--template cloudformation/paths.yaml \
+		--use-container
+
+	sam deploy \
+		--capabilities=CAPABILITY_NAMED_IAM \
+		--no-fail-on-empty-changeset \
+		--stack-name=find-a-tutor-paths \
+		--template-file .aws-sam/build/template.yaml \
+		--s3-prefix sam/find-a-tutor-paths \
+		--s3-bucket sam-artifacts601998595272

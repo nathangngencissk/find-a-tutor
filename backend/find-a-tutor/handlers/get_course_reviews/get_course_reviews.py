@@ -16,7 +16,7 @@ cognito_idp = boto3.client("cognito-idp", region_name="us-east-1")
 
 def handle(event, context):
 
-    with open("get_course_steps.sql", "r") as f:
+    with open("get_course_reviews.sql", "r") as f:
         query = f.read()
 
     arguments = {"course_id": event["arguments"]["id"]}
@@ -38,6 +38,7 @@ def handle(event, context):
 
         review["reviewer_name"] = f'{user["name"]} {user["family_name"]}'
         review["reviewer_picture"] = user["picture"]
+        review["reviewer_username"] = response_user["Username"]
 
         reviews.append(review)
 

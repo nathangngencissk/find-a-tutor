@@ -2,29 +2,12 @@
   <v-container>
     <v-row justify="center">
       <v-col xl="6" lg="8" md="12" sm="12" xs="12" class="mt-4">
-        <CourseCardShort
-          courseName="Programação C#"
-          courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-          courseId="1"
-        />
-        <CourseCardShort
-          courseName="Programação C#"
-          courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-          courseId="1"
-        />
-        <CourseCardShort
-          courseName="Programação C#"
-          courseImage="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          courseDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-          courseId="1"
-        />
+        <CourseCardShort v-for="course in shoppingCart" :key="course.id" :course="course" />
       </v-col>
       <v-col xl="3" lg="4" md="12" sm="12" xs="12">
         <v-card width="350">
           <v-subheader> Total:</v-subheader>
-          <h1 class="ml-5">R$ 450,00</h1>
+          <h1 class="ml-5">R$ {{ cartTotal }},00</h1>
           <v-card-text class="text--primary">
             <div class="my-2">
               <v-btn x-large color="success" block> Finalizar </v-btn>
@@ -37,6 +20,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CourseCardShort from '@/components/CourseCardShort.vue';
 
 export default {
@@ -50,7 +34,12 @@ export default {
 
   data: () => ({}),
 
-  computed: {},
+  computed: {
+    ...mapGetters('shopping', ['shoppingCart']),
+    cartTotal() {
+      return this.shoppingCart.reduce((sum, obj) => sum + parseFloat(obj.price || 0), 0);
+    },
+  },
 
   methods: {},
 };

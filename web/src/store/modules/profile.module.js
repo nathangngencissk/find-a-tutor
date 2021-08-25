@@ -29,8 +29,10 @@ const actions = {
     await dispatch('auth/fetchUser', null, { root: true });
     const currentUser = rootGetters['auth/currentUser'];
     if (currentUser.username.includes('Facebook')) {
-      const userPictureData = JSON.parse(currentUser.attributes.picture);
-      commit('changeProfilePicture', userPictureData.data.url);
+      const picture = await Storage.get('default-profile-picture.png', {
+        level: 'public',
+      });
+      commit('changeProfilePicture', picture);
     } else if (currentUser.username.includes('Google')) {
       commit('changeProfilePicture', currentUser.attributes.picture);
     } else {

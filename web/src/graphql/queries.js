@@ -181,8 +181,8 @@ export const deleteNote = /* GraphQL */ `
   }
 `;
 export const getCourseSteps = /* GraphQL */ `
-  query GetCourseSteps($course_id: Int) {
-    getCourseSteps(course_id: $course_id)
+  query GetCourseSteps($id: Int) {
+    getCourseSteps(id: $id)
   }
 `;
 export const getCourseNotes = /* GraphQL */ `
@@ -201,8 +201,8 @@ export const getCourseRate = /* GraphQL */ `
   }
 `;
 export const getCourseReviews = /* GraphQL */ `
-  query GetCourseReviews($course_id: Int) {
-    getCourseReviews(course_id: $course_id)
+  query GetCourseReviews($id: Int) {
+    getCourseReviews(id: $id)
   }
 `;
 export const rateCourse = /* GraphQL */ `
@@ -213,5 +213,15 @@ export const rateCourse = /* GraphQL */ `
 export const getCourseClassPosts = /* GraphQL */ `
   query GetCourseClassPosts($course_class_id: Int) {
     getCourseClassPosts(course_class_id: $course_class_id)
+  }
+`;
+export const getUserCourses = /* GraphQL */ `
+  query GetUserCourses($user_id: String) {
+    getUserCourses(user_id: $user_id)
+  }
+`;
+export const getCourseClass = /* GraphQL */ `
+  query GetCourseClass($id: Int) {
+    getCourseClass(id: $id)
   }
 `;

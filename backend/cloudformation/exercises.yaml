@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: "AWS::Serverless-2016-10-31"
-Description: "Find a Tutor Courses Classes"
+Description: "Find a Tutor Courses Exercises"
 
 Globals:
   Function:
@@ -10,13 +10,13 @@ Globals:
     Environment:
       Variables:
         LOG_LEVEL: "INFO"
-        POWERTOOLS_SERVICE_NAME: "find-a-tutor-courses-classes"
+        POWERTOOLS_SERVICE_NAME: "find-a-tutor-courses-exercises"
 
 Resources:
-  ExecutionRoleGetCourseClassPosts:
+  ExecutionRoleGetExerciseLists:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: "find-a-tutor-get-course-class-posts-role"
+      RoleName: "find-a-tutor-get-exercise-lists-role"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -39,23 +39,23 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
 
-  GetCourseClassPostsHandler:
+  GetExerciseListsHandler:
     Type: "AWS::Serverless::Function"
     Properties:
-      FunctionName: "find-a-tutor-get-course-class-posts"
-      CodeUri: "../find-a-tutor/handlers/get_course_class_posts"
-      Handler: "get_course_class_posts.handle"
-      Role: !GetAtt ExecutionRoleGetCourseClassPosts.Arn
+      FunctionName: "find-a-tutor-get-exercise-lists"
+      CodeUri: "../find-a-tutor/handlers/get_exercise_lists"
+      Handler: "get_exercise_lists.handle"
+      Role: !GetAtt ExecutionRoleGetExerciseLists.Arn
       Environment:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
         - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
 
-  ExecutionRoleGetCourseClass:
+  ExecutionRoleGetExerciseList:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: "find-a-tutor-get-course-class-role"
+      RoleName: "find-a-tutor-get-exercise-list-role"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -78,13 +78,13 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
 
-  GetCourseClassHandler:
+  GetExerciseListHandler:
     Type: "AWS::Serverless::Function"
     Properties:
-      FunctionName: "find-a-tutor-get-course-class"
-      CodeUri: "../find-a-tutor/handlers/get_course_class"
-      Handler: "get_course_class.handle"
-      Role: !GetAtt ExecutionRoleGetCourseClass.Arn
+      FunctionName: "find-a-tutor-get-exercise-list"
+      CodeUri: "../find-a-tutor/handlers/get_exercise_list"
+      Handler: "get_exercise_list.handle"
+      Role: !GetAtt ExecutionRoleGetExerciseList.Arn
       Environment:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"

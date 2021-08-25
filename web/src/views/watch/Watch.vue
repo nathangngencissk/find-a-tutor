@@ -6,11 +6,7 @@
           <v-sheet width="100%" height="100%" elevation="1">
             <vue-plyr>
               <div class="plyr__video-embed">
-                <iframe
-                  src="https://www.youtube.com/embed/Ejkb_YpuHWs?amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
-                  allowfullscreen
-                  allowtransparency
-                ></iframe>
+                <iframe :src="videoUrl" allowfullscreen allowtransparency></iframe>
               </div>
             </vue-plyr>
           </v-sheet>
@@ -43,15 +39,15 @@
       <v-col xl="4" lg="4" cols="12">
         <v-subheader>Aulas</v-subheader>
         <v-expansion-panels popout>
-          <v-expansion-panel v-for="(item, i) in 11" :key="i">
-            <v-expansion-panel-header> Aula {{ i }} </v-expansion-panel-header>
+          <v-expansion-panel v-for="step in courseSteps" :key="step.id">
+            <v-expansion-panel-header> {{ step.name }} </v-expansion-panel-header>
             <v-expansion-panel-content>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                {{ step.description }}
               </p>
-              <v-btn color="primary" depressed text>Assistir</v-btn>
+              <v-btn color="primary" depressed text @click="changeVideo(step.video)"
+                >Assistir</v-btn
+              >
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -64,6 +60,16 @@
 import CourseNotes from '@/views/watch/components/CourseNotes.vue';
 import CourseClasses from '@/views/watch/components/CourseClasses.vue';
 import CourseReview from '@/views/watch/components/CourseReview.vue';
+import { mapGetters } from 'vuex';
+import {
+  getCourseSteps,
+  getCourseRate,
+  getCourseNotes,
+  getCourseClasses,
+  upsertNote,
+  deleteNote,
+  rateCourse,
+} from '@/graphql/queries';
 
 export default {
   name: 'Watch',
@@ -86,57 +92,115 @@ export default {
         body: '',
       },
     ],
-    text: `# h1 Heading 8-)
-<h2> h2 Heading by HTML</h2>
-## h2 Heading
-### h3 Heading
-
-## Horizontal Rules
-
-___
-
----
-
-***
-
-## Typographic replacements
-
-Enable typographer option to see result.
-
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
-
-test.. test... test..... test?..... test!....
-
-!!!!!! ???? ,,  -- ---
-
-"Smartypants, double quotes" and 'single quotes'
-
-
-## Emphasis
-
-**This is bold text**
-
-__This is bold text__
-
-*This is italic text*
-
-_This is italic text_
-
-~~Strikethrough~~
-
-
-## Blockquotes
-
-
-> Blockquotes can also be nested...
->> ...by using additional greater-than signs right next to each other...
-> > > ...or with spaces between arrows.`,
+    courseSteps: [],
+    player: {},
+    rate: {},
+    notes: [],
+    classes: [],
+    videoUrl: 'https://www.youtube.com/embed/6IqFslIiy7s',
   }),
-  methods: {},
+  methods: {
+    getCourseSteps() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseSteps),
+          variables: { id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseSteps);
+          this.courseSteps = result;
+          this.changeVideo(result[0].video);
+        });
+    },
+    getCourseRate() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseRate),
+          variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseRate);
+          this.rate = result;
+        });
+    },
+    getCourseNotes() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseNotes),
+          variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseNotes);
+          this.notes = result;
+        });
+    },
+    getCourseClasses() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseClasses),
+          variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseClasses);
+          this.classes = result;
+        });
+    },
+    upsertNote(title, content, fixed) {
+      this.$gqlClient.query({
+        query: this.$gql(upsertNote),
+        variables: {
+          course_id: this.$route.params.id,
+          user_id: this.currentUser.username,
+          title,
+          content,
+          fixed,
+        },
+      });
+    },
+    deleteNote(id) {
+      this.$gqlClient.query({
+        query: this.$gql(deleteNote),
+        variables: {
+          id,
+        },
+      });
+    },
+    rateCourse(rating) {
+      this.$gqlClient.query({
+        query: this.$gql(rateCourse),
+        variables: {
+          course_id: this.$route.params.id,
+          user_id: this.currentUser.username,
+          rating,
+        },
+      });
+    },
+    changeVideo(video) {
+      // eslint-disable-next-line prefer-destructuring
+      const player = this.$refs.plyr.player;
+      console.log(player);
+      player.source = {
+        sources: [
+          {
+            src: video,
+            type: 'video/mp4',
+            size: 720,
+          },
+        ],
+      };
+    },
+  },
   computed: {
     compiledMarkdown() {
       return this.$marked(this.text, { sanitize: true });
     },
+    ...mapGetters('auth', ['currentUser']),
+  },
+  created() {
+    this.getCourseSteps();
+    this.getCourseRate();
+    this.getCourseNotes();
+    this.getCourseClasses();
   },
 };
 </script>

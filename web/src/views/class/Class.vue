@@ -13,12 +13,7 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-btn depressed :to="{ name: item.url }" v-if="item.title == 'Aula'"
-                  ><v-chip color="error" class="mr-2" label
-                    ><v-icon left> fas fa-satellite-dish </v-icon>{{ item.title }}</v-chip
-                  ></v-btn
-                >
-                <v-btn depressed :to="{ name: item.url }" block v-else>{{ item.title }}</v-btn>
+                <v-btn depressed :to="{ name: item.url }" block>{{ item.title }}</v-btn>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -27,7 +22,7 @@
           <v-card-text class="text--primary">
             <v-row justify="center">
               <div class="my-6">
-                de <b>{{ cl.start }}</b> até <b>{{ cl.end }}</b>
+                de <b>{{ cl.start_date }}</b> até <b>{{ cl.end_date }}</b>
               </div>
             </v-row>
           </v-card-text>
@@ -52,25 +47,34 @@
 </template>
 
 <script>
+import { getCourseClass } from '@/graphql/queries';
+
 export default {
   name: 'Class',
-  title: 'Turma Programação C# | Find a Tutor',
+  title: 'Detalhes da Turma | Find a Tutor',
   data: () => ({
     items: [
       { title: 'Aula', icon: 'far fa-play-circle', url: 'ClassLecture' },
       { title: 'Postagens', icon: 'fas fa-chalkboard', url: 'ClassPosts' },
-      { title: 'Calendário', icon: 'far fa-calendar-alt', url: 'ClassCalendar' },
     ],
-    cl: {
-      id: 1,
-      name: 'Programação C#',
-      image: 'https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg',
-      category: 'Tecnologia',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. At libero commodi, voluptates voluptas autem maiores quasi rem sapiente ut optio corporis ullam reiciendis, sequi veniam mollitia! Amet tempore saepe eaque!',
-      start: '2021-07-21',
-      end: '2021-10-22',
-    },
+    cl: {},
   }),
+  methods: {
+    getCourseClass() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourseClass),
+          variables: { id: this.$route.params.id },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourseClass);
+          // eslint-disable-next-line prefer-destructuring
+          this.cl = result[0];
+        });
+    },
+  },
+  created() {
+    this.getCourseClass();
+  },
 };
 </script>

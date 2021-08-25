@@ -11,13 +11,15 @@ db = Database(conn_string=CONN_STRING)
 
 def handle(event, context):
 
-    with open("get_course_steps.sql", "r") as f:
+    with open("get_user_courses.sql", "r") as f:
         query = f.read()
 
-    arguments = {"course_id": event["arguments"]["id"]}
+    arguments = {"user_id": event["arguments"]["user_id"]}
 
     result = db.query(query=query, arguments=arguments)
 
-    response = json.dumps(result, cls=DateTimeEncoder)
+    courses_ids = [r["id"] for r in result]
+
+    response = json.dumps(courses_ids, cls=DateTimeEncoder)
 
     return response

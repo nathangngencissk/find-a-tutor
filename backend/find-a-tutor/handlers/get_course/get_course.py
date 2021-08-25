@@ -55,6 +55,8 @@ def handle(event, context):
 
     course["owner_name"] = f'{user["name"]} {user["family_name"]}'
     course["owner_picture"] = user["picture"]
+    course["owner_created_at"] = user["created_at"]
+    course["owner_username"] = user["username"]
 
     response = json.dumps(course, cls=DateTimeEncoder)
 
