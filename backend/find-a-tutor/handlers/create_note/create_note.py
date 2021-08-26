@@ -25,7 +25,7 @@ def handle(event, context):
 
     note = Note(**arguments)
 
-    db.update(note)
+    db.add(note)
 
     note.__dict__.pop("_sa_instance_state")
 

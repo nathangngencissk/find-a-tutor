@@ -21,7 +21,8 @@ def handle(event, context):
         "user_id": event["arguments"]["user_id"],
         "course_id": event["arguments"]["course_id"],
         "rating": event["arguments"]["rating"],
-        "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+        "content": event["arguments"]["content"],
+        "created_at": event["arguments"]["created_at"],
         "updated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
     }
 

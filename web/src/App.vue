@@ -11,7 +11,6 @@
 <script>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import { getUserCourses } from '@/graphql/queries';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -28,22 +27,11 @@ export default {
   },
   async created() {
     await this.$store.dispatch('auth/fetchUser');
-    this.getUserCourses();
+    await this.$store.dispatch('course/updateUserCourses');
   },
   methods: {
     async logout() {
       await this.$store.dispatch('auth/logout');
-    },
-    getUserCourses() {
-      this.$gqlClient
-        .query({
-          query: this.$gql(getUserCourses),
-          variables: { user_id: this.currentUser.username },
-        })
-        .then(async (response) => {
-          const result = JSON.parse(response.data.getUserCourses);
-          await this.$store.dispatch('course/updateUserCourses', { courses: result });
-        });
     },
   },
   async mounted() {

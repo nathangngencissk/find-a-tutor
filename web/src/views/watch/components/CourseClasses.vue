@@ -8,11 +8,11 @@
               <v-card class="d-flex align-center" height="200" @click="enroll($event, cl)">
                 <v-card-subtitle>
                   <ul>
-                    <li><b>Inicio:</b> {{ cl.start }}</li>
-                    <li><b>Término:</b> {{ cl.end }}</li>
+                    <li><b>Inicio:</b> {{ cl.start_date }}</li>
+                    <li><b>Término:</b> {{ cl.end_date }}</li>
                     <li><b>Frequência:</b> {{ cronToDatetime(cl) }}</li>
                   </ul>
-                  <h3 class="mt-4 enrolled" v-if="enrolled == cl.id">MATRICULADO</h3>
+                  <h3 class="mt-4 enrolled" v-if="cl.enrolled">MATRICULADO</h3>
                 </v-card-subtitle>
               </v-card>
             </v-item>
@@ -33,79 +33,40 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { enrollCourseClass } from '@/graphql/queries';
+
 export default {
   name: 'CourseClasses',
-  props: ['courseId'],
+  props: ['classes', 'courseId'],
   data: () => ({
     sheet: false,
     sheetText: '',
     enrolled: null,
     enrolling: null,
-    classes: [
-      {
-        id: 1,
-        courseId: '1',
-        timeExpression: '0 14 * * 1',
-        start: '2021-07-20',
-        end: '2021-10-21',
-      },
-      {
-        id: 2,
-        courseId: '1',
-        timeExpression: '0 19 * * 1',
-        start: '2021-07-20',
-        end: '2021-10-21',
-      },
-      {
-        id: 3,
-        courseId: '1',
-        timeExpression: '0 19 * * 3',
-        start: '2021-07-20',
-        end: '2021-10-21',
-      },
-      {
-        id: 4,
-        courseId: '1',
-        timeExpression: '0 14 * * 1',
-        start: '2021-08-14',
-        end: '2021-11-18',
-      },
-      {
-        id: 5,
-        courseId: '1',
-        timeExpression: '0 19 * * 1',
-        start: '2021-08-14',
-        end: '2021-11-18',
-      },
-      {
-        id: 6,
-        courseId: '1',
-        timeExpression: '0 19 * * 3,4',
-        start: '2021-08-14',
-        end: '2021-11-18',
-      },
-    ],
   }),
   methods: {
     enroll(event, cl) {
-      this.sheetText = `${this.cronToDatetime(cl)} de ${cl.start} até ${cl.end}`;
+      this.sheetText = `${this.cronToDatetime(cl)} de ${cl.start_date} até ${cl.end_date}`;
       this.sheet = !this.sheet;
       this.enrolling = cl;
     },
     confirmEnroll(event, cl) {
       this.sheet = !this.sheet;
+      this.enrollCourseClass(cl);
       this.enrolled = cl.id;
     },
     cronToDatetime(cl) {
-      const startDate = new Date(Date.parse(cl.start));
+      const startDate = new Date(Date.parse(cl.start_date));
       const options = {
         currentDate: startDate,
         endDate: this.addDays(startDate, 7),
         iterator: true,
       };
       const optionsFormatDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
-      const interval = this.$parser.parseExpression(cl.timeExpression, options);
+      const interval = this.$parser.parseExpression(cl.schedule, options);
       const frequency = [];
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         try {
           const obj = interval.next();
@@ -117,7 +78,6 @@ export default {
         }
       }
       const uniqueFrequency = [...new Set(frequency)];
-      console.log(uniqueFrequency);
       return uniqueFrequency.join('; ');
     },
     addDays(date, days) {
@@ -125,6 +85,25 @@ export default {
       result.setDate(result.getDate() + days);
       return result;
     },
+    enrollCourseClass(cl) {
+      this.$gqlClient
+        .query({
+          query: this.$gql(enrollCourseClass),
+          variables: {
+            course_class_id: cl.id,
+            user_id: this.currentUser.username,
+            created_at: this.$getFormattedDate(),
+            updated_at: this.$getFormattedDate(),
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.enrollCourseClass);
+          this.courseSteps = result;
+        });
+    },
+  },
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
   },
 };
 </script>

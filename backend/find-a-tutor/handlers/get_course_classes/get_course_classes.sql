@@ -13,4 +13,5 @@ from   course_classes cc
 inner join courses c on c.id = cc.course_id
 left join course_class_users ccu on ccu.course_class_id = cc.id
 where cc.course_id = :course_id
+and cc.end_date > current_date
 and ccu.user_id = :user_id;

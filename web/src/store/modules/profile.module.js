@@ -46,7 +46,7 @@ const actions = {
         }
 
         const picture = await Storage.get(currentUser.attributes.picture, {
-          level: 'private',
+          level: 'public',
         });
         commit('changeProfilePicture', picture);
       } catch (err) {
@@ -57,7 +57,7 @@ const actions = {
   async updateProfilePicture({ dispatch, commit, getters, rootGetters }, { file, fileName }) {
     try {
       await Storage.put(fileName, file, {
-        level: 'private',
+        level: 'public',
       });
 
       const user = await Auth.currentAuthenticatedUser();

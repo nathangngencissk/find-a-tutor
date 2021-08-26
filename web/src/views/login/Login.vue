@@ -103,6 +103,7 @@ export default {
           email: this.$data.email,
           password: this.$data.password,
         });
+        await this.$store.dispatch('course/updateUserCourses');
         this.overlay = !this.overlay;
       }
     },

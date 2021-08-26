@@ -97,6 +97,11 @@ export const getPath = /* GraphQL */ `
     getPath(id: $id)
   }
 `;
+export const getAllPaths = /* GraphQL */ `
+  query GetAllPaths {
+    getAllPaths
+  }
+`;
 export const getPathRate = /* GraphQL */ `
   query GetPathRate($user_id: String, $path_id: Int) {
     getPathRate(user_id: $user_id, path_id: $path_id)
@@ -165,6 +170,9 @@ export const upsertNote = /* GraphQL */ `
     $title: String
     $content: String
     $fixed: Boolean
+    $id: Int
+    $created_at: String
+    $updated_at: String
   ) {
     upsertNote(
       user_id: $user_id
@@ -172,12 +180,38 @@ export const upsertNote = /* GraphQL */ `
       title: $title
       content: $content
       fixed: $fixed
+      id: $id
+      created_at: $created_at
+      updated_at: $updated_at
     )
   }
 `;
 export const deleteNote = /* GraphQL */ `
   query DeleteNote($id: Int) {
     deleteNote(id: $id)
+  }
+`;
+export const createNote = /* GraphQL */ `
+  query CreateNote(
+    $user_id: String
+    $course_id: Int
+    $title: String
+    $content: String
+    $fixed: Boolean
+    $id: Int
+    $created_at: String
+    $updated_at: String
+  ) {
+    createNote(
+      user_id: $user_id
+      course_id: $course_id
+      title: $title
+      content: $content
+      fixed: $fixed
+      id: $id
+      created_at: $created_at
+      updated_at: $updated_at
+    )
   }
 `;
 export const getCourseSteps = /* GraphQL */ `
@@ -206,8 +240,18 @@ export const getCourseReviews = /* GraphQL */ `
   }
 `;
 export const rateCourse = /* GraphQL */ `
-  query RateCourse($course_id: Int, $user_id: String, $rating: Float) {
-    rateCourse(course_id: $course_id, user_id: $user_id, rating: $rating)
+  query RateCourse(
+    $course_id: Int
+    $user_id: String
+    $rating: Float
+    $content: String
+  ) {
+    rateCourse(
+      course_id: $course_id
+      user_id: $user_id
+      rating: $rating
+      content: $content
+    )
   }
 `;
 export const getCourseClassPosts = /* GraphQL */ `
@@ -223,5 +267,20 @@ export const getUserCourses = /* GraphQL */ `
 export const getCourseClass = /* GraphQL */ `
   query GetCourseClass($id: Int) {
     getCourseClass(id: $id)
+  }
+`;
+export const enrollCourseClass = /* GraphQL */ `
+  query EnrollCourseClass(
+    $course_class_id: Int
+    $user_id: String
+    $created_at: String
+    $updated_at: String
+  ) {
+    enrollCourseClass(
+      course_class_id: $course_class_id
+      user_id: $user_id
+      created_at: $created_at
+      updated_at: $updated_at
+    )
   }
 `;

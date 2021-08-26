@@ -16,12 +16,13 @@
       <v-btn class="mb-4" color="success" @click="addNote">Adicionar</v-btn>
     </v-form>
     <v-card v-for="note in notes" :key="note.id" class="my-2">
-      <v-toolbar color="transparent" dark>
+      <v-toolbar color="transparent">
         <v-text-field
           label="Título da nota"
           v-if="note.id == editingId"
           :value="editingTitle"
           v-model="editingTitle"
+          v-bind:class="{ 'note-title': !darkTheme }"
         ></v-text-field>
         <v-toolbar-title v-else v-bind:class="{ 'note-title': !darkTheme }">{{
           note.title
@@ -36,10 +37,10 @@
           <v-icon color="secondary" @click="edit($event, note)">fas fa-edit</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon color="error" @click="remove($event, note)">fas fa-trash-alt</v-icon>
+          <v-icon color="error" @click="remove($event, note, true)">fas fa-trash-alt</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-card-subtitle class="card-body">
+      <v-card-subtitle class="card-content">
         <v-textarea
           solo
           name="input-7-4"
@@ -49,7 +50,7 @@
           v-model="editing"
         ></v-textarea>
         <p v-else>
-          {{ note.body }}
+          {{ note.content }}
         </p>
       </v-card-subtitle>
     </v-card>
@@ -57,35 +58,18 @@
 </template>
 
 <script>
+import { upsertNote, deleteNote, createNote } from '@/graphql/queries';
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'CourseNotes',
-  props: ['courseId'],
+  props: ['notes', 'courseId'],
   data: () => ({
     title: '',
-    body: '',
+    content: '',
     editingId: null,
     editingTitle: '',
     editing: '',
-    notes: [
-      {
-        id: 3,
-        title: 'Titulo Nota 3',
-        body: 'Corpo Nota 3',
-        courseId: '1',
-      },
-      {
-        id: 4,
-        title: 'Titulo Nota 4',
-        body: 'Corpo Nota 4',
-        courseId: '1',
-      },
-      {
-        id: 5,
-        title: 'Titulo Nota 5',
-        body: 'Corpo Nota 5',
-        courseId: '1',
-      },
-    ],
   }),
   methods: {
     clear() {
@@ -96,47 +80,104 @@ export default {
     edit(event, note) {
       this.editingId = note.id;
       this.editingTitle = note.title;
-      this.editing = note.body;
+      this.editing = note.content;
     },
     save(event, note) {
       const updatedNote = {
         id: note.id,
         title: this.editingTitle,
-        body: this.editing,
-        courseId: note.courseId,
+        content: this.editing,
+        course_id: note.course_id,
+        created_at: note.created_at,
+        updated_at: this.$getFormattedDate(),
+        user_id: this.currentUser.username,
+        fixed: note.fixed,
       };
       const index = this.notes.indexOf(note);
-      this.remove({}, note);
+      this.remove({}, note, false);
       this.notes.splice(index, 0, updatedNote);
+      this.upsertNote(note);
       this.clear();
     },
-    remove(event, note) {
+    remove(event, note, dl) {
       const index = this.notes.indexOf(note);
       if (index > -1) {
         this.notes.splice(index, 1);
+        if (dl) {
+          this.dlNote(note);
+        }
       }
     },
     addNote() {
       const newNote = {
-        id: 6,
+        id: null,
         title: this.editingTitle,
-        body: this.editing,
-        courseId: this.courseId,
+        content: this.editing,
+        fixed: false,
+        user_id: this.currentUser.username,
+        course_id: this.courseId,
+        created_at: this.$getFormattedDate(),
+        updated_at: this.$getFormattedDate(),
       };
-      this.notes.unshift(newNote);
+      this.createNote(newNote);
       this.clear();
+    },
+    upsertNote(note) {
+      this.$gqlClient.query({
+        query: this.$gql(upsertNote),
+        variables: {
+          user_id: this.currentUser.username,
+          course_id: note.course_id,
+          id: note.id,
+          title: note.title,
+          content: note.content,
+          fixed: note.fixed,
+          created_at: note.created_at,
+          updated_at: note.updated_at,
+        },
+      });
+    },
+    createNote(note) {
+      this.$gqlClient
+        .query({
+          query: this.$gql(createNote),
+          fetchPolicy: 'network-only',
+          variables: {
+            user_id: this.currentUser.username,
+            course_id: note.course_id,
+            id: note.id,
+            title: note.title,
+            content: note.content,
+            fixed: note.fixed,
+            created_at: note.created_at,
+            updated_at: note.updated_at,
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.createNote);
+          this.notes.unshift(result);
+        });
+    },
+    dlNote(note) {
+      this.$gqlClient.query({
+        query: this.$gql(deleteNote),
+        variables: {
+          id: note.id,
+        },
+      });
     },
   },
   computed: {
     darkTheme() {
       return this.$vuetify.theme.dark;
     },
+    ...mapGetters('auth', ['currentUser']),
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.card-body {
+.card-content {
   background-color: #f7f3eb;
   p {
     color: #313639;

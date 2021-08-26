@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
+import { getUserCourses } from '@/graphql/queries';
+import Vue from 'vue';
 
 const namespaced = true;
 
 const state = {
-  userCourses: ['2'],
+  userCourses: null,
 };
 
 const getters = {
@@ -14,9 +16,18 @@ const getters = {
 };
 
 const actions = {
-  async updateUserCourses({ dispatch, commit, getters, rootGetters }, { courses }) {
+  async updateUserCourses({ dispatch, commit, getters, rootGetters }) {
     try {
-      await commit('updateUserCourses', courses);
+      const currentUser = rootGetters['auth/currentUser'];
+      Vue.gqlClient
+        .query({
+          query: Vue.gql(getUserCourses),
+          variables: { user_id: currentUser.username },
+        })
+        .then(async (response) => {
+          const result = JSON.parse(response.data.getUserCourses);
+          await commit('updateUserCourses', result);
+        });
     } catch (error) {
       console.error('Error updating user courses: ', error);
     }

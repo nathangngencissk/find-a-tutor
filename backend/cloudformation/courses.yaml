@@ -50,7 +50,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetPopularCourses:
     Type: "AWS::IAM::Role"
@@ -89,7 +89,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetStudyingNow:
     Type: "AWS::IAM::Role"
@@ -128,7 +128,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourse:
     Type: "AWS::IAM::Role"
@@ -177,7 +177,7 @@ Resources:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
           USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleSearchCourse:
     Type: "AWS::IAM::Role"
@@ -216,7 +216,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleMyCourses:
     Type: "AWS::IAM::Role"
@@ -255,7 +255,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetMyCourseClasses:
     Type: "AWS::IAM::Role"
@@ -294,7 +294,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourseSteps:
     Type: "AWS::IAM::Role"
@@ -333,7 +333,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourseNotes:
     Type: "AWS::IAM::Role"
@@ -372,7 +372,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourseClasses:
     Type: "AWS::IAM::Role"
@@ -411,7 +411,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourseRate:
     Type: "AWS::IAM::Role"
@@ -450,7 +450,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleRateCourse:
     Type: "AWS::IAM::Role"
@@ -489,7 +489,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetCourseReviews:
     Type: "AWS::IAM::Role"
@@ -538,7 +538,7 @@ Resources:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
           USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetMainCourseCategories:
     Type: "AWS::IAM::Role"
@@ -587,7 +587,7 @@ Resources:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
           USER_POOL_ID: "{{resolve:ssm:FindATutorUserPoolId:1}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetUserCourses:
     Type: "AWS::IAM::Role"
@@ -626,4 +626,4 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"

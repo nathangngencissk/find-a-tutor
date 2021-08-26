@@ -29,7 +29,13 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" text :to="'/course/' + courseId"> Ver Curso </v-btn>
+      <v-btn
+        color="primary"
+        text
+        :to="{ name: 'Course', params: { id: courseId }, query: { id: courseId } }"
+      >
+        Ver Curso
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

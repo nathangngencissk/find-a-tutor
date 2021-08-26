@@ -4,10 +4,10 @@
       <v-col xl="8" lg="8" cols="12">
         <v-row>
           <v-sheet width="100%" height="100%" elevation="1">
-            <vue-plyr>
-              <div class="plyr__video-embed">
-                <iframe :src="videoUrl" allowfullscreen allowtransparency></iframe>
-              </div>
+            <vue-plyr ref="plyr">
+              <video controls crossorigin playsinline :src="videoUrl">
+                <source size="720" :src="videoUrl" type="video/mp4" />
+              </video>
             </vue-plyr>
           </v-sheet>
         </v-row>
@@ -20,17 +20,17 @@
           <v-tabs-items v-model="tab" id="tabs-items">
             <v-tab-item>
               <v-card color="basil" flat min-height="200px">
-                <CourseNotes id="1" />
+                <CourseNotes :notes="notes" :courseId="$route.params.id" />
               </v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card color="basil" flat min-height="200px">
-                <CourseClasses id="1" />
+                <CourseClasses :classes="classes" :courseId="$route.params.id" />
               </v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card color="basil" flat min-height="200px">
-                <CourseReview id="1" />
+                <CourseReview :rate="rate" :courseId="$route.params.id" />
               </v-card>
             </v-tab-item>
           </v-tabs-items>
@@ -61,20 +61,11 @@ import CourseNotes from '@/views/watch/components/CourseNotes.vue';
 import CourseClasses from '@/views/watch/components/CourseClasses.vue';
 import CourseReview from '@/views/watch/components/CourseReview.vue';
 import { mapGetters } from 'vuex';
-import {
-  getCourseSteps,
-  getCourseRate,
-  getCourseNotes,
-  getCourseClasses,
-  upsertNote,
-  deleteNote,
-  rateCourse,
-} from '@/graphql/queries';
+import { getCourseSteps, getCourseRate, getCourseNotes, getCourseClasses } from '@/graphql/queries';
 
 export default {
   name: 'Watch',
   title: 'Programação C# | Find a Tutor',
-  props: ['courseId'],
   components: { CourseNotes, CourseClasses, CourseReview },
   data: () => ({
     tab: null,
@@ -97,7 +88,7 @@ export default {
     rate: {},
     notes: [],
     classes: [],
-    videoUrl: 'https://www.youtube.com/embed/6IqFslIiy7s',
+    videoUrl: '',
   }),
   methods: {
     getCourseSteps() {
@@ -116,17 +107,20 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseRate),
+          fetchPolicy: 'network-only',
           variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
         })
         .then((response) => {
           const result = JSON.parse(response.data.getCourseRate);
-          this.rate = result;
+          // eslint-disable-next-line prefer-destructuring
+          this.rate = result[0];
         });
     },
     getCourseNotes() {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseNotes),
+          fetchPolicy: 'network-only',
           variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
         })
         .then((response) => {
@@ -138,6 +132,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseClasses),
+          fetchPolicy: 'network-only',
           variables: { course_id: this.$route.params.id, user_id: this.currentUser.username },
         })
         .then((response) => {
@@ -145,49 +140,9 @@ export default {
           this.classes = result;
         });
     },
-    upsertNote(title, content, fixed) {
-      this.$gqlClient.query({
-        query: this.$gql(upsertNote),
-        variables: {
-          course_id: this.$route.params.id,
-          user_id: this.currentUser.username,
-          title,
-          content,
-          fixed,
-        },
-      });
-    },
-    deleteNote(id) {
-      this.$gqlClient.query({
-        query: this.$gql(deleteNote),
-        variables: {
-          id,
-        },
-      });
-    },
-    rateCourse(rating) {
-      this.$gqlClient.query({
-        query: this.$gql(rateCourse),
-        variables: {
-          course_id: this.$route.params.id,
-          user_id: this.currentUser.username,
-          rating,
-        },
-      });
-    },
     changeVideo(video) {
-      // eslint-disable-next-line prefer-destructuring
-      const player = this.$refs.plyr.player;
-      console.log(player);
-      player.source = {
-        sources: [
-          {
-            src: video,
-            type: 'video/mp4',
-            size: 720,
-          },
-        ],
-      };
+      this.videoUrl = this.$cloudfrontUrl + video;
+      document.querySelector('video').load();
     },
   },
   computed: {

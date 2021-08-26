@@ -77,6 +77,8 @@
 
 <script>
 import PathCard from '@/components/PathCard.vue';
+import { mapGetters } from 'vuex';
+import { getAllPaths } from '@/graphql/queries';
 
 export default {
   name: 'Paths',
@@ -142,12 +144,30 @@ export default {
   }),
 
   methods: {
+    getAllPaths() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getAllPaths),
+          fetchPolicy: 'network-only',
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getAllPaths);
+          console.log(result);
+          this.paths = result;
+        });
+    },
     removeBookmark(event, item) {
       const index = this.bookmarks.indexOf(item);
       if (index > -1) {
         this.bookmarks.splice(index, 1);
       }
     },
+  },
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
+  created() {
+    this.getCourseSteps();
   },
 };
 </script>

@@ -60,7 +60,7 @@
         <v-row justify="center" align="center">
           <v-col cols="2">
             <v-rating
-              value="5"
+              :value="parseInt('5')"
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
@@ -76,7 +76,7 @@
         <v-row justify="center" align="center">
           <v-col cols="2">
             <v-rating
-              value="4"
+              :value="parseInt('4')"
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
@@ -92,7 +92,7 @@
         <v-row justify="center" align="center">
           <v-col cols="2">
             <v-rating
-              value="3"
+              :value="parseInt('3')"
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
@@ -108,7 +108,7 @@
         <v-row justify="center" align="center">
           <v-col cols="2">
             <v-rating
-              value="2"
+              :value="parseInt('2')"
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
@@ -124,7 +124,7 @@
         <v-row justify="center" align="center">
           <v-col cols="2">
             <v-rating
-              value="1"
+              :value="parseInt('1')"
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
@@ -315,6 +315,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseReviews),
+          fetchPolicy: 'network-only',
           variables: { id: this.$route.params.id },
         })
         .then((response) => {
