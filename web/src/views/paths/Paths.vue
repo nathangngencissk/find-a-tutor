@@ -4,12 +4,14 @@
       <v-col xl="3" lg="3" md="12" sm="12" xs="12">
         <v-sheet elevation="1" width="100%" class="mb-4">
           <v-subheader color="primary">Salvos</v-subheader>
-          <v-list-item v-for="bookmark in bookmarks" :key="bookmark.name">
+          <v-skeleton-loader v-bind="attrs" type="card-heading" v-if="loading"></v-skeleton-loader>
+          <v-list-item v-for="bookmark in savedPaths" :key="bookmark.id" v-else>
             <v-list-item-content>
               <v-list-item-title
-                ><v-icon @click="removeBookmark($event, bookmark)" class="mr-2"
-                  >fas fa-bookmark </v-icon
-                ><v-btn :to="bookmark.path"> {{ bookmark.name }}</v-btn></v-list-item-title
+                ><v-icon class="mr-2">fas fa-bookmark </v-icon
+                ><v-btn :to="{ name: 'Path', params: { id: bookmark.id } }">
+                  {{ bookmark.name }}</v-btn
+                ></v-list-item-title
               >
             </v-list-item-content>
           </v-list-item>
@@ -21,6 +23,7 @@
               v-model="selectedKeywords"
               :items="keywords"
               :search-input.sync="search"
+              v-on:change="filter(selectedKeywords, ratingsRange, orderBy)"
               hide-selected
               multiple
               small-chips
@@ -37,7 +40,10 @@
               </template>
             </v-combobox>
             <v-subheader color="primary">Ordenar por</v-subheader>
-            <v-radio-group v-model="orderBy">
+            <v-radio-group
+              v-model="orderBy"
+              v-on:change="filter(selectedKeywords, ratingsRange, orderBy)"
+            >
               <v-radio label="Avaliação" value="ratings"></v-radio>
               <v-radio label="Quantidade de avaliações" value="reviews"></v-radio>
             </v-radio-group>
@@ -48,29 +54,39 @@
               step="0.5"
               max="5"
               min="1"
-              :value="[1, 5]"
               :tick-labels="ratings"
+              v-model="ratingsRange"
+              v-on:change="filter(selectedKeywords, ratingsRange, orderBy)"
             ></v-range-slider>
           </v-container>
         </v-sheet>
       </v-col>
       <v-col xl="9" lg="9" md="12" sm="12" xs="12">
-        <v-row justify="space-around">
-          <v-col cols="12" xl="4" lg="4" md="6" v-for="n in 9" :key="n">
+        <v-row justify="start">
+          <v-col cols="12" xl="4" lg="4" md="6" v-if="loading">
+            <v-skeleton-loader v-bind="attrs" type="card, article, actions"></v-skeleton-loader>
+          </v-col>
+
+          <v-col cols="12" xl="4" lg="4" md="6" v-for="path in filteredPaths" :key="path.id" v-else>
             <PathCard
-              pathName="Programação C#"
-              pathImage="https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg"
-              pathRating="4.5"
-              pathReviews="413"
-              pathDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat nemo inventore dolor fugiat exercitationem sint expedita facilis ea itaque, illum, doloremque praesentium autem similique quis placeat id maxime sunt nulla!"
-              pathId="1"
+              :pathName="path.name"
+              :pathImage="path.image"
+              :pathRating="path.avg_rating"
+              :pathReviews="path.reviews"
+              :pathDescription="path.description"
+              :pathId="path.id"
             />
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <div class="text-center my-10">
-      <v-pagination v-model="page" length="4" circle></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
   </v-container>
 </template>
@@ -78,7 +94,7 @@
 <script>
 import PathCard from '@/components/PathCard.vue';
 import { mapGetters } from 'vuex';
-import { getAllPaths } from '@/graphql/queries';
+import { getAllPaths, getMySavedPaths } from '@/graphql/queries';
 
 export default {
   name: 'Paths',
@@ -90,57 +106,25 @@ export default {
   },
 
   data: () => ({
-    bookmarks: [
-      {
-        name: 'Programação de Zero a Hero',
-        path: '/path',
-      },
-    ],
+    loading: true,
+    attrs: {
+      class: 'mb-6',
+      boilerplate: true,
+      elevation: 2,
+    },
     page: 1,
+    pagesLength: 1,
+    pages: [],
     keywords: ['Programação', 'Python', 'Jogos', 'Música'],
     selectedKeywords: [],
     search: null,
     ratings: ['1', '', '2', '', '3', '', '4', '', '5'],
     orderBy: ['ratings'],
     price: [],
-    items: [
-      {
-        action: 'mdi-ticket',
-        items: [{ title: 'List Item' }],
-        title: 'Attractions',
-      },
-      {
-        action: 'mdi-silverware-fork-knife',
-        active: true,
-        items: [{ title: 'Breakfast & brunch' }, { title: 'New American' }, { title: 'Sushi' }],
-        title: 'Dining',
-      },
-      {
-        action: 'mdi-school',
-        items: [{ title: 'List Item' }],
-        title: 'Education',
-      },
-      {
-        action: 'mdi-run',
-        items: [{ title: 'List Item' }],
-        title: 'Family',
-      },
-      {
-        action: 'mdi-bottle-tonic-plus',
-        items: [{ title: 'List Item' }],
-        title: 'Health',
-      },
-      {
-        action: 'mdi-content-cut',
-        items: [{ title: 'List Item' }],
-        title: 'Office',
-      },
-      {
-        action: 'mdi-tag',
-        items: [{ title: 'List Item' }],
-        title: 'Promotions',
-      },
-    ],
+    paths: [],
+    savedPaths: [],
+    filteredPaths: [],
+    ratingsRange: [1, 5],
   }),
 
   methods: {
@@ -152,9 +136,50 @@ export default {
         })
         .then((response) => {
           const result = JSON.parse(response.data.getAllPaths);
-          console.log(result);
           this.paths = result;
+          this.filteredPaths = result;
+          this.paginate();
+          this.loading = false;
         });
+    },
+    getMySavedPaths() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getMySavedPaths),
+          variables: { id: this.currentUser.username },
+          fetchPolicy: 'network-only',
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getMySavedPaths);
+          this.savedPaths = result;
+        });
+    },
+    filter(selectedKeywords, ratingsRange, orderBy) {
+      let filteredPaths = this.paths.filter(
+        (path) => path.avg_rating >= ratingsRange[0] && path.avg_rating <= ratingsRange[1]
+      );
+      if (selectedKeywords.length > 0) {
+        filteredPaths = filteredPaths.filter(
+          (path) =>
+            selectedKeywords.every((keyword) => path.name.includes(keyword)) ||
+            selectedKeywords.every((keyword) => path.description.includes(keyword))
+        );
+      }
+      if (orderBy !== '') {
+        filteredPaths.sort((a, b) => a[orderBy] - b[orderBy]);
+      }
+      this.filteredPaths = filteredPaths;
+    },
+    paginate() {
+      const numPages = Math.ceil(this.filteredPaths.length / 12);
+      const paginated = this.$chunkify(this.filteredPaths, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredPaths = paginated[0];
+    },
+    changePage() {
+      this.filteredPaths = this.pages[this.page - 1];
     },
     removeBookmark(event, item) {
       const index = this.bookmarks.indexOf(item);
@@ -167,7 +192,8 @@ export default {
     ...mapGetters('auth', ['currentUser']),
   },
   created() {
-    this.getCourseSteps();
+    this.getAllPaths();
+    this.getMySavedPaths();
   },
 };
 </script>

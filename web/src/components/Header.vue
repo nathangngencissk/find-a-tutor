@@ -295,7 +295,9 @@ export default {
     },
   },
   async created() {
-    this.getProfilePicture();
+    if (this.currentUser) {
+      this.getProfilePicture();
+    }
   },
 };
 </script>

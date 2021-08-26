@@ -14,7 +14,10 @@ def handle(event, context):
     with open("get_exercise_list.sql", "r") as f:
         query = f.read()
 
-    arguments = {"exercise_list_id": event["arguments"]["id"]}
+    arguments = {
+        "exercise_list_id": event["arguments"]["id"],
+        "user_id": event["arguments"]["user_id"],
+    }
 
     exercise_list = db.query(query=query, arguments=arguments)
 

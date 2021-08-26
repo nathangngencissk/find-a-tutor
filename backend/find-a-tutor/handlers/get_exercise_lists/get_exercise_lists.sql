@@ -20,8 +20,8 @@ select el.id,
 	   ctu.total_user as total_user,
 	   ct.total as total,
 	   case when total_user = total then 'Feita'
-	   		when total_user = 0 then null
+	   		when total_user is null then null
 	   		else 'Em Andamento' end as status
 from exercise_lists el
-inner join cte_total_user ctu on ctu.list_id = el.id
-inner join cte_total ct on ct.list_id = ctu.list_id;
+left join cte_total_user ctu on ctu.list_id = el.id
+left join cte_total ct on ct.list_id = ctu.list_id;

@@ -50,7 +50,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"
 
   ExecutionRoleGetExerciseList:
     Type: "AWS::IAM::Role"
@@ -89,4 +89,4 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:13"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:15"

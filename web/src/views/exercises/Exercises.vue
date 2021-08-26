@@ -7,6 +7,7 @@
           v-model="selectedKeywords"
           :items="keywords"
           :search-input.sync="search"
+          v-on:change="filter(selectedKeywords)"
           hide-selected
           multiple
           small-chips
@@ -23,38 +24,48 @@
           </template>
         </v-combobox>
         <v-expansion-panels popout>
-          <v-expansion-panel v-for="(item, i) in 15" :key="i">
+          <v-expansion-panel v-for="exercise in filteredExercises" :key="exercise.i">
             <v-expansion-panel-header
-              >Programação básica para jogos
-              <div class="text-center" v-if="i == 0">
-                <v-chip color="secondary" class="mr-2" label
-                  ><v-icon left> fas fa-clipboard </v-icon> Em andamento
+              >{{ exercise.title }}
+              <div class="text-center" v-if="exercise.status !== null">
+                <v-chip
+                  :color="exercise.status === 'Em Andamento' ? 'secondary' : 'success'"
+                  class="mr-2"
+                  label
+                  ><v-icon left>
+                    {{
+                      exercise.status === 'Em Andamento'
+                        ? 'fas fa-clipboard'
+                        : 'fas fa-clipboard-check'
+                    }}
+                  </v-icon>
+                  Em andamento
                 </v-chip>
-                <v-chip color="secondary" label> 4/10 </v-chip>
-              </div>
-              <div class="text-center" v-if="i == 1">
-                <v-chip color="success" class="mr-2" label
-                  ><v-icon left> fas fa-clipboard-check </v-icon> Feita
+                <v-chip color="secondary" label>
+                  {{ exercise.total_user }}/ {{ exercise.total_user }}
                 </v-chip>
-                <v-chip color="success" label> 12/12 </v-chip>
               </div>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                {{ exercise.description }}
               </p>
               <v-row>
                 <v-subheader> Tags </v-subheader>
                 <v-chip-group>
-                  <v-chip v-for="tag in tags" :key="tag">
+                  <v-chip v-for="tag in exercise.tags.split(', ')" :key="tag">
                     {{ tag }}
                   </v-chip>
                 </v-chip-group>
               </v-row>
               <v-row>
-                <v-btn color="primary" depressed text to="/exercise/1">Ver Lista</v-btn>
+                <v-btn
+                  color="primary"
+                  depressed
+                  text
+                  :to="{ name: 'Exercise', params: { id: exercise.id } }"
+                  >Ver Lista</v-btn
+                >
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -62,23 +73,86 @@
       </v-col>
     </v-row>
     <div class="text-center my-10">
-      <v-pagination v-model="page" length="4" circle></v-pagination>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getExerciseLists } from '@/graphql/queries';
+
 export default {
   name: 'Exercises',
 
   title: 'Exercícios | Find a Tutor',
 
   data: () => ({
+    loading: true,
+    attrs: {
+      class: 'mb-6',
+      boilerplate: true,
+      elevation: 2,
+    },
     page: 1,
+    pagesLength: 1,
+    pages: [],
     keywords: ['Programação', 'Python', 'Jogos', 'Música'],
     tags: ['Programação', 'Jogos'],
     selectedKeywords: [],
     search: null,
+    exercises: [],
+    filteredExercises: [],
   }),
+  methods: {
+    getExerciseLists() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getExerciseLists),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getExerciseLists);
+          this.exercises = result;
+          this.filteredExercises = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    filter(selectedKeywords) {
+      if (selectedKeywords.length > 0) {
+        this.filteredExercises = this.exercises.filter(
+          (exercise) =>
+            selectedKeywords.every((keyword) => exercise.name.includes(keyword)) ||
+            selectedKeywords.every((keyword) => exercise.description.includes(keyword))
+        );
+      } else {
+        this.filteredExercises = this.exercises;
+      }
+    },
+    paginate() {
+      const numPages = Math.ceil(this.filteredExercises.length / 12);
+      const paginated = this.$chunkify(this.filteredExercises, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredExercises = paginated[0];
+    },
+    changePage() {
+      this.filteredExercises = this.pages[this.page - 1];
+    },
+  },
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
+  created() {
+    this.getExerciseLists();
+  },
 };
 </script>

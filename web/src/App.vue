@@ -22,12 +22,11 @@ export default {
   computed: {
     ...mapGetters('auth', ['currentUser', 'isAuthenticated']),
     user() {
-      return this.$store.getters['auth/fetchUser'];
+      return this.currentUser;
     },
   },
   async created() {
     await this.$store.dispatch('auth/fetchUser');
-    await this.$store.dispatch('course/updateUserCourses');
   },
   methods: {
     async logout() {

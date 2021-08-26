@@ -23,7 +23,9 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" text to="/path"> Ver Trilha </v-btn>
+      <v-btn color="primary" text :to="{ name: 'Path', params: { id: pathId } }">
+        Ver Trilha
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

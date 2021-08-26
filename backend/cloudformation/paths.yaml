@@ -321,6 +321,15 @@ Resources:
                   - "lambda:GetLayerVersion"
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+        - PolicyName: "CognitoIDP"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cognito-idp:AdminGetUser"
+                Resource:
+                  - !Sub "arn:aws:cognito-idp:*:${AWS::AccountId}:userpool/*"
 
   GetAllPathsHandler:
     Type: "AWS::Serverless::Function"

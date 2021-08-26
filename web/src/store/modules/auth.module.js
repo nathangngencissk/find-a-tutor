@@ -119,7 +119,10 @@ const actions = {
       setTimeout(async () => {
         await dispatch('fetchUser');
       }, expires * 1000);
-      commit('user', user);
+      if (user) {
+        commit('user', user);
+        await dispatch('course/updateUserCourses');
+      }
     } catch (err) {
       commit('user', null);
     }
