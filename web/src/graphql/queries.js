@@ -146,20 +146,23 @@ export const likeComment = /* GraphQL */ `
     )
   }
 `;
-export const upsertComment = /* GraphQL */ `
-  query UpsertComment(
-    $parent_comment_id: Int
-    $post_id: Int
-    $content: String
-    $user_id: String
-    $id: Int
+export const commentPost = /* GraphQL */ `
+  query CommentPost($user_id: String, $post_id: Int, $content: String) {
+    commentPost(user_id: $user_id, post_id: $post_id, content: $content)
+  }
+`;
+export const createForumPost = /* GraphQL */ `
+  query CreateForumPost(
+    $title: String
+    $description: String
+    $category_id: Int
+    $creator_id: String
   ) {
-    upsertComment(
-      parent_comment_id: $parent_comment_id
-      post_id: $post_id
-      content: $content
-      user_id: $user_id
-      id: $id
+    createForumPost(
+      title: $title
+      description: $description
+      category_id: $category_id
+      creator_id: $creator_id
     )
   }
 `;
@@ -287,5 +290,10 @@ export const enrollCourseClass = /* GraphQL */ `
       created_at: $created_at
       updated_at: $updated_at
     )
+  }
+`;
+export const fodase = /* GraphQL */ `
+  query Fodase {
+    fodase
   }
 `;

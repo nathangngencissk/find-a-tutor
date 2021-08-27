@@ -37,6 +37,7 @@
                   @click:append="pushSearch"
                   @keydown.enter="pushSearch"
                   filled
+                  v-if="isAuthenticated"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -45,23 +46,33 @@
 
         <v-col cols="3" xl="3" class="d-none d-xl-flex">
           <v-row align="center" justify="space-around">
-            <v-btn color="primaryText" plain to="/dashboard" v-if="platformTutor">
+            <v-btn
+              color="primaryText"
+              plain
+              to="/dashboard"
+              v-if="platformTutor && isAuthenticated"
+            >
               <span>Painel</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain to="/courses" v-else>
+            <v-btn color="primaryText" plain to="/courses" v-if="!platformTutor && isAuthenticated">
               <span>Meus Cursos</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain to="/foruns">
+            <v-btn color="primaryText" plain to="/foruns" v-if="isAuthenticated">
               <span>Fóruns</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain to="/notes" v-if="platformTutor">
+            <v-btn color="primaryText" plain to="/notes" v-if="platformTutor && isAuthenticated">
               <span>Minhas Anotações</span>
             </v-btn>
 
-            <v-btn color="primaryText" plain to="/exercises" v-else>
+            <v-btn
+              color="primaryText"
+              plain
+              to="/exercises"
+              v-if="!platformTutor && isAuthenticated"
+            >
               <span>Exercícios</span>
             </v-btn>
           </v-row>

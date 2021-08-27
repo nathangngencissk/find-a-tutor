@@ -26,16 +26,36 @@ def handle(event, context):
     with open("get_post_comments.sql", "r") as f:
         query = f.read()
 
-    arguments = {"user_id": event["arguments"]["user_id"]}
+    arguments = {
+        "user_id": event["arguments"]["user_id"],
+        "post_id": event["arguments"]["id"],
+    }
 
     post_comments = db.query(query=query, arguments=arguments)
+
+    for comment in post_comments:
+        response_user = cognito_idp.admin_get_user(
+            UserPoolId=USER_POOL_ID, Username=comment["user_id"]
+        )
+
+        user = {
+            "username": response_user["Username"],
+            "created_at": response_user["UserCreateDate"].strftime("%d/%m/%Y"),
+            "updated_at": response_user["UserLastModifiedDate"].strftime("%d/%m/%Y"),
+        }
+
+        for attribute in response_user["UserAttributes"]:
+            user[attribute["Name"]] = attribute["Value"]
+
+        comment["creator_name"] = f'{user["name"]} {user["family_name"]}'
+        comment["creator_picture"] = user["picture"]
 
     post = dict(result_post[0])
 
     post["comments"] = post_comments
 
     response_user = cognito_idp.admin_get_user(
-        UserPoolId=USER_POOL_ID, Username=event["arguments"]["user_id"]
+        UserPoolId=USER_POOL_ID, Username=post["creator_id"]
     )
 
     user = {

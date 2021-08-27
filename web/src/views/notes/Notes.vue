@@ -162,6 +162,10 @@ export default {
         .then((response) => {
           const courses = JSON.parse(response.data.myCourses);
           this.courses = courses;
+          this.courses.push({
+            name: 'Nenhum',
+            id: null,
+          });
         });
     },
     updateNote() {

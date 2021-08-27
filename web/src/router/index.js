@@ -13,6 +13,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/about',
@@ -33,11 +36,17 @@ const routes = [
     path: '/categories',
     name: 'Categories',
     component: () => import('@/views/categories/Categories.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/foruns',
     name: 'Foruns',
     component: () => import('@/views/foruns/Foruns.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/foruns/thread',
@@ -62,6 +71,9 @@ const routes = [
     name: 'Search',
     component: () => import('@/views/search/Search.vue'),
     props: (route) => ({ searchText: route.query.search }),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/courses',
@@ -75,11 +87,17 @@ const routes = [
     path: '/paths',
     name: 'Paths',
     component: () => import('@/views/paths/Paths.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/path',
     name: 'Path',
     component: () => import('@/views/path/Path.vue'),
+    meta: {
+      middleware: auth,
+    },
   },
   {
     path: '/cart',
@@ -116,7 +134,7 @@ const routes = [
     name: 'Course',
     component: () => import('@/views/course/Course.vue'),
     meta: {
-      middleware: [watch],
+      middleware: [watch, auth],
     },
   },
   {

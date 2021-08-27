@@ -13,6 +13,7 @@
               :type="show ? 'text' : 'password'"
               :rules="passwordRules"
               @click:append="show = !show"
+              @keydown.enter="login"
             ></v-text-field>
           </v-form>
           <v-row justify="center" align="center">
