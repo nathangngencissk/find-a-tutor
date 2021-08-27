@@ -290,14 +290,6 @@ export default {
     pushSearch() {
       this.$router.push({ path: '/search', query: { search: this.search } });
     },
-    async getProfilePicture() {
-      await this.$store.dispatch('profile/getProfilePicture');
-    },
-  },
-  async created() {
-    if (this.currentUser) {
-      this.getProfilePicture();
-    }
   },
 };
 </script>

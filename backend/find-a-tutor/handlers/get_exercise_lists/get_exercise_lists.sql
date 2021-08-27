@@ -4,13 +4,12 @@ cte_total_user as (
 	from exercises e 
 	inner join exercises_users eu on e.id = eu.exercise_id 
 	where eu.user_id = :user_id
-	group by e.id
+	group by list_id
 ),
 cte_total as (
 	select e.exercise_list_id as list_id, count(*) as total 
-	from exercises e 
-	inner join exercises_users eu on e.id = eu.exercise_id
-	group by e.id
+	from exercises e
+	group by list_id
 )
 
 select el.id,

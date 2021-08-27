@@ -118,8 +118,13 @@ export const getExerciseLists = /* GraphQL */ `
   }
 `;
 export const getExerciseList = /* GraphQL */ `
-  query GetExerciseList($id: String) {
-    getExerciseList(id: $id)
+  query GetExerciseList($id: String, $user_id: String) {
+    getExerciseList(id: $id, user_id: $user_id)
+  }
+`;
+export const answerExercise = /* GraphQL */ `
+  query AnswerExercise($user_id: String, $exercise_id: Int) {
+    answerExercise(user_id: $user_id, exercise_id: $exercise_id)
   }
 `;
 export const getForumPosts = /* GraphQL */ `

@@ -26,7 +26,6 @@ const getters = {
 
 const actions = {
   async getProfilePicture({ dispatch, commit, getters, rootGetters }) {
-    await dispatch('auth/fetchUser', null, { root: true });
     const currentUser = rootGetters['auth/currentUser'];
     if (currentUser.username.includes('Facebook')) {
       const picture = await Storage.get('default-profile-picture.png', {
@@ -60,7 +59,7 @@ const actions = {
         level: 'public',
       });
 
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser({ bypassCache: true });
       const result = await Auth.updateUserAttributes(user, {
         picture: fileName,
       });
@@ -75,7 +74,7 @@ const actions = {
     { name, family_name }
   ) {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser({ bypassCache: true });
 
       const result = await Auth.updateUserAttributes(user, {
         name,
@@ -92,7 +91,7 @@ const actions = {
     { oldPassword, newPassword }
   ) {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser({ bypassCache: true });
 
       const result = await Auth.changePassword(user, oldPassword, newPassword);
       await dispatch('auth/fetchUser', null, { root: true });

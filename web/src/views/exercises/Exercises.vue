@@ -23,7 +23,12 @@
             </v-list-item>
           </template>
         </v-combobox>
-        <v-expansion-panels popout>
+        <v-skeleton-loader
+          v-bind="attrs"
+          type="article, actions"
+          v-if="loading"
+        ></v-skeleton-loader>
+        <v-expansion-panels popout v-else>
           <v-expansion-panel v-for="exercise in filteredExercises" :key="exercise.i">
             <v-expansion-panel-header
               >{{ exercise.title }}
@@ -39,10 +44,10 @@
                         : 'fas fa-clipboard-check'
                     }}
                   </v-icon>
-                  Em andamento
+                  {{ exercise.status }}
                 </v-chip>
-                <v-chip color="secondary" label>
-                  {{ exercise.total_user }}/ {{ exercise.total_user }}
+                <v-chip :color="exercise.status === 'Em Andamento' ? 'secondary' : 'success'" label>
+                  {{ exercise.total_user }}/ {{ exercise.total }}
                 </v-chip>
               </div>
             </v-expansion-panel-header>
@@ -129,8 +134,9 @@ export default {
       if (selectedKeywords.length > 0) {
         this.filteredExercises = this.exercises.filter(
           (exercise) =>
-            selectedKeywords.every((keyword) => exercise.name.includes(keyword)) ||
-            selectedKeywords.every((keyword) => exercise.description.includes(keyword))
+            selectedKeywords.every((keyword) => exercise.title.includes(keyword)) ||
+            selectedKeywords.every((keyword) => exercise.description.includes(keyword)) ||
+            selectedKeywords.every((keyword) => exercise.tags.includes(keyword))
         );
       } else {
         this.filteredExercises = this.exercises;

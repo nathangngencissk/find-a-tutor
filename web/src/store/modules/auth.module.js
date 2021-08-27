@@ -63,7 +63,6 @@ const actions = {
       return;
     }
     await dispatch('fetchUser');
-    await dispatch('profile/getProfilePicture', null, { root: true });
     router.push({ name: 'Home' }).catch((error) => {
       if (error.name !== 'NavigationDuplicated') {
         throw error;
@@ -112,7 +111,7 @@ const actions = {
   },
   async fetchUser({ commit, dispatch }) {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser({ bypassCache: true });
       const expires =
         user.getSignInUserSession().getIdToken().payload.exp -
         Math.floor(new Date().getTime() / 1000);
@@ -121,7 +120,8 @@ const actions = {
       }, expires * 1000);
       if (user) {
         commit('user', user);
-        await dispatch('course/updateUserCourses');
+        await dispatch('profile/getProfilePicture', null, { root: true });
+        await dispatch('course/updateUserCourses', null, { root: true });
       }
     } catch (err) {
       commit('user', null);

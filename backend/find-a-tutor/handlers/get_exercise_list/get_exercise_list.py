@@ -21,14 +21,18 @@ def handle(event, context):
 
     exercise_list = db.query(query=query, arguments=arguments)
 
-    exercises_id = " ,".join([str(ex["id"]) for ex in exercise_list])
+    exercises_id = ",".join([str(ex["id"]) for ex in exercise_list])
 
-    with open("get_exercise_list_options.sql", "r") as f:
-        query = f.read()
+    query = f"""
+        select eo.id,
+            eo.exercise_id,
+            eo.description
+        from exercises_options eo
+        inner join exercises e on e.id = eo.exercise_id
+        where eo.exercise_id in ({exercises_id})
+    """
 
-    arguments = {"exercises_id": exercises_id}
-
-    exercise_list_options = db.query(query=query, arguments=arguments)
+    exercise_list_options = db.query(query=query)
 
     for ex in exercise_list:
         ex["options"] = [

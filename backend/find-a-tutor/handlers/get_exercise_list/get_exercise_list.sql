@@ -7,4 +7,5 @@ select e.id,
 from   exercises e
 inner join exercise_lists el on el.id = e.exercise_list_id
 left join exercises_users eu on e.id = eu.exercise_id
+                             and eu.user_id = :user_id
 where el.id = :exercise_list_id;
