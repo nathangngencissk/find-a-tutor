@@ -51,6 +51,7 @@
 
 <script>
 export default {
+  title: 'Cursos | Find a Tutor',
   data() {
     return {
       page: 1,

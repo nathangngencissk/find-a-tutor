@@ -95,3 +95,31 @@ paths: ##=> Updates the stack on aws
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor-paths \
 		--s3-bucket sam-artifacts601998595272
+
+payments: ##=> Updates the stack on aws
+	$(info [*] Updating Find a Tutor Payments)
+	sam build \
+		--template cloudformation/payments.yaml \
+		--use-container
+
+	sam deploy \
+		--capabilities=CAPABILITY_NAMED_IAM \
+		--no-fail-on-empty-changeset \
+		--stack-name=find-a-tutor-payments \
+		--template-file .aws-sam/build/template.yaml \
+		--s3-prefix sam/find-a-tutor-payments \
+		--s3-bucket sam-artifacts601998595272
+
+tutor_courses: ##=> Updates the stack on aws
+	$(info [*] Updating Find a Tutor Tutor Courses)
+	sam build \
+		--template cloudformation/tutor_courses.yaml \
+		--use-container
+
+	sam deploy \
+		--capabilities=CAPABILITY_NAMED_IAM \
+		--no-fail-on-empty-changeset \
+		--stack-name=find-a-tutor-tutor-courses \
+		--template-file .aws-sam/build/template.yaml \
+		--s3-prefix sam/find-a-tutor-tutor-courses \
+		--s3-bucket sam-artifacts601998595272
