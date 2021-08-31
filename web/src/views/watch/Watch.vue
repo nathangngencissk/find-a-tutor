@@ -95,6 +95,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseSteps),
+          fetchPolicy: 'network-only',
           variables: { id: this.$route.params.id },
         })
         .then((response) => {
@@ -141,7 +142,7 @@ export default {
         });
     },
     changeVideo(video) {
-      this.videoUrl = this.$cloudfrontUrl + video;
+      this.videoUrl = `${this.$cloudfrontUrl}public/${video}`;
       document.querySelector('video').load();
     },
   },

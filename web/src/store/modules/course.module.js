@@ -2,6 +2,7 @@
 /* eslint-disable no-shadow */
 import { getUserCourses } from '@/graphql/queries';
 import Vue from 'vue';
+import { Storage } from 'aws-amplify';
 
 const namespaced = true;
 
@@ -30,6 +31,24 @@ const actions = {
         });
     } catch (error) {
       console.error('Error updating user courses: ', error);
+    }
+  },
+  async updateCourseImage({ dispatch, commit, getters, rootGetters }, { file, fileName }) {
+    try {
+      await Storage.put(fileName, file, {
+        level: 'public',
+      });
+    } catch (error) {
+      console.error('Error uploading file: ', error);
+    }
+  },
+  async uploadVideo({ dispatch, commit, getters, rootGetters }, { file, fileName }) {
+    try {
+      await Storage.put(fileName, file, {
+        level: 'public',
+      });
+    } catch (error) {
+      console.error('Error uploading file: ', error);
     }
   },
 };

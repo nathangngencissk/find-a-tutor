@@ -290,6 +290,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourseSteps),
+          fetchPolicy: 'network-only',
           variables: { id: this.$route.params.id },
         })
         .then((response) => {

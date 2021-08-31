@@ -31,20 +31,33 @@
         <h2 class="mb-2">Imagem de capa</h2>
         <v-hover>
           <template v-slot:default="{ hover }">
-            <v-img
-              src="https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg"
-              height="300"
-              width="600"
-              cover
-            >
+            <v-avatar width="600" height="400" tile>
+              <img :src="$cloudfrontUrl + 'public/' + courseImage" alt="imagem do curso" />
               <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="rgba(0, 0, 0, 0.87)">
-                  <v-btn color="primary">Alterar</v-btn>
+                <v-overlay v-if="hover" absolute color="#1976d2">
+                  <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
                 </v-overlay>
               </v-fade-transition>
-            </v-img>
+              <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
+            </v-avatar>
           </template>
         </v-hover>
+        <v-dialog v-model="dialog" width="500">
+          <v-card>
+            <v-card-text>
+              <VueCropper
+                v-show="selectedFile"
+                ref="cropper"
+                :src="selectedFile"
+                alt="Source Image"
+              ></VueCropper>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
+              <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -52,7 +65,7 @@
         <h2 class="mb-2">Aulas</h2>
         <v-data-table
           :headers="headers"
-          :items="lectures"
+          :items="steps"
           :page.sync="page"
           :items-per-page="itemsPerPage"
           @page-count="pageCount = $event"
@@ -75,11 +88,11 @@
               v-bind="dragOptions"
               :move="onMove"
               @start="isDragging = true"
-              @end="isDragging = false"
-              :list="props.items"
+              @end="onEnd"
+              :list="steps"
               tag="tbody"
             >
-              <tr v-for="(lecture, index) in props.items" :key="index">
+              <tr v-for="(lecture, index) in steps" :key="index">
                 <td>
                   <v-icon small class="page__grab-icon"> mdi-arrow-all </v-icon>
                 </td>
@@ -123,9 +136,13 @@
           <v-text-field label="Nome" :value="name"></v-text-field>
           <v-textarea outlined name="input-7-4" label="Descrição" :value="description"></v-textarea>
           <v-row justify="start" align="center" class="mb-4">
-            <v-col cols="12">
+            <v-col cols="6">
+              <template>
+                <v-file-input show-size label="Arquivo" @change="uploadVideo"></v-file-input>
+              </template>
+            </v-col>
+            <v-col cols="6">
               <span><v-icon left> fas fa-file-video </v-icon> {{ video }}</span>
-              <v-btn text color="primary">Carregar Vídeo</v-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -138,10 +155,13 @@
 
 <script>
 import draggable from 'vuedraggable';
+import VueCropper from 'vue-cropperjs';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cropperjs/dist/cropper.css';
 
 export default {
   name: 'DashboardEditCourse',
-  components: { draggable },
+  components: { draggable, VueCropper },
   data: () => ({
     items: ['Tecnologia', 'Música', 'Matemática', 'Desenho'],
     input: '# hello',
@@ -154,10 +174,20 @@ export default {
     zIndex: 2,
     name: '',
     description: '',
+    courseImage: 'c995-90b5-179-3cbf.jpeg',
     video: '',
     text: 'Salvo com sucesso!',
     snackbar: false,
-    lectures: [
+    mime_type: '',
+    cropedImage: '',
+    autoCrop: false,
+    selectedFile: '',
+    image: '',
+    dialog: false,
+    files: '',
+    overlayUpload: false,
+    editingStep: {},
+    steps: [
       {
         id: 1,
         name: 'Programação C#',
@@ -268,6 +298,11 @@ export default {
       const draggedElement = draggedContext.element;
       return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed;
     },
+    // eslint-disable-next-line no-unused-vars
+    onEnd() {
+      this.isDragging = false;
+      this.updateList(this.steps);
+    },
     editLecture(event, lecture) {
       this.name = lecture.name;
       this.description = lecture.description;
@@ -279,6 +314,62 @@ export default {
       this.description = '';
       this.video = '';
       this.overlay = true;
+    },
+    updateList(l) {
+      l.forEach((step, i) => {
+        // eslint-disable-next-line no-param-reassign
+        step.order = i + 1;
+      });
+      this.steps = l;
+      console.log(this.steps);
+    },
+    uuidv4() {
+      return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, () => {
+        const r = Math.floor(Math.random() * 16);
+        return r.toString(16);
+      });
+    },
+    saveImage() {
+      this.overlayUpload = !this.overlayUpload;
+      this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      const fileName = `${this.uuidv4()}.${this.mime_type.replace('image/', '')}`;
+      this.$refs.cropper.getCroppedCanvas().toBlob(async (blob) => {
+        await this.$store.dispatch('course/updateCourseImage', {
+          file: blob,
+          fileName,
+        });
+        this.courseImage = fileName;
+      }, this.mime_type);
+      this.overlayUpload = !this.overlayUpload;
+    },
+    onFileSelect(e) {
+      const file = e.target.files[0];
+      this.mime_type = file.type;
+      if (typeof FileReader === 'function') {
+        this.dialog = true;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          this.selectedFile = event.target.result;
+          this.$refs.cropper.replace(this.selectedFile);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.log('Sorry, FileReader API not supported');
+      }
+    },
+    async uploadVideo(file) {
+      const fileName = `${this.uuidv4()}.mp4`;
+      await this.$store.dispatch('course/uploadVideo', {
+        file,
+        fileName,
+      });
+      this.steps.forEach((step) => {
+        if (step.id === this.editingStep) {
+          // eslint-disable-next-line no-param-reassign
+          step.video = fileName;
+        }
+      });
+      console.log(fileName);
     },
   },
   watch: {
