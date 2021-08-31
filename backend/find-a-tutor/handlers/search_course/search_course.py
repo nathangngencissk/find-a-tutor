@@ -37,7 +37,7 @@ def handle(event, context):
         join cte_total on cte_total.course_id = c.id
         inner join courses_categories cat on cat.id = c.category_id
         inner join reviews r on r.course_id = c.id
-        where 1 = 1
+        where c.status = 'APROVADO'
     """
 
     if keywords:

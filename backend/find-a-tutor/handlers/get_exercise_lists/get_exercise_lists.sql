@@ -23,4 +23,5 @@ select el.id,
 	   		else 'Em Andamento' end as status
 from exercise_lists el
 left join cte_total_user ctu on ctu.list_id = el.id
-left join cte_total ct on ct.list_id = ctu.list_id;
+left join cte_total ct on ct.list_id = ctu.list_id
+where el.status = 'APROVADO';
