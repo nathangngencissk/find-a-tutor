@@ -50,4 +50,359 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:17"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleCreateBankAccount:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-create-bank-account-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  CreateBankAccountHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-create-bank-account"
+      CodeUri: "../find-a-tutor/handlers/create_bank_account"
+      Handler: "create_bank_account.handle"
+      Role: !GetAtt ExecutionRoleCreateBankAccount.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleUpdateBankAccount:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-update-bank-account-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  UpdateBankAccountHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-update-bank-account"
+      CodeUri: "../find-a-tutor/handlers/update_bank_account"
+      Handler: "update_bank_account.handle"
+      Role: !GetAtt ExecutionRoleUpdateBankAccount.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleDeleteBankAccount:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-delete-bank-account-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  DeleteBankAccountHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-delete-bank-account"
+      CodeUri: "../find-a-tutor/handlers/delete_bank_account"
+      Handler: "delete_bank_account.handle"
+      Role: !GetAtt ExecutionRoleDeleteBankAccount.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleCreatePayment:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-create-payment-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  CreatePaymentHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-create-payment"
+      CodeUri: "../find-a-tutor/handlers/create_payment"
+      Handler: "create_payment.handle"
+      Role: !GetAtt ExecutionRoleCreatePayment.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+          PAYPAL_CLIENT_ID: "{{resolve:ssm:FindATutorPaypalClientId:1}}"
+          PAYPAL_CLIENT_SECRET: "{{resolve:ssm:FindATutorPaypalClientSecret:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleConfirmPayment:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-confirm-payment-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  ConfirmPaymentHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-confirm-payment"
+      CodeUri: "../find-a-tutor/handlers/confirm_payment"
+      Handler: "confirm_payment.handle"
+      Role: !GetAtt ExecutionRoleConfirmPayment.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+          PAYPAL_CLIENT_ID: "{{resolve:ssm:FindATutorPaypalClientId:1}}"
+          PAYPAL_CLIENT_SECRET: "{{resolve:ssm:FindATutorPaypalClientSecret:1}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleGetMyPayouts:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-my-payouts-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetMyPayoutsHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-my-payouts"
+      CodeUri: "../find-a-tutor/handlers/get_my_payouts"
+      Handler: "get_my_payouts.handle"
+      Role: !GetAtt ExecutionRoleGetMyPayouts.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleCreatePayout:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-create-payout-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  CreatePayoutHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-create-payout"
+      CodeUri: "../find-a-tutor/handlers/create_payout"
+      Handler: "create_payout.handle"
+      Role: !GetAtt ExecutionRoleCreatePayout.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleSendPayout:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-send-payout-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  SendPayoutHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-send-payout"
+      CodeUri: "../find-a-tutor/handlers/send_payout"
+      Handler: "send_payout.handle"
+      Role: !GetAtt ExecutionRoleSendPayout.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
+
+  ExecutionRoleGetMyBalance:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-my-balance-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetMyBalanceHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-my-balance"
+      CodeUri: "../find-a-tutor/handlers/get_my_balance"
+      Handler: "get_my_balance.handle"
+      Role: !GetAtt ExecutionRoleGetMyBalance.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"

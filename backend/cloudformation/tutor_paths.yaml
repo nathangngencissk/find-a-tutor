@@ -50,7 +50,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleDeletePath:
     Type: "AWS::IAM::Role"
@@ -89,7 +89,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleCreatePath:
     Type: "AWS::IAM::Role"
@@ -128,7 +128,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleUpdatePath:
     Type: "AWS::IAM::Role"
@@ -167,7 +167,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleCreatePathCourses:
     Type: "AWS::IAM::Role"
@@ -206,7 +206,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleUpdatePathCourses:
     Type: "AWS::IAM::Role"
@@ -245,7 +245,7 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
 
   ExecutionRoleDeletePathCourses:
     Type: "AWS::IAM::Role"
@@ -284,4 +284,4 @@ Resources:
         Variables:
           CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:18"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:19"
