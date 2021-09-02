@@ -1,6 +1,10 @@
 <template>
   <v-card class="mb-4 mr-2" max-width="400">
-    <v-img class="white--text align-end" height="200px" :src="courseImage">
+    <v-img
+      class="white--text align-end"
+      height="200px"
+      :src="$cloudfrontUrl + 'public/' + courseImage"
+    >
       <v-card-title>{{ courseName }}</v-card-title>
     </v-img>
 

@@ -23,12 +23,7 @@
   </v-slide-group>
   <v-slide-group v-else>
     <v-slide-item v-for="index in 5" :key="index">
-      <v-skeleton-loader
-        class="mx-auto mr-2"
-        width="400"
-        height="800"
-        type="card"
-      ></v-skeleton-loader>
+      <v-skeleton-loader width="400" class="mx-auto mr-2" type="card"></v-skeleton-loader>
     </v-slide-item>
   </v-slide-group>
 </template>
@@ -56,6 +51,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getPopularCourses),
+          fetchPolicy: 'network-only',
         })
         .then((response) => {
           const popularCourses = JSON.parse(response.data.getPopularCourses);

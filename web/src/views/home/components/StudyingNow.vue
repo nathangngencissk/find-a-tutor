@@ -61,6 +61,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getStudyingNow),
+          fetchPolicy: 'network-only',
         })
         .then((response) => {
           const courses = JSON.parse(response.data.getStudyingNow);

@@ -168,7 +168,7 @@
       </v-col>
       <v-col xl="3" lg="3" md="6" sm="12" xs="12">
         <v-card width="400">
-          <v-img height="200px" :src="courseImage" />
+          <v-img height="200px" :src="$cloudfrontUrl + 'public/' + courseImage" />
 
           <v-card-text class="text--primary">
             <h1>R${{ courseCost }},00</h1>
@@ -199,6 +199,9 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
@@ -206,6 +209,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getCourse, getCourseSteps, getCourseClasses, getCourseReviews } from '@/graphql/queries';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'Course',
@@ -236,6 +240,7 @@ export default {
     avgRatingOwner: '',
     courseSteps: [],
     reviews: [],
+    loading: true,
   }),
 
   computed: {
@@ -243,7 +248,7 @@ export default {
       return parseFloat(this.courseRating);
     },
     compiledMarkdown() {
-      return this.$marked(this.courseDescription, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.courseDescription));
     },
     ...mapGetters('auth', ['currentUser']),
   },
@@ -253,6 +258,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(getCourse),
+          fetchPolicy: 'network-only',
           variables: { id: this.$route.params.id },
         })
         .then((response) => {
@@ -284,6 +290,7 @@ export default {
             }
           );
           this.classes = result.classes;
+          this.loading = false;
         });
     },
     getCourseSteps() {

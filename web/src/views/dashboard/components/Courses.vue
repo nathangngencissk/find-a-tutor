@@ -35,114 +35,54 @@
         <v-btn color="error" text @click="remove($event, item)">Remover</v-btn>
       </template>
     </v-data-table>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
     <div class="text-center pt-2">
-      <v-pagination v-model="page" :length="pageCount"></v-pagination>
-      <v-text-field
-        :value="itemsPerPage"
-        label="Itens por página"
-        type="number"
-        min="-1"
-        max="15"
-        @input="itemsPerPage = parseInt($event, 10)"
-      ></v-text-field>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getCourses, deleteCourse } from '@/graphql/queries';
+
 export default {
   title: 'Cursos | Find a Tutor',
   data() {
     return {
+      loading: true,
       page: 1,
-      pageCount: 0,
+      pagesLength: 1,
+      pages: [],
       itemsPerPage: 10,
       search: '',
       newCourse: {
-        id: 0,
+        id: null,
         name: '',
-        category: '',
-        value: 0,
+        category_id: null,
+        price: 0.0,
         description: '',
+        short_description: '',
+        image: '',
         status: 'EM AVALIAÇÃO',
+        owner_id: '',
+        created_at: '',
+        updated_at: '',
+        steps: [],
       },
-      courses: [
-        {
-          id: 1,
-          name: 'Programação C#',
-          category: 'Tecnologia',
-          value: 150,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'APROVADO',
-        },
-        {
-          id: 2,
-          name: 'Redes de Computadores',
-          category: 'Tecnologia',
-          value: 200,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'APROVADO',
-        },
-        {
-          id: 3,
-          name: 'Programação para jogos',
-          category: 'Tecnologia',
-          value: 350,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'EM AVALIAÇÃO',
-        },
-        {
-          id: 4,
-          name: 'Programação para inciantes',
-          category: 'Tecnologia',
-          value: 100,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'EM AVALIAÇÃO',
-        },
-        {
-          id: 5,
-          name: 'Orientação a objetos em C#',
-          category: 'Tecnologia',
-          value: 80,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'EM AVALIAÇÃO',
-        },
-        {
-          id: 6,
-          name: 'Como ficar rico com C#',
-          category: 'Tecnologia',
-          value: 1000,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'EM AVALIAÇÃO',
-        },
-        {
-          id: 7,
-          name: 'Arduino do iniciante ao avançado',
-          category: 'Tecnologia',
-          value: 250,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'EM AVALIAÇÃO',
-        },
-        {
-          id: 8,
-          name: 'Programação C++',
-          category: 'Tecnologia',
-          value: 175,
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          status: 'REPROVADO',
-        },
-      ],
+      courses: [],
+      filteredCourses: [],
     };
   },
   computed: {
+    ...mapGetters('auth', ['currentUser']),
     headers() {
       return [
         {
@@ -150,11 +90,7 @@ export default {
           align: 'start',
           value: 'name',
         },
-        {
-          text: 'Categoria',
-          value: 'category',
-        },
-        { text: 'Valor (R$)', value: 'value', align: 'center' },
+        { text: 'Valor (R$)', value: 'price', align: 'center' },
         { text: 'Status', value: 'status', align: 'center' },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
@@ -166,8 +102,58 @@ export default {
       console.log(event, item);
     },
     remove(event, item) {
-      console.log(event, item);
+      this.deleteCourse(item.id);
     },
+    paginate() {
+      const numPages = Math.ceil(this.filteredCourses.length / 12);
+      const paginated = this.$chunkify(this.filteredCourses, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredCourses = paginated[0];
+    },
+    changePage() {
+      this.filteredCourses = this.pages[this.page - 1];
+    },
+    getCourses() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getCourses),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getCourses);
+          this.courses = result;
+          this.filteredCourses = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    deleteCourse(courseId) {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(deleteCourse),
+          fetchPolicy: 'network-only',
+          variables: { course_id: courseId },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.courses.forEach((course) => {
+            if (course.id === courseId) {
+              const index = this.courses.indexOf(course);
+              if (index > -1) {
+                this.courses.splice(index, 1);
+              }
+            }
+          });
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getCourses();
   },
 };
 </script>

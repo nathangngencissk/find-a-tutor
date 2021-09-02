@@ -18,7 +18,8 @@ def handle(event, context):
     now = datetime.now()
 
     arguments = {
-        "id": event["arguments"]["user_id"],
+        "id": event["arguments"]["id"],
+        "user_id": event["arguments"]["user_id"],
         "updated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
     }
 

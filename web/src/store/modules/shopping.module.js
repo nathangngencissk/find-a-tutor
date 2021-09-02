@@ -34,6 +34,13 @@ const actions = {
       console.error('Error removing from cart: ', error);
     }
   },
+  async clearCart({ dispatch, commit, getters, rootGetters }) {
+    try {
+      await commit('clearCart');
+    } catch (error) {
+      console.error('Error clearing cart: ', error);
+    }
+  },
 };
 
 const mutations = {
@@ -59,6 +66,9 @@ const mutations = {
     if (pos != -1) {
       state.shoppingCart.splice(pos, 1);
     }
+  },
+  clearCart(state) {
+    state.shoppingCart = [];
   },
 };
 

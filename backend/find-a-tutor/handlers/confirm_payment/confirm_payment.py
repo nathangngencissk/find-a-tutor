@@ -6,7 +6,6 @@ from paypalcheckoutsdk.orders import OrdersGetRequest
 from paypalhttp import HttpError
 
 from utils.database import Database
-from utils import DateTimeEncoder
 from models.payment.Payment import Payment
 from models.course_user.CourseUser import CourseUser
 
@@ -49,15 +48,15 @@ def handle(event, context):
         with open("get_payment_orders.sql", "r") as f:
             query = f.read()
 
-        arguments_orders = {"payment_id": payment["id"]}
+        arguments_orders = {"payment_id": payment.id}
 
-        results = db.query(query=query, arguments=arguments_orders)
+        orders = db.query(query=query, arguments=arguments_orders)
 
-        for result in results:
-            course = dict(result)
+        for order in orders:
+            order = dict(order)
 
             arguments_course_user = {
-                "course_id": course["id"],
+                "course_id": order["course_id"],
                 "user_id": event["arguments"]["user_id"],
                 "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
                 "updated_at": now.strftime("%Y-%m-%d %H:%M:%S"),

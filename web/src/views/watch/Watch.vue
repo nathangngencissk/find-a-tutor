@@ -147,9 +147,6 @@ export default {
     },
   },
   computed: {
-    compiledMarkdown() {
-      return this.$marked(this.text, { sanitize: true });
-    },
     ...mapGetters('auth', ['currentUser']),
   },
   created() {

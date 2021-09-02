@@ -5,20 +5,23 @@
         <v-sheet elevation="1" class="px-4">
           <v-subheader> Contas Bancárias </v-subheader>
           <v-row>
-            <v-col v-for="account in accounts" :key="account.id" xl="6" lg="6" cols="12">
+            <v-col xl="6" lg="6" cols="12" v-if="loading">
+              <v-skeleton-loader class="mx-auto mr-2" type="card"></v-skeleton-loader>
+            </v-col>
+            <v-col v-for="account in accounts" :key="account.id" xl="6" lg="6" cols="12" v-else>
               <v-card>
                 <v-card-text>
-                  <div v-if="account.id === primaryAccount">
-                    {{ account.bank_name }}
-                    <v-icon color="success accent-2">fas fa-check-circle</v-icon>
-                  </div>
+                  <div class="text-h4 text--primary">
+                    <div v-if="account.favorite === true">
+                      {{ account.bank_name }}
+                      <v-icon color="success accent-2">fas fa-check-circle</v-icon>
+                    </div>
 
-                  <div v-else>
-                    {{ account.bank_name }}
+                    <div v-else>
+                      {{ account.bank_name }}
+                    </div>
                   </div>
-
-                  <p class="text-h4 text--primary">{{ account.titular }}</p>
-                  <p>{{ account.tipo_conta }}</p>
+                  <p>{{ account.account_type }}</p>
                   <div class="text--primary">
                     Agência: {{ account.agencia }}<br />
                     Conta: {{ account.conta }}
@@ -28,8 +31,14 @@
                   <v-btn text color="primary accent-4" @click="edit($event, account)">
                     Editar
                   </v-btn>
-                  <v-btn text color="error accent-4"> Excluir </v-btn>
-                  <v-btn text color="success accent-2" v-if="account.id !== primaryAccount"
+                  <v-btn text color="error accent-4" @click="deleteBankAccount($event, account.id)">
+                    Excluir
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="success accent-2"
+                    v-if="account.favorite == false"
+                    @click="favoriteBankAccount($event, account.id)"
                     >Favoritar</v-btn
                   >
                 </v-card-actions>
@@ -43,40 +52,68 @@
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
-          <v-text-field label="Nome do Titular" :value="titular"></v-text-field>
-          <v-text-field label="Banco" :value="bank_name"></v-text-field>
-          <v-text-field label="Agência" :value="agencia"></v-text-field>
-          <v-text-field label="Conta" :value="conta"></v-text-field>
-          <v-text-field label="Tipo de Conta" :value="conta"></v-text-field>
+          <v-select
+            :items="bankCodes"
+            item-text="label"
+            item-value="value"
+            v-model="bank_code"
+            label="Banco"
+            dense
+            outlined
+            @change="updateBankName"
+          ></v-select>
+          <v-text-field label="Agência" v-model="agencia"></v-text-field>
+          <v-text-field label="Conta" v-model="conta"></v-text-field>
+          <v-select
+            :items="accountTypes"
+            item-text="label"
+            item-value="value"
+            v-model="account_type"
+            label="Tipo de Conta"
+            dense
+            outlined
+          ></v-select>
         </v-form>
-        <v-btn class="white--text mr-4" color="success" @click="overlay = false"> Salvar </v-btn>
-        <v-btn class="white--text" color="error" @click="overlay = false"> Fechar </v-btn>
+        <v-btn
+          class="white--text mr-4"
+          color="success"
+          @click="createBankAccount"
+          v-if="account_id == null"
+        >
+          Salvar
+        </v-btn>
+        <v-btn class="white--text mr-4" color="success" @click="updateBankAccount" v-else>
+          Salvar
+        </v-btn>
+        <v-btn class="white--text" text color="error" @click="overlay = false"> Fechar </v-btn>
       </v-card>
     </v-overlay>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import {
+  getMyBankAccounts,
+  createBankAccount,
+  updateBankAccount,
+  deleteBankAccount,
+  favoriteBankAccount,
+} from '@/graphql/queries';
+
 export default {
   title: 'Saque | Find a Tutor',
   data: () => ({
-    primaryAccount: 1,
-    accounts: [
+    loading: true,
+    accounts: [],
+    accountTypes: [
       {
-        id: 1,
-        titular: 'Nathan Gencissk',
-        bank_name: 'Banco Inter',
-        agencia: '1234',
-        conta: '12345-0',
-        tipo_conta: 'Conta Corrente',
+        label: 'Conta Corrente',
+        value: 'Conta Corrente',
       },
       {
-        id: 2,
-        titular: 'Nathan Gencissk',
-        bank_name: 'Itaú',
-        agencia: '4321',
-        conta: '54321-0',
-        tipo_conta: 'Conta Corrente',
+        label: 'Poupança',
+        value: 'Poupança',
       },
     ],
     bankCodes: [
@@ -855,29 +892,164 @@ export default {
     ],
     overlay: false,
     zIndex: 2,
-    titular: '',
     bank_name: '',
     agencia: '',
     conta: '',
-    tipo_conta: '',
+    account_type: '',
+    bank_code: '',
+    favorite: '',
+    account_id: null,
+    created_at: '',
   }),
   methods: {
     add() {
-      this.titular = '';
+      this.account_id = null;
+      this.bank_code = '';
       this.bank_name = '';
+      this.account_type = '';
       this.agencia = '';
       this.conta = '';
-      this.tipo_conta = '';
+      this.favorite = false;
       this.overlay = true;
     },
     edit(event, account) {
-      this.titular = account.titular;
+      this.account_id = account.id;
+      this.bank_code = account.bank_code;
       this.bank_name = account.bank_name;
+      this.account_type = account.account_type;
       this.agencia = account.agencia;
       this.conta = account.conta;
-      this.tipo_conta = account.tipo_conta;
+      this.favorite = account.favorite;
+      this.created_at = account.created_at;
       this.overlay = true;
     },
+    updateBankName(event) {
+      this.bankCodes.forEach((bank) => {
+        if (bank.value === event) {
+          this.bank_name = bank.label;
+        }
+      });
+    },
+    getMyBankAccounts() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getMyBankAccounts),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getMyBankAccounts);
+          this.accounts = result;
+          this.loading = false;
+        });
+    },
+    createBankAccount() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(createBankAccount),
+          fetchPolicy: 'network-only',
+          variables: {
+            bank_code: this.bank_code,
+            bank_name: this.bank_name,
+            account_type: this.account_type,
+            agencia: this.agencia,
+            conta: this.conta,
+            favorite: false,
+            user_id: this.currentUser.username,
+            created_at: this.$getFormattedDate(),
+            updated_at: this.$getFormattedDate(),
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.createBankAccount);
+          this.accounts.push(result);
+          this.overlay = false;
+        });
+    },
+    updateBankAccount() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(updateBankAccount),
+          fetchPolicy: 'network-only',
+          variables: {
+            id: this.account_id,
+            bank_code: this.bank_code,
+            bank_name: this.bank_name,
+            account_type: this.account_type,
+            agencia: this.agencia,
+            conta: this.conta,
+            favorite: this.favorite,
+            user_id: this.currentUser.username,
+            created_at: this.created_at,
+            updated_at: this.$getFormattedDate(),
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.updateBankAccount);
+          this.accounts.forEach((account) => {
+            // eslint-disable-next-line eqeqeq
+            if (account.id == result.id) {
+              // eslint-disable-next-line no-param-reassign
+              const index = this.accounts.indexOf(account);
+              if (index > -1) {
+                this.accounts.splice(index, 1);
+              }
+              this.accounts.push(result);
+            }
+          });
+          this.overlay = false;
+        });
+    },
+    deleteBankAccount(event, id) {
+      this.$gqlClient
+        .query({
+          query: this.$gql(deleteBankAccount),
+          fetchPolicy: 'network-only',
+          variables: {
+            id,
+          },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.accounts.forEach((account) => {
+            if (account.id === id) {
+              const index = this.accounts.indexOf(account);
+              if (index > -1) {
+                this.accounts.splice(index, 1);
+              }
+            }
+          });
+        });
+    },
+    favoriteBankAccount(event, id) {
+      this.$gqlClient
+        .query({
+          query: this.$gql(favoriteBankAccount),
+          fetchPolicy: 'network-only',
+          variables: {
+            id,
+            user_id: this.currentUser.username,
+          },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.accounts.forEach((account) => {
+            if (account.id === id) {
+              // eslint-disable-next-line no-param-reassign
+              account.favorite = true;
+            } else {
+              // eslint-disable-next-line no-param-reassign
+              account.favorite = false;
+            }
+          });
+        });
+    },
+  },
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
+  created() {
+    this.getMyBankAccounts();
   },
 };
 </script>

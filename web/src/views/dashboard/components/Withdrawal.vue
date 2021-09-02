@@ -9,7 +9,7 @@
               <v-col cols="8">
                 <v-subheader> Saldo na Carteira </v-subheader>
                 <h2 class="ma-2">
-                  R$ 7284,52
+                  R$ {{ accountBalance }}
                   <v-btn class="ml-2" color="primary accent-2" depressed @click="withdraw"
                     >Sacar</v-btn
                   >
@@ -23,14 +23,29 @@
                     >Mais</v-btn
                   >
                 </v-subheader>
-                <v-row justify="start">
+                <v-row justify="start" v-if="selectedAccount != {}">
                   <v-col cols="2">
                     <v-icon>fas fa-university</v-icon>
                   </v-col>
                   <v-col cols="6">
-                    <b>Banco Inter</b>
+                    <b>{{ selectedAccount.bank_name }}</b>
                   </v-col>
-                  <v-col cols="4"> 12345-0 </v-col>
+                  <v-col cols="4">
+                    <v-row justify="start" class="text-body-2">
+                      <b class="mr-1">Ag:</b> {{ selectedAccount.agencia }}
+                    </v-row>
+                    <v-row justify="start" class="text-body-2">
+                      <b class="mr-1">Conta:</b> {{ selectedAccount.conta }}
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row justify="start" v-else>
+                  <v-col cols="2">
+                    <v-icon>fas fa-university</v-icon>
+                  </v-col>
+                  <v-col cols="6">
+                    <b>Nenhuma conta selecionada</b>
+                  </v-col>
                 </v-row>
               </v-col>
             </v-row>
@@ -38,7 +53,7 @@
           <h3 class="my-4">Histórico de saques</h3>
           <v-data-table
             :headers="headers"
-            :items="withdrawals"
+            :items="filteredPayouts"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             @page-count="pageCount = $event"
@@ -53,89 +68,148 @@
             </template>
           </v-data-table>
           <div class="text-center pt-2">
-            <v-pagination v-model="page" :length="pageCount"></v-pagination>
-            <v-text-field
-              :value="itemsPerPage"
-              label="Itens por página"
-              type="number"
-              min="-1"
-              max="15"
-              @input="itemsPerPage = parseInt($event, 10)"
-            ></v-text-field>
+            <v-pagination
+              v-model="page"
+              :length="pagesLength"
+              circle
+              v-on:change="changePage"
+            ></v-pagination>
           </div>
         </v-sheet>
       </v-col>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
-          <v-text-field label="Valor" :value="amount"></v-text-field>
-          <v-text-field
-            v-model="password"
-            label="Senha"
-            required
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show ? 'text' : 'password'"
-            :rules="passwordRules"
-            @click:append="show = !show"
-          ></v-text-field>
+          <v-text-field label="Valor" v-model="amount"></v-text-field>
         </v-form>
-        <v-btn class="white--text mr-4" color="success" @click="overlay = false"> Sacar </v-btn>
-        <v-btn class="white--text" color="error" @click="overlay = false"> Fechar </v-btn>
+        <v-btn class="white--text mr-4" color="success" @click="createPayout"> Sacar </v-btn>
+        <v-btn class="white--text" color="error" @click="overlay = false" text> Fechar </v-btn>
       </v-card>
     </v-overlay>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getMyBankAccounts, getMyPayouts, createPayout, getMyBalance } from '@/graphql/queries';
+
 export default {
   title: 'Saque | Find a Tutor',
   data() {
     return {
       page: 1,
-      pageCount: 0,
+      pagesLength: 1,
+      pages: [],
       itemsPerPage: 10,
       search: '',
       amount: '',
-      password: '',
+      loading: true,
       show: false,
       overlay: false,
       zIndex: 2,
-      passwordRules: [
-        (v) => !!v || 'Senha é necessária',
-        (v) => (v && v.length >= 8) || 'Senha deve ter no mínimo 8 caracteres',
-      ],
-      withdrawals: [
-        {
-          id: 1,
-          date: '2021-06-20 14:32',
-          amount: 'R$140,32',
-          status: 'COMPLETO',
-        },
-        {
-          id: 2,
-          date: '2021-05-26 19:45',
-          amount: 'R$2062,45',
-          status: 'COMPLETO',
-        },
-      ],
+      payouts: [],
+      filteredPayouts: [],
+      accountBalance: 0.0,
+      selectedAccount: {},
     };
   },
   computed: {
     headers() {
       return [
-        { text: 'Data', value: 'date', align: 'center' },
-        { text: 'Valor', value: 'amount', align: 'center' },
+        { text: 'Data', value: 'updated_at', align: 'center' },
+        { text: 'Valor', value: 'value', align: 'center' },
         { text: 'Status', value: 'status', align: 'center' },
       ];
     },
+    ...mapGetters('auth', ['currentUser']),
   },
   methods: {
     withdraw() {
       this.amount = '';
-      this.password = '';
       this.overlay = true;
     },
+    paginate() {
+      const numPages = Math.ceil(this.filteredPayouts.length / 12);
+      const paginated = this.$chunkify(this.filteredPayouts, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredPayouts = paginated[0];
+    },
+    changePage() {
+      this.filteredPayouts = this.pages[this.page - 1];
+    },
+    getMyBankAccounts() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getMyBankAccounts),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getMyBankAccounts);
+          result.forEach((account) => {
+            if (account.favorite) {
+              this.selectedAccount = account;
+            }
+          });
+          this.accounts = result;
+        });
+    },
+    getMyPayouts() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getMyPayouts),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getMyPayouts);
+          this.payouts = result;
+          this.filteredPayouts = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    getMyBalance() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getMyBalance),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getMyBalance);
+          this.accountBalance = result;
+        });
+    },
+    createPayout() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(createPayout),
+          fetchPolicy: 'network-only',
+          variables: {
+            user_id: this.currentUser.username,
+            value: this.amount,
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.createPayout);
+          this.payouts.push(result);
+          this.paginate();
+          this.changePage(-1);
+          this.overlay = false;
+        });
+    },
+  },
+  created() {
+    this.getMyBankAccounts();
+    this.getMyPayouts();
+    this.getMyBalance();
   },
 };
 </script>

@@ -10,11 +10,14 @@
           <h1 class="ml-5">R$ {{ cartTotal }},00</h1>
           <v-card-text class="text--primary">
             <div class="my-2">
-              <v-btn x-large color="success" block> Finalizar </v-btn>
+              <v-btn x-large color="success" block @click="createPayment"> Finalizar </v-btn>
             </div>
           </v-card-text>
         </v-card>
       </v-col>
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
@@ -22,6 +25,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import CourseCardShort from '@/components/CourseCardShort.vue';
+import { createPayment } from '@/graphql/queries';
 
 export default {
   name: 'Cart',
@@ -32,15 +36,47 @@ export default {
     CourseCardShort,
   },
 
-  data: () => ({}),
+  data: () => ({
+    overlay: false,
+  }),
 
   computed: {
     ...mapGetters('shopping', ['shoppingCart']),
+    ...mapGetters('auth', ['currentUser']),
     cartTotal() {
       return this.shoppingCart.reduce((sum, obj) => sum + parseFloat(obj.price || 0), 0);
     },
   },
 
-  methods: {},
+  methods: {
+    createPayment() {
+      this.overlay = true;
+      const courses = [];
+      this.shoppingCart.forEach((course) => {
+        courses.push(parseInt(course.id, 10));
+      });
+      this.$gqlClient
+        .query({
+          query: this.$gql(createPayment),
+          fetchPolicy: 'network-only',
+          variables: {
+            user_id: this.currentUser.username,
+            value: this.cartTotal.toString(),
+            courses,
+          },
+        })
+        .then(async (response) => {
+          const paymentLink = response.data.createPayment;
+          await this.$store.dispatch('shopping/clearCart');
+          this.overlay = false;
+          window.open(paymentLink, '_blank');
+          this.$router.push({ name: 'Home' }).catch((error) => {
+            if (error.name !== 'NavigationDuplicated') {
+              throw error;
+            }
+          });
+        });
+    },
+  },
 };
 </script>

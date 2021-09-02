@@ -3,9 +3,9 @@
     <v-row class="mb-4">
       <v-col cols="12" lg="4">
         <base-material-chart-card
-          :data="emailsSubscriptionChart.data"
-          :options="emailsSubscriptionChart.options"
-          :responsive-options="emailsSubscriptionChart.responsiveOptions"
+          :data="sumPerMonth.data"
+          :options="sumPerMonth.options"
+          :responsive-options="sumPerMonth.responsiveOptions"
           color="primary"
           hover-reveal
           type="Bar"
@@ -45,8 +45,8 @@
 
       <v-col cols="12" lg="4">
         <base-material-chart-card
-          :data="dailySalesChart.data"
-          :options="dailySalesChart.options"
+          :data="countPerMonth.data"
+          :options="countPerMonth.options"
           color="success"
           hover-reveal
           type="Line"
@@ -89,8 +89,8 @@
 
       <v-col cols="12" lg="4">
         <base-material-chart-card
-          :data="dataCompletedTasksChart.data"
-          :options="dataCompletedTasksChart.options"
+          :data="avgRatingPerMonth.data"
+          :options="avgRatingPerMonth.options"
           hover-reveal
           color="orange darken-3"
           type="Line"
@@ -133,7 +133,7 @@
           color="info"
           icon="fas fa-user-graduate"
           title="Alunos"
-          value="245"
+          :value="totalUsers"
           sub-icon="mdi-clock"
           sub-text="Atualizado agora"
         />
@@ -143,8 +143,8 @@
         <base-material-stats-card
           color="primary"
           icon="mdi-poll"
-          title="Total de visitas dos cursos"
-          value="1.521"
+          title="Total de cursos vendidos"
+          :value="totalCount"
           sub-icon="mdi-calendar"
           sub-text="Último mês"
         />
@@ -155,7 +155,7 @@
           color="success"
           icon="mdi-store"
           title="Ganhos"
-          value="R$ 8,245"
+          :value="'R$ ' + totalSum"
           sub-icon="mdi-calendar"
           sub-text="Último mês"
         />
@@ -166,25 +166,36 @@
           color="orange"
           icon="fas fa-star"
           title="Média de avaliações"
-          value="4.6"
+          :value="lastAverage"
           sub-icon="mdi-clock"
           sub-text="Atualizado agora"
         />
       </v-col>
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getDashboardData } from '@/graphql/queries';
+
 export default {
   name: 'DashboardDashboard',
 
   data() {
     return {
-      dailySalesChart: {
+      overlay: true,
+      totalCount: '0',
+      totalUsers: '0',
+      totalSum: '0',
+      lastAverage: '5',
+      countPerMonth: {
         data: {
-          labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
-          series: [[12, 17, 7, 17, 23, 18, 38]],
+          labels: [],
+          series: [[]],
         },
         options: {
           lineSmooth: this.$chartist.Interpolation.cardinal({
@@ -200,10 +211,10 @@ export default {
           },
         },
       },
-      dataCompletedTasksChart: {
+      avgRatingPerMonth: {
         data: {
-          labels: ['8', '7', '6', '5', '4', '3', '2', '1'],
-          series: [[3.9, 4.2, 4.4, 4.5, 4.7, 4.3, 4.5, 4.6]],
+          labels: [],
+          series: [[]],
         },
         options: {
           lineSmooth: this.$chartist.Interpolation.cardinal({
@@ -219,10 +230,10 @@ export default {
           },
         },
       },
-      emailsSubscriptionChart: {
+      sumPerMonth: {
         data: {
-          labels: ['Ja', 'Fe', 'Ma', 'Ab', 'Mai', 'Ju', 'Jul', 'Ag', 'Se', 'Ou', 'No', 'De'],
-          series: [[585, 802, 704, 954, 982, 1112, 1084, 1203, 1301, 1412, 1331, 1521]],
+          labels: [],
+          series: [[]],
         },
         options: {
           axisX: {
@@ -251,130 +262,44 @@ export default {
           ],
         ],
       },
-      headers: [
-        {
-          sortable: false,
-          text: 'ID',
-          value: 'id',
-        },
-        {
-          sortable: false,
-          text: 'Name',
-          value: 'name',
-        },
-        {
-          sortable: false,
-          text: 'Salary',
-          value: 'salary',
-          align: 'right',
-        },
-        {
-          sortable: false,
-          text: 'Country',
-          value: 'country',
-          align: 'right',
-        },
-        {
-          sortable: false,
-          text: 'City',
-          value: 'city',
-          align: 'right',
-        },
-      ],
-      items: [
-        {
-          id: 1,
-          name: 'Dakota Rice',
-          country: 'Niger',
-          city: 'Oud-Tunrhout',
-          salary: '$35,738',
-        },
-        {
-          id: 2,
-          name: 'Minerva Hooper',
-          country: 'Curaçao',
-          city: 'Sinaai-Waas',
-          salary: '$23,738',
-        },
-        {
-          id: 3,
-          name: 'Sage Rodriguez',
-          country: 'Netherlands',
-          city: 'Overland Park',
-          salary: '$56,142',
-        },
-        {
-          id: 4,
-          name: 'Philip Chanley',
-          country: 'Korea, South',
-          city: 'Gloucester',
-          salary: '$38,735',
-        },
-        {
-          id: 5,
-          name: 'Doris Greene',
-          country: 'Malawi',
-          city: 'Feldkirchen in Kārnten',
-          salary: '$63,542',
-        },
-      ],
-      tabs: 0,
-      tasks: {
-        0: [
-          {
-            text: 'Sign contract for "What are conference organizers afraid of?"',
-            value: true,
-          },
-          {
-            text: 'Lines From Great Russian Literature? Or E-mails From My Boss?',
-            value: false,
-          },
-          {
-            text: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-            value: false,
-          },
-          {
-            text: 'Create 4 Invisible User Experiences you Never Knew About',
-            value: true,
-          },
-        ],
-        1: [
-          {
-            text: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-            value: true,
-          },
-          {
-            text: 'Sign contract for "What are conference organizers afraid of?"',
-            value: false,
-          },
-        ],
-        2: [
-          {
-            text: 'Lines From Great Russian Literature? Or E-mails From My Boss?',
-            value: false,
-          },
-          {
-            text: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-            value: true,
-          },
-          {
-            text: 'Sign contract for "What are conference organizers afraid of?"',
-            value: true,
-          },
-        ],
-      },
-      list: {
-        0: false,
-        1: false,
-        2: false,
-      },
     };
   },
 
   methods: {
-    complete(index) {
-      this.list[index] = !this.list[index];
+    getDashboardData() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getDashboardData),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getDashboardData);
+          this.totalCount = result.total_count.toString();
+          this.totalSum = result.total_sum.toString();
+          this.totalUsers = result.total_users[0].count.toString();
+          this.lastAverage = result.last_average.toString();
+          result.sum_per_month.forEach((month) => {
+            this.sumPerMonth.data.labels.push(month.month_name);
+            this.sumPerMonth.data.series[0].push(month.total_month);
+          });
+          result.avg_rating_per_month.forEach((month) => {
+            this.avgRatingPerMonth.data.labels.push(month.month_name);
+            this.avgRatingPerMonth.data.series[0].push(month.cum_amt);
+          });
+          result.count_per_month.forEach((month) => {
+            this.countPerMonth.data.labels.push(month.month_name);
+            this.countPerMonth.data.series[0].push(month.count_month);
+          });
+          this.overlay = false;
+        });
     },
+  },
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
+  created() {
+    this.getDashboardData();
   },
 };
 </script>

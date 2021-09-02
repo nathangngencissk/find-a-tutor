@@ -193,6 +193,8 @@
 </template>
 
 <script>
+import DOMPurify from 'dompurify';
+
 export default {
   name: 'DashboardEditCourse',
   data: () => ({
@@ -263,10 +265,10 @@ export default {
       return this.$route.params.class;
     },
     compiledMarkdown() {
-      return this.$marked(this.$route.params.class.description, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.$route.params.class.description));
     },
     compiledMarkdownAccess() {
-      return this.$marked(this.$route.params.class.access, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.$route.params.class.access));
     },
     dateRangeText() {
       return this.dates.join(' ~ ');

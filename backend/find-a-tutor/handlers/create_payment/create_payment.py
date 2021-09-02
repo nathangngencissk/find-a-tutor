@@ -6,8 +6,8 @@ from paypalcheckoutsdk.orders import OrdersCreateRequest
 from paypalhttp import HttpError
 
 from utils.database import Database
-from utils import DateTimeEncoder
 from models.payment.Payment import Payment
+from models.order.Order import Order
 
 CONN_STRING = os.environ["CONN_STRING"]
 PAYPAL_CLIENT_ID = os.environ["PAYPAL_CLIENT_ID"]
@@ -62,6 +62,22 @@ def handle(event, context):
         db.add(payment)
 
         payment.__dict__.pop("_sa_instance_state")
+
+        courses = event["arguments"]["courses"]
+
+        for course_id in courses:
+            arguments = {
+                "course_id": course_id,
+                "payment_id": payment.id,
+                "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+                "updated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+            }
+
+            order = Order(**arguments)
+
+            db.add(order)
+
+            order.__dict__.pop("_sa_instance_state")
 
         return payment_link
 

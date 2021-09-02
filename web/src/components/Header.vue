@@ -49,7 +49,7 @@
             <v-btn
               color="primaryText"
               plain
-              to="/dashboard"
+              :to="{ name: 'DashboardMain' }"
               v-if="platformTutor && isAuthenticated"
             >
               <span>Painel</span>
@@ -119,7 +119,7 @@
                   </v-list-item-icon>
 
                   <v-list-item-content>
-                    <v-btn depressed small to="/dashboard">Painel</v-btn>
+                    <v-btn depressed small :to="{ name: 'DashboardMain' }">Painel</v-btn>
                   </v-list-item-content>
                 </v-list-item>
 

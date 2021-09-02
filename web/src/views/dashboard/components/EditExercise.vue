@@ -104,6 +104,7 @@
 
 <script>
 import draggable from 'vuedraggable';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'DashboardEditExercise',
@@ -132,7 +133,7 @@ export default {
       return this.$route.params.exerciseList;
     },
     compiledMarkdown() {
-      return this.$marked(this.$route.params.exerciseList.description, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.$route.params.exerciseList.description));
     },
     headers() {
       return [

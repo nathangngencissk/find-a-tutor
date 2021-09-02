@@ -4,25 +4,48 @@
       <v-row>
         <v-col xl="6" cols="12">
           <h2>Nome</h2>
-          <v-text-field label="Nome" :value="course.name"></v-text-field>
+          <v-text-field label="Nome" v-model="course.name"></v-text-field>
         </v-col>
         <v-col xl="3" xs="12" cols="6">
           <h2>Categoria</h2>
-          <v-select :items="items" label="Categoria" :value="course.category"></v-select>
+          <v-select
+            :items="categories"
+            item-text="name"
+            item-value="id"
+            v-model="course.category_id"
+            label="Categoria"
+            dense
+            outlined
+          >
+          </v-select>
         </v-col>
         <v-col xl="3" xs="12" cols="6">
           <h2>Valor (R$)</h2>
-          <v-text-field label="Valor" :value="course.value"></v-text-field>
+          <v-text-field label="Valor" v-model="course.price"></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col xl="6" cols="12">
           <h2>Descrição</h2>
-          <textarea :value="course.description" auto-grow @input="update($event)"></textarea>
+          <textarea v-model="course.description" auto-grow @input="update($event)"></textarea>
         </v-col>
         <v-col xl="6" cols="12">
           <h2>Preview</h2>
           <div v-html="compiledMarkdown"></div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col xl="6" cols="12">
+          <h2>Descrição curta (Preview)</h2>
+          <textarea
+            v-model="course.short_description"
+            auto-grow
+            @input="updateShort($event)"
+          ></textarea>
+        </v-col>
+        <v-col xl="6" cols="12">
+          <h2>Preview</h2>
+          <div v-html="compiledMarkdownShort"></div>
         </v-col>
       </v-row>
     </v-container>
@@ -32,7 +55,7 @@
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-avatar width="600" height="400" tile>
-              <img :src="$cloudfrontUrl + 'public/' + courseImage" alt="imagem do curso" />
+              <img :src="$cloudfrontUrl + 'public/' + course.image" alt="imagem do curso" />
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="#1976d2">
                   <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
@@ -65,7 +88,7 @@
         <h2 class="mb-2">Aulas</h2>
         <v-data-table
           :headers="headers"
-          :items="steps"
+          :items="course.steps"
           :page.sync="page"
           :items-per-page="itemsPerPage"
           @page-count="pageCount = $event"
@@ -78,8 +101,9 @@
             <v-toolbar flat>
               <v-toolbar-title>Aulas</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <v-text-field v-model="search" label="Filtrar" class="mx-4"></v-text-field>
-              <v-btn color="success" dark class="mb-2" @click="addLecture"> Adicionar </v-btn>
+              <v-btn color="success" dark class="mb-2" @click="addLecture" text>
+                Adicionar Aula
+              </v-btn>
             </v-toolbar>
           </template>
           <template v-slot:body="props">
@@ -89,10 +113,10 @@
               :move="onMove"
               @start="isDragging = true"
               @end="onEnd"
-              :list="steps"
+              :list="course.steps"
               tag="tbody"
             >
-              <tr v-for="(lecture, index) in steps" :key="index">
+              <tr v-for="(lecture, index) in course.steps" :key="index">
                 <td>
                   <v-icon small class="page__grab-icon"> mdi-arrow-all </v-icon>
                 </td>
@@ -104,24 +128,17 @@
                 <td>
                   <v-btn color="primary" @click="editLecture($event, lecture)" text>Editar</v-btn>
                 </td>
-                <td><v-btn color="error" text>Remover</v-btn></td>
+                <td>
+                  <v-btn color="error" text @click="deleteCourseStep($event, lecture)"
+                    >Remover</v-btn
+                  >
+                </td>
               </tr>
             </draggable>
           </template>
         </v-data-table>
-        <div class="text-center pt-2">
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
-          <v-text-field
-            :value="itemsPerPage"
-            label="Itens por página"
-            type="number"
-            min="-1"
-            max="15"
-            @input="itemsPerPage = parseInt($event, 10)"
-          ></v-text-field>
-        </div>
       </v-col>
-      <v-btn class="mr-4" color="success" @click="snackbar = true"> Salvar </v-btn>
+      <v-btn class="mr-4" color="success" @click="save"> Salvar </v-btn>
       <v-snackbar v-model="snackbar">
         {{ text }}
 
@@ -133,8 +150,13 @@
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
-          <v-text-field label="Nome" :value="name"></v-text-field>
-          <v-textarea outlined name="input-7-4" label="Descrição" :value="description"></v-textarea>
+          <v-text-field label="Nome" v-model="editingStep.name"></v-text-field>
+          <v-textarea
+            outlined
+            name="input-7-4"
+            label="Descrição"
+            v-model="editingStep.description"
+          ></v-textarea>
           <v-row justify="start" align="center" class="mb-4">
             <v-col cols="6">
               <template>
@@ -142,12 +164,15 @@
               </template>
             </v-col>
             <v-col cols="6">
-              <span><v-icon left> fas fa-file-video </v-icon> {{ video }}</span>
+              <span><v-icon left> fas fa-file-video </v-icon> {{ editingStep.video }}</span>
             </v-col>
+            <v-overlay :value="loading">
+              <v-progress-circular indeterminate size="64"></v-progress-circular>
+            </v-overlay>
           </v-row>
         </v-form>
-        <v-btn class="mr-4" color="success" @click="overlay = false"> Salvar </v-btn>
-        <v-btn color="error" outlined @click="overlay = false"> Fechar </v-btn>
+        <v-btn class="mr-4" color="success" @click="saveCourseStep"> Salvar </v-btn>
+        <v-btn color="error" outlined @click="overlay = false" text> Fechar </v-btn>
       </v-card>
     </v-overlay>
   </v-container>
@@ -158,6 +183,16 @@ import draggable from 'vuedraggable';
 import VueCropper from 'vue-cropperjs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'cropperjs/dist/cropper.css';
+import { mapGetters } from 'vuex';
+import {
+  getAllCourseCategories,
+  createCourseSteps,
+  updateCourseSteps,
+  deleteCourseSteps,
+  createCourse,
+  updateCourse,
+} from '@/graphql/queries';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'DashboardEditCourse',
@@ -174,7 +209,6 @@ export default {
     zIndex: 2,
     name: '',
     description: '',
-    courseImage: 'c995-90b5-179-3cbf.jpeg',
     video: '',
     text: 'Salvo com sucesso!',
     snackbar: false,
@@ -187,71 +221,23 @@ export default {
     files: '',
     overlayUpload: false,
     editingStep: {},
-    steps: [
-      {
-        id: 1,
-        name: 'Programação C#',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 2,
-        name: 'Redes de Computadores',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 3,
-        name: 'Programação para jogos',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 4,
-        name: 'Programação para inciantes',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 5,
-        name: 'Orientação a objetos em C#',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 6,
-        name: 'Como ficar rico com C#',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 7,
-        name: 'Arduino do iniciante ao avançado',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-      {
-        id: 8,
-        name: 'Programação C++',
-        description:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, eos numquam, odio nesciunt fugit minus pariatur voluptas quasi mollitia dolorum, exercitationem libero sunt voluptatum! Maxime a voluptatum quibusdam illum aliquid.',
-        video: 'programacao-c-sharp.mp4',
-      },
-    ],
+    categories: [],
+    toCreateSteps: [],
+    toUpdateSteps: [],
+    toDeleteSteps: [],
+    loading: false,
+    courseId: null,
   }),
   computed: {
+    ...mapGetters('auth', ['currentUser']),
     course() {
       return this.$route.params.course;
     },
     compiledMarkdown() {
-      return this.$marked(this.$route.params.course.description, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.$route.params.course.description));
+    },
+    compiledMarkdownShort() {
+      return this.$marked(DOMPurify.sanitize(this.$route.params.course.short_description));
     },
     headers() {
       return [
@@ -274,7 +260,7 @@ export default {
         },
         {
           text: 'Descrição',
-          value: 'descrição',
+          value: 'description',
         },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
@@ -289,9 +275,83 @@ export default {
     },
   },
   methods: {
+    save() {
+      if (Number.isInteger(this.course.id)) {
+        this.updateCourse(this.course);
+      } else {
+        this.createCourse(this.course);
+      }
+    },
+    saveSteps() {
+      if (this.toCreateSteps.length > 0) {
+        this.toCreateSteps.forEach((step) => {
+          // eslint-disable-next-line no-param-reassign
+          step.course_id = this.courseId;
+        });
+        this.createCourseSteps(JSON.stringify(this.toCreateSteps));
+      }
+      if (this.toUpdateSteps.length > 0) {
+        this.toUpdateSteps.forEach((step) => {
+          // eslint-disable-next-line no-param-reassign
+          step.course_id = this.courseId;
+        });
+        this.updateCourseSteps(JSON.stringify(this.toUpdateSteps));
+      }
+      if (this.toDeleteSteps.length > 0) {
+        this.deleteCourseSteps(JSON.stringify(this.toDeleteSteps));
+      }
+    },
+    saveCourseStep() {
+      if (this.editingStep.id == null) {
+        this.toCreateSteps.push(this.editingStep);
+        this.course.steps.push(this.editingStep);
+      } else {
+        this.toUpdateSteps.push(this.editingStep);
+      }
+      this.overlay = false;
+    },
+    deleteCourseStep(event, lecture) {
+      this.toCreateSteps.forEach((step) => {
+        // eslint-disable-next-line eqeqeq
+        if (step.id == lecture.id) {
+          // eslint-disable-next-line no-param-reassign
+          const index = this.toCreateSteps.indexOf(step);
+          if (index > -1) {
+            this.toCreateSteps.splice(index, 1);
+          }
+        }
+      });
+      this.toUpdateSteps.forEach((step) => {
+        // eslint-disable-next-line eqeqeq
+        if (step.id == lecture.id) {
+          // eslint-disable-next-line no-param-reassign
+          const index = this.toUpdateSteps.indexOf(step);
+          if (index > -1) {
+            this.toUpdateSteps.splice(index, 1);
+          }
+        }
+      });
+      this.course.steps.forEach((step) => {
+        // eslint-disable-next-line eqeqeq
+        if (step.id == lecture.id) {
+          // eslint-disable-next-line no-param-reassign
+          const index = this.course.steps.indexOf(step);
+          if (index > -1) {
+            this.course.steps.splice(index, 1);
+          }
+        }
+      });
+      if (Number.isInteger(lecture.id)) {
+        this.toDeleteSteps.push(lecture);
+      }
+    },
     // eslint-disable-next-line func-names
     update(event) {
       this.course.description = event.target.value;
+    },
+    // eslint-disable-next-line func-names
+    updateShort(event) {
+      this.course.short_description = event.target.value;
     },
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
@@ -301,18 +361,23 @@ export default {
     // eslint-disable-next-line no-unused-vars
     onEnd() {
       this.isDragging = false;
-      this.updateList(this.steps);
+      this.updateList(this.course.steps);
     },
     editLecture(event, lecture) {
-      this.name = lecture.name;
-      this.description = lecture.description;
-      this.video = lecture.video;
+      this.editingStep = null;
+      this.editingStep = lecture;
       this.overlay = true;
     },
     addLecture() {
-      this.name = '';
-      this.description = '';
-      this.video = '';
+      this.editingStep = {};
+      this.editingStep.course_id = null;
+      this.editingStep.created_at = this.$getFormattedDate();
+      this.editingStep.description = '';
+      this.editingStep.id = null;
+      this.editingStep.name = '';
+      this.editingStep.order = this.course.steps.length + 1;
+      this.editingStep.updated_at = this.$getFormattedDate();
+      this.editingStep.video = '';
       this.overlay = true;
     },
     updateList(l) {
@@ -320,8 +385,7 @@ export default {
         // eslint-disable-next-line no-param-reassign
         step.order = i + 1;
       });
-      this.steps = l;
-      console.log(this.steps);
+      this.course.steps = l;
     },
     uuidv4() {
       return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, () => {
@@ -338,7 +402,7 @@ export default {
           file: blob,
           fileName,
         });
-        this.courseImage = fileName;
+        this.course.image = fileName;
       }, this.mime_type);
       this.overlayUpload = !this.overlayUpload;
     },
@@ -358,19 +422,104 @@ export default {
       }
     },
     async uploadVideo(file) {
+      this.loading = true;
       const fileName = `${this.uuidv4()}.mp4`;
       await this.$store.dispatch('course/uploadVideo', {
         file,
         fileName,
       });
-      this.steps.forEach((step) => {
-        if (step.id === this.editingStep) {
-          // eslint-disable-next-line no-param-reassign
-          step.video = fileName;
-        }
-      });
-      console.log(fileName);
+      this.editingStep.video = fileName;
+      this.loading = false;
     },
+    getAllCourseCategories() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getAllCourseCategories),
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getAllCourseCategories);
+          this.categories = result;
+        });
+    },
+    createCourseSteps(steps) {
+      this.$gqlClient.query({
+        query: this.$gql(createCourseSteps),
+        fetchPolicy: 'network-only',
+        variables: {
+          steps,
+        },
+      });
+    },
+    updateCourseSteps(steps) {
+      this.$gqlClient.query({
+        query: this.$gql(updateCourseSteps),
+        fetchPolicy: 'network-only',
+        variables: {
+          steps,
+        },
+      });
+    },
+    deleteCourseSteps(steps) {
+      this.$gqlClient.query({
+        query: this.$gql(deleteCourseSteps),
+        fetchPolicy: 'network-only',
+        variables: {
+          steps,
+        },
+      });
+    },
+    createCourse() {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(createCourse),
+          fetchPolicy: 'network-only',
+          variables: {
+            name: this.course.name,
+            description: this.course.description,
+            short_description: this.course.short_description,
+            image: this.course.image,
+            price: this.course.price,
+            category_id: this.course.category_id,
+            owner_id: this.currentUser.username,
+            id: 0,
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.createCourse);
+          this.courseId = result.id;
+          this.saveSteps();
+          this.loading = false;
+        });
+    },
+    updateCourse() {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(updateCourse),
+          fetchPolicy: 'network-only',
+          variables: {
+            id: this.course.id,
+            name: this.course.name,
+            description: this.course.description,
+            short_description: this.course.short_description,
+            image: this.course.image,
+            price: this.course.price,
+            category_id: this.course.category_id,
+            owner_id: this.currentUser.username,
+            created_at: this.course.created_at,
+          },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.updateCourse);
+          this.courseId = result.id;
+          this.saveSteps();
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getAllCourseCategories();
   },
   watch: {
     isDragging(newValue) {

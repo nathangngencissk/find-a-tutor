@@ -292,8 +292,393 @@ export const enrollCourseClass = /* GraphQL */ `
     )
   }
 `;
-export const fodase = /* GraphQL */ `
-  query Fodase {
-    fodase
+export const getMyBankAccounts = /* GraphQL */ `
+  query GetMyBankAccounts($user_id: String) {
+    getMyBankAccounts(user_id: $user_id)
+  }
+`;
+export const createBankAccount = /* GraphQL */ `
+  query CreateBankAccount(
+    $bank_code: String
+    $bank_name: String
+    $account_type: String
+    $agencia: String
+    $conta: String
+    $favorite: Boolean
+    $user_id: String
+    $created_at: String
+    $updated_at: String
+  ) {
+    createBankAccount(
+      bank_code: $bank_code
+      bank_name: $bank_name
+      account_type: $account_type
+      agencia: $agencia
+      conta: $conta
+      favorite: $favorite
+      user_id: $user_id
+      created_at: $created_at
+      updated_at: $updated_at
+    )
+  }
+`;
+export const updateBankAccount = /* GraphQL */ `
+  query UpdateBankAccount(
+    $id: String
+    $bank_code: String
+    $bank_name: String
+    $account_type: String
+    $agencia: String
+    $conta: String
+    $favorite: Boolean
+    $user_id: String
+    $created_at: String
+    $updated_at: String
+  ) {
+    updateBankAccount(
+      id: $id
+      bank_code: $bank_code
+      bank_name: $bank_name
+      account_type: $account_type
+      agencia: $agencia
+      conta: $conta
+      favorite: $favorite
+      user_id: $user_id
+      created_at: $created_at
+      updated_at: $updated_at
+    )
+  }
+`;
+export const deleteBankAccount = /* GraphQL */ `
+  query DeleteBankAccount($id: String) {
+    deleteBankAccount(id: $id)
+  }
+`;
+export const favoriteBankAccount = /* GraphQL */ `
+  query FavoriteBankAccount($id: Int, $user_id: String) {
+    favoriteBankAccount(id: $id, user_id: $user_id)
+  }
+`;
+export const getCourses = /* GraphQL */ `
+  query GetCourses($user_id: String) {
+    getCourses(user_id: $user_id)
+  }
+`;
+export const createCourseSteps = /* GraphQL */ `
+  query CreateCourseSteps($steps: String) {
+    createCourseSteps(steps: $steps)
+  }
+`;
+export const updateCourseSteps = /* GraphQL */ `
+  query UpdateCourseSteps($steps: String) {
+    updateCourseSteps(steps: $steps)
+  }
+`;
+export const deleteCourseSteps = /* GraphQL */ `
+  query DeleteCourseSteps($steps: String) {
+    deleteCourseSteps(steps: $steps)
+  }
+`;
+export const deleteCourseStep = /* GraphQL */ `
+  query DeleteCourseStep($step_id: String) {
+    deleteCourseStep(step_id: $step_id)
+  }
+`;
+export const createCourse = /* GraphQL */ `
+  query CreateCourse(
+    $name: String
+    $description: String
+    $short_description: String
+    $image: String
+    $price: Float
+    $category_id: Int
+    $owner_id: String
+  ) {
+    createCourse(
+      name: $name
+      description: $description
+      short_description: $short_description
+      image: $image
+      price: $price
+      category_id: $category_id
+      owner_id: $owner_id
+    )
+  }
+`;
+export const updateCourse = /* GraphQL */ `
+  query UpdateCourse(
+    $id: Int
+    $name: String
+    $description: String
+    $short_description: String
+    $image: String
+    $price: Float
+    $category_id: Int
+    $owner_id: String
+    $created_at: String
+  ) {
+    updateCourse(
+      id: $id
+      name: $name
+      description: $description
+      short_description: $short_description
+      image: $image
+      price: $price
+      category_id: $category_id
+      owner_id: $owner_id
+      created_at: $created_at
+    )
+  }
+`;
+export const deleteCourse = /* GraphQL */ `
+  query DeleteCourse($course_id: Int) {
+    deleteCourse(course_id: $course_id)
+  }
+`;
+export const getTutorCourseClasses = /* GraphQL */ `
+  query GetTutorCourseClasses($user_id: String) {
+    getTutorCourseClasses(user_id: $user_id)
+  }
+`;
+export const deleteCourseClass = /* GraphQL */ `
+  query DeleteCourseClass($id: Int) {
+    deleteCourseClass(id: $id)
+  }
+`;
+export const createCourseClassPosts = /* GraphQL */ `
+  query CreateCourseClassPosts($posts: String) {
+    createCourseClassPosts(posts: $posts)
+  }
+`;
+export const updateCourseClassPosts = /* GraphQL */ `
+  query UpdateCourseClassPosts($posts: String) {
+    updateCourseClassPosts(posts: $posts)
+  }
+`;
+export const deleteCourseClassPosts = /* GraphQL */ `
+  query DeleteCourseClassPosts($posts: String) {
+    deleteCourseClassPosts(posts: $posts)
+  }
+`;
+export const deleteCourseClassPost = /* GraphQL */ `
+  query DeleteCourseClassPost($id: String) {
+    deleteCourseClassPost(id: $id)
+  }
+`;
+export const createCourseClass = /* GraphQL */ `
+  query CreateCourseClass(
+    $name: String
+    $description: String
+    $image: String
+    $start_date: String
+    $end_date: String
+    $schedule: String
+    $how_to_access: String
+    $course_id: Int
+    $duration: Int
+  ) {
+    createCourseClass(
+      name: $name
+      description: $description
+      image: $image
+      start_date: $start_date
+      end_date: $end_date
+      schedule: $schedule
+      how_to_access: $how_to_access
+      course_id: $course_id
+      duration: $duration
+    )
+  }
+`;
+export const updateCourseClass = /* GraphQL */ `
+  query UpdateCourseClass(
+    $id: Int
+    $name: String
+    $description: String
+    $image: String
+    $start_date: String
+    $end_date: String
+    $schedule: String
+    $how_to_access: String
+    $course_id: Int
+    $duration: Int
+    $created_at: String
+  ) {
+    updateCourseClass(
+      id: $id
+      name: $name
+      description: $description
+      image: $image
+      start_date: $start_date
+      end_date: $end_date
+      schedule: $schedule
+      how_to_access: $how_to_access
+      course_id: $course_id
+      duration: $duration
+      created_at: $created_at
+    )
+  }
+`;
+export const getTutorExerciseLists = /* GraphQL */ `
+  query GetTutorExerciseLists($user_id: String) {
+    getTutorExerciseLists(user_id: $user_id)
+  }
+`;
+export const deleteExerciseList = /* GraphQL */ `
+  query DeleteExerciseList($id: Int) {
+    deleteExerciseList(id: $id)
+  }
+`;
+export const createExercises = /* GraphQL */ `
+  query CreateExercises($exercises: String) {
+    createExercises(exercises: $exercises)
+  }
+`;
+export const updateExercises = /* GraphQL */ `
+  query UpdateExercises($exercises: String) {
+    updateExercises(exercises: $exercises)
+  }
+`;
+export const deleteExercise = /* GraphQL */ `
+  query DeleteExercise($id: Int) {
+    deleteExercise(id: $id)
+  }
+`;
+export const createExerciseList = /* GraphQL */ `
+  query CreateExerciseList(
+    $creator_id: String
+    $title: String
+    $tags: String
+    $description: String
+  ) {
+    createExerciseList(
+      creator_id: $creator_id
+      title: $title
+      tags: $tags
+      description: $description
+    )
+  }
+`;
+export const updateExerciseList = /* GraphQL */ `
+  query UpdateExerciseList(
+    $id: Int
+    $creator_id: String
+    $title: String
+    $tags: String
+    $description: String
+    $created_at: String
+  ) {
+    updateExerciseList(
+      id: $id
+      creator_id: $creator_id
+      title: $title
+      tags: $tags
+      description: $description
+      created_at: $created_at
+    )
+  }
+`;
+export const getTutorPaths = /* GraphQL */ `
+  query GetTutorPaths($user_id: String) {
+    getTutorPaths(user_id: $user_id)
+  }
+`;
+export const deletePath = /* GraphQL */ `
+  query DeletePath($id: Int) {
+    deletePath(id: $id)
+  }
+`;
+export const createPathCourses = /* GraphQL */ `
+  query CreatePathCourses($courses: String) {
+    createPathCourses(courses: $courses)
+  }
+`;
+export const updatePathCourses = /* GraphQL */ `
+  query UpdatePathCourses($courses: String) {
+    updatePathCourses(courses: $courses)
+  }
+`;
+export const deletePathCourses = /* GraphQL */ `
+  query DeletePathCourses($courses: String) {
+    deletePathCourses(courses: $courses)
+  }
+`;
+export const createPath = /* GraphQL */ `
+  query CreatePath(
+    $name: String
+    $description: String
+    $image: String
+    $creator_id: String
+  ) {
+    createPath(
+      name: $name
+      description: $description
+      image: $image
+      creator_id: $creator_id
+    )
+  }
+`;
+export const updatePath = /* GraphQL */ `
+  query UpdatePath(
+    $id: Int
+    $name: String
+    $description: String
+    $image: String
+    $creator_id: String
+    $created_at: String
+  ) {
+    updatePath(
+      id: $id
+      name: $name
+      description: $description
+      image: $image
+      creator_id: $creator_id
+      created_at: $created_at
+    )
+  }
+`;
+export const createPayment = /* GraphQL */ `
+  query CreatePayment($value: String, $user_id: String, $courses: [Int]) {
+    createPayment(value: $value, user_id: $user_id, courses: $courses)
+  }
+`;
+export const confirmPayment = /* GraphQL */ `
+  query ConfirmPayment($id: Int, $order_id: String, $user_id: String) {
+    confirmPayment(id: $id, order_id: $order_id, user_id: $user_id)
+  }
+`;
+export const createPayout = /* GraphQL */ `
+  query CreatePayout($value: String, $user_id: String) {
+    createPayout(value: $value, user_id: $user_id)
+  }
+`;
+export const sendPayout = /* GraphQL */ `
+  query SendPayout(
+    $id: Int
+    $value: String
+    $user_id: String
+    $created_at: String
+  ) {
+    sendPayout(
+      id: $id
+      value: $value
+      user_id: $user_id
+      created_at: $created_at
+    )
+  }
+`;
+export const getMyPayouts = /* GraphQL */ `
+  query GetMyPayouts($user_id: String) {
+    getMyPayouts(user_id: $user_id)
+  }
+`;
+export const getMyBalance = /* GraphQL */ `
+  query GetMyBalance($user_id: String) {
+    getMyBalance(user_id: $user_id)
+  }
+`;
+export const getDashboardData = /* GraphQL */ `
+  query GetDashboardData($user_id: String) {
+    getDashboardData(user_id: $user_id)
   }
 `;

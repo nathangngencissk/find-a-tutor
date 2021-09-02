@@ -10,6 +10,7 @@
 
 <script>
 import { getCourseClass } from '@/graphql/queries';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'Class',
@@ -21,7 +22,7 @@ export default {
   }),
   computed: {
     compiledMarkdown() {
-      return this.$marked(this.cl.how_to_access, { sanitize: true });
+      return this.$marked(DOMPurify.sanitize(this.cl.how_to_access));
     },
   },
   methods: {
