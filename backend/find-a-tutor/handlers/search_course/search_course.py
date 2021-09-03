@@ -43,9 +43,7 @@ def handle(event, context):
     if keywords:
         keywords = " & ".join(keywords)
         event["arguments"]["keywords"] = keywords
-        query += (
-            " and to_tsvector(c.name || ' ' || c.description) @@ to_tsquery(:keywords)"
-        )
+        query += " and to_tsvector(c.name || ' ' || c.description || ' ' || cat.name) @@ to_tsquery(:keywords)"
 
     if category_id:
         query += " and c.category_id = :category_id"

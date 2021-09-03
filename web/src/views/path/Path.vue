@@ -51,7 +51,7 @@
           v-if="loadingPath"
         ></v-skeleton-loader>
         <v-card width="400" v-else>
-          <v-img height="200px" :src="path.image"> </v-img>
+          <v-img height="200px" :src="$cloudfrontUrl + 'public/' + path.image"> </v-img>
 
           <v-card-text class="text--primary">
             <v-row align="center" class="mx-0 my-2">

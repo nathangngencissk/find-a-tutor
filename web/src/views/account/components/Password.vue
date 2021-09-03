@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-subheader> Email </v-subheader>
+    <v-subheader> Senha </v-subheader>
     <v-sheet elevation="1">
       <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">

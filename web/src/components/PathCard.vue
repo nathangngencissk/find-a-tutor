@@ -1,6 +1,10 @@
 <template>
   <v-card class="mx-auto mr-4" max-width="400">
-    <v-img class="white--text align-end" height="200px" :src="pathImage">
+    <v-img
+      class="white--text align-end"
+      height="200px"
+      :src="$cloudfrontUrl + 'public/' + pathImage"
+    >
       <v-card-title>{{ pathName }}</v-card-title>
     </v-img>
 

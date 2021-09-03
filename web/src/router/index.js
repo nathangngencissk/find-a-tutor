@@ -279,6 +279,41 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('@/views/admin/Admin.vue'),
+    meta: {
+      middleware: auth,
+    },
+    children: [
+      {
+        name: 'AdminMain',
+        path: '',
+        component: () => import('@/views/admin/components/Main.vue'),
+      },
+      {
+        name: 'AdminPayments',
+        path: 'payments',
+        component: () => import('@/views/admin/components/Payments.vue'),
+      },
+      {
+        name: 'AdminPayouts',
+        path: 'payouts',
+        component: () => import('@/views/admin/components/Payouts.vue'),
+      },
+      {
+        name: 'AdminCourses',
+        path: 'courses',
+        component: () => import('@/views/admin/components/Courses.vue'),
+      },
+      {
+        name: 'AdminExercises',
+        path: 'exercises',
+        component: () => import('@/views/admin/components/Exercises.vue'),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

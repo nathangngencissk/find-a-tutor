@@ -1,0 +1,326 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+Description: "Find a Tutor Admin"
+
+Globals:
+  Function:
+    Runtime: "python3.8"
+    MemorySize: 128
+    Timeout: 300
+    Environment:
+      Variables:
+        LOG_LEVEL: "INFO"
+        POWERTOOLS_SERVICE_NAME: "find-a-tutor-admin"
+
+Resources:
+  ExecutionRoleGetAdminData:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-admin-data-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetAdminDataHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-admin-data"
+      CodeUri: "../find-a-tutor/handlers/get_admin_data"
+      Handler: "get_admin_data.handle"
+      Role: !GetAtt ExecutionRoleGetAdminData.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleGetPayoutsForApproval:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-payouts-for-approval-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPayoutsForApprovalHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-payouts-for-approval"
+      CodeUri: "../find-a-tutor/handlers/get_payouts_for_approval"
+      Handler: "get_payouts_for_approval.handle"
+      Role: !GetAtt ExecutionRoleGetPayoutsForApproval.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleGetCoursesForApproval:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-courses-for-approval-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetCoursesForApprovalHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-courses-for-approval"
+      CodeUri: "../find-a-tutor/handlers/get_courses_for_approval"
+      Handler: "get_courses_for_approval.handle"
+      Role: !GetAtt ExecutionRoleGetCoursesForApproval.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleGetExercisesForApproval:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-exercises-for-approval-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetExercisesForApprovalHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-exercises-for-approval"
+      CodeUri: "../find-a-tutor/handlers/get_exercises_for_approval"
+      Handler: "get_exercises_for_approval.handle"
+      Role: !GetAtt ExecutionRoleGetExercisesForApproval.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleChangePayoutStatus:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-change-payout-status-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  ChangePayoutStatusHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-change-payout-status"
+      CodeUri: "../find-a-tutor/handlers/change_payout_status"
+      Handler: "change_payout_status.handle"
+      Role: !GetAtt ExecutionRoleChangePayoutStatus.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleChangeCourseStatus:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-change-course-status-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  ChangeCourseStatusHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-change-course-status"
+      CodeUri: "../find-a-tutor/handlers/change_course_status"
+      Handler: "change_course_status.handle"
+      Role: !GetAtt ExecutionRoleChangeCourseStatus.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleChangeExerciseStatus:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-change-exercise-status-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  ChangeExerciseStatusHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-change-exercise-status"
+      CodeUri: "../find-a-tutor/handlers/change_exercise_status"
+      Handler: "change_exercise_status.handle"
+      Role: !GetAtt ExecutionRoleChangeExerciseStatus.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"
+
+  ExecutionRoleGetPayments:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-get-payments-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "Lambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:GetLayerVersion"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:*"
+
+  GetPaymentsHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-get-payments"
+      CodeUri: "../find-a-tutor/handlers/get_payments"
+      Handler: "get_payments.handle"
+      Role: !GetAtt ExecutionRoleGetPayments.Arn
+      Environment:
+        Variables:
+          CONN_STRING: "{{resolve:ssm:FindATutorDbConnection:2}}"
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:FindATutor:20"

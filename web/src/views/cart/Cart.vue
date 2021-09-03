@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col xl="6" lg="8" md="12" sm="12" xs="12" class="mt-4">
+      <v-col xl="6" lg="8" md="12" sm="12" xs="12" class="mt-4" v-if="shoppingCart.length > 0">
         <CourseCardShort v-for="course in shoppingCart" :key="course.id" :course="course" />
+      </v-col>
+      <v-col xl="6" lg="8" md="12" sm="12" xs="12" class="mt-4" v-else>
+        <h2 class="header-2">Seu carrinho está vazio, por favor adicione cursos para continuar.</h2>
       </v-col>
       <v-col xl="3" lg="4" md="12" sm="12" xs="12">
         <v-card width="350">
@@ -10,7 +13,16 @@
           <h1 class="ml-5">R$ {{ cartTotal }},00</h1>
           <v-card-text class="text--primary">
             <div class="my-2">
-              <v-btn x-large color="success" block @click="createPayment"> Finalizar </v-btn>
+              <v-btn
+                x-large
+                color="success"
+                block
+                @click="createPayment"
+                v-if="shoppingCart.length > 0"
+              >
+                Finalizar
+              </v-btn>
+              <v-btn x-large color="success" block disabled v-else> Finalizar </v-btn>
             </div>
           </v-card-text>
         </v-card>

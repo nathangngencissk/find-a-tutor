@@ -77,6 +77,9 @@
         <v-btn class="white--text" color="error" @click="overlay = false"> Fechar </v-btn>
       </v-card>
     </v-overlay>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -94,6 +97,7 @@ export default {
     fixedNotes: [],
     editingNote: {},
     notes: [],
+    loading: true,
   }),
   methods: {
     add() {
@@ -150,6 +154,7 @@ export default {
               this.notes.push(note);
             }
           });
+          this.loading = false;
         });
     },
     myCourses() {

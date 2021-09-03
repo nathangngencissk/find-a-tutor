@@ -56,7 +56,6 @@ export default {
         .then((response) => {
           const result = JSON.parse(response.data.getCourseClassPosts);
           this.posts = result;
-          console.log(result);
         });
     },
   },

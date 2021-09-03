@@ -113,6 +113,16 @@
               </v-list-item>
               <v-divider></v-divider>
               <v-list dense>
+                <v-list-item v-if="isAdmin">
+                  <v-list-item-icon>
+                    <v-icon>fas fa-user-cog</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-btn depressed small :to="{ name: 'AdminMain' }">Admin</v-btn>
+                  </v-list-item-content>
+                </v-list-item>
+
                 <v-list-item v-if="platformTutor">
                   <v-list-item-icon>
                     <v-icon>fas fa-pencil-ruler</v-icon>
@@ -248,6 +258,9 @@ export default {
     },
     currentUserName() {
       return this.currentUser.attributes.name;
+    },
+    isAdmin() {
+      return parseInt(this.currentUser.attributes['custom:admin'], 10) === 1;
     },
     currentUserFamilyName() {
       return this.currentUser.attributes.family_name;

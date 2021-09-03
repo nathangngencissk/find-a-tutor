@@ -686,3 +686,47 @@ export const getDashboardData = /* GraphQL */ `
     getDashboardData(user_id: $user_id)
   }
 `;
+export const getAdminData = /* GraphQL */ `
+  query GetAdminData {
+    getAdminData
+  }
+`;
+export const getPayoutsForApproval = /* GraphQL */ `
+  query GetPayoutsForApproval {
+    getPayoutsForApproval
+  }
+`;
+export const changePayoutStatus = /* GraphQL */ `
+  query ChangePayoutStatus($id: String, $status: String, $updated_at: String) {
+    changePayoutStatus(id: $id, status: $status, updated_at: $updated_at)
+  }
+`;
+export const getCoursesForApproval = /* GraphQL */ `
+  query GetCoursesForApproval {
+    getCoursesForApproval
+  }
+`;
+export const changeCourseStatus = /* GraphQL */ `
+  query ChangeCourseStatus($id: String, $status: String, $updated_at: String) {
+    changeCourseStatus(id: $id, status: $status, updated_at: $updated_at)
+  }
+`;
+export const getExercisesForApproval = /* GraphQL */ `
+  query GetExercisesForApproval {
+    getExercisesForApproval
+  }
+`;
+export const changeExerciseStatus = /* GraphQL */ `
+  query ChangeExerciseStatus(
+    $id: String
+    $status: String
+    $updated_at: String
+  ) {
+    changeExerciseStatus(id: $id, status: $status, updated_at: $updated_at)
+  }
+`;
+export const getPayments = /* GraphQL */ `
+  query GetPayments {
+    getPayments
+  }
+`;

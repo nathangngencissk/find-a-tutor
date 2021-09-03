@@ -132,6 +132,7 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(myCourses),
+          fetchPolicy: 'network-only',
           variables: { id: this.currentUser.username },
         })
         .then((response) => {

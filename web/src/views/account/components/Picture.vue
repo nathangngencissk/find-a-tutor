@@ -77,7 +77,6 @@ export default {
     },
     saveImage() {
       this.overlayUpload = !this.overlayUpload;
-      console.log(this.overlayUpload);
       this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL();
       this.$refs.cropper.getCroppedCanvas().toBlob(async (blob) => {
         await this.$store.dispatch('profile/updateProfilePicture', {
@@ -86,7 +85,6 @@ export default {
         });
       }, this.mime_type);
       this.overlayUpload = !this.overlayUpload;
-      console.log(this.overlayUpload);
     },
     onFileSelect(e) {
       const file = e.target.files[0];

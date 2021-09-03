@@ -3,7 +3,12 @@
     <template v-for="category in mainCategories">
       <v-col :key="category.id" xl="3" lg="4" md="6" sm="6" xs="6">
         <v-hover v-slot="{ hover }">
-          <v-card class="mx-auto" :class="{ 'on-hover': hover }" max-width="344" to="/search">
+          <v-card
+            class="mx-auto"
+            :class="{ 'on-hover': hover }"
+            max-width="344"
+            :to="{ name: 'Search', query: { search: category.name } }"
+          >
             <v-img :src="category.image" height="200px"></v-img>
 
             <v-card-title> {{ category.name }} </v-card-title>

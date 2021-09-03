@@ -42,7 +42,10 @@
               v-on:change="show = false"
             ></v-radio>
           </v-radio-group>
-          <v-btn color="success" depressed @click="answer">Responder</v-btn>
+          <v-btn color="success" depressed @click="answer" v-if="selectedExercise.id"
+            >Responder</v-btn
+          >
+          <v-btn depressed @click="answer" disabled v-else>Responder</v-btn>
         </div>
 
         <v-divider class="my-4"></v-divider>

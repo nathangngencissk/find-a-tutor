@@ -2,7 +2,11 @@
   <v-row justify="space-around" align="center" class="mt-2">
     <v-col xl="10" lg="10" md="8" sm="6" xs="6">
       <v-chip-group multiple active-class="primary--text">
-        <v-chip v-for="category in categories" :key="category.id" to="/search">
+        <v-chip
+          v-for="category in categories"
+          :key="category.id"
+          :to="{ name: 'Search', query: { search: category.name } }"
+        >
           {{ category.name }}
         </v-chip>
       </v-chip-group>

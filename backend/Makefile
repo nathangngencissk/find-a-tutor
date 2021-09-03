@@ -165,3 +165,17 @@ tutor_paths: ##=> Updates the stack on aws
 		--template-file .aws-sam/build/template.yaml \
 		--s3-prefix sam/find-a-tutor-tutor-paths \
 		--s3-bucket sam-artifacts601998595272
+
+admin: ##=> Updates the stack on aws
+	$(info [*] Updating Find a Tutor Admin)
+	sam build \
+		--template cloudformation/admin.yaml \
+		--use-container
+
+	sam deploy \
+		--capabilities=CAPABILITY_NAMED_IAM \
+		--no-fail-on-empty-changeset \
+		--stack-name=find-a-tutor-admin \
+		--template-file .aws-sam/build/template.yaml \
+		--s3-prefix sam/find-a-tutor-admin \
+		--s3-bucket sam-artifacts601998595272

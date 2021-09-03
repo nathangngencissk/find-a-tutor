@@ -32,13 +32,13 @@
             </v-tooltip>
           </template>
 
-          <h4 class="card-title font-weight-light mt-2 ml-2">Visitas dos cursos</h4>
+          <h4 class="card-title font-weight-light mt-2 ml-2">Vendas de cursos</h4>
 
           <p class="d-inline-flex font-weight-light ml-2 mt-1">Performance do último ano</p>
 
           <template v-slot:actions>
             <v-icon class="mr-1" small> mdi-clock-outline </v-icon>
-            <span class="caption grey--text font-weight-light">Atualizado 10 minutos atrás</span>
+            <span class="caption grey--text font-weight-light">Atualizado agora</span>
           </template>
         </base-material-chart-card>
       </v-col>
@@ -73,16 +73,16 @@
             </v-tooltip>
           </template>
 
-          <h4 class="card-title font-weight-light mt-2 ml-2">Vendas diárias</h4>
+          <h4 class="card-title font-weight-light mt-2 ml-2">Vendas mensais</h4>
 
           <p class="d-inline-flex font-weight-light ml-2 mt-1">
             <v-icon color="green" small> mdi-arrow-up </v-icon>
-            <span class="green--text mr-2">55%</span>&nbsp; de aumento no total semanal
+            Total mensal
           </p>
 
           <template v-slot:actions>
             <v-icon class="mr-1" small> mdi-clock-outline </v-icon>
-            <span class="caption grey--text font-weight-light">Atualizado 5 minutos atrás</span>
+            <span class="caption grey--text font-weight-light">Atualizado agora</span>
           </template>
         </base-material-chart-card>
       </v-col>
@@ -119,11 +119,11 @@
 
           <h3 class="card-title font-weight-light mt-2 ml-2">Média de avaliações</h3>
 
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">Média semanal</p>
+          <p class="d-inline-flex font-weight-light ml-2 mt-1">Média mensal</p>
 
           <template v-slot:actions>
             <v-icon class="mr-1" small> mdi-clock-outline </v-icon>
-            <span class="caption grey--text font-weight-light">Atualizado 10 minutos atrás</span>
+            <span class="caption grey--text font-weight-light">Atualizado agora</span>
           </template>
         </base-material-chart-card>
       </v-col>
@@ -183,7 +183,7 @@ import { mapGetters } from 'vuex';
 import { getDashboardData } from '@/graphql/queries';
 
 export default {
-  name: 'DashboardDashboard',
+  name: 'DashboardMain',
 
   data() {
     return {

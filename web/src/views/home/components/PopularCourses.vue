@@ -7,17 +7,16 @@
     show-arrows
   >
     <v-slide-item v-for="course in popularCourses" :key="course.id">
-      <PopularCourseCard
-        :id="course.id"
-        :name="course.name"
-        :category="course.category_name"
-        :description="course.short_description"
-        :price="course.price"
-        :rating="course.avg_rating"
-        :classes="course.classes"
-        :reviews="course.reviews"
-        :image="course.image"
-        :loading="loading"
+      <CourseCardFull
+        :courseName="course.name"
+        :courseImage="course.image"
+        :courseRating="course.avg_rating"
+        :courseReviews="course.reviews"
+        :courseCategory="course.category_name"
+        :courseDescription="course.short_description"
+        :courseId="course.id"
+        courseLanguage="pt-br"
+        :courseCost="course.price"
       />
     </v-slide-item>
   </v-slide-group>
@@ -29,12 +28,12 @@
 </template>
 
 <script>
-import PopularCourseCard from '@/views/home/components/PopularCourseCard.vue';
+import CourseCardFull from '@/components/CourseCardFull.vue';
 import { getPopularCourses } from '@/graphql/queries';
 
 export default {
   name: 'PopularCourses',
-  components: { PopularCourseCard },
+  components: { CourseCardFull },
   data: () => ({
     loading: false,
     model: null,

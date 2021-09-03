@@ -143,7 +143,7 @@ export default {
     ratingsRange: [1, 5],
   }),
 
-  props: ['searchText'],
+  props: ['searchText', 'searchCategoryId'],
 
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -160,7 +160,10 @@ export default {
       this.$gqlClient
         .query({
           query: this.$gql(searchCourse),
-          variables: { keywords: [this.searchText] },
+          fetchPolicy: 'network-only',
+          variables: {
+            keywords: [this.searchText],
+          },
         })
         .then((response) => {
           const courses = JSON.parse(response.data.searchCourse);
