@@ -36,64 +36,52 @@
       </template>
     </v-data-table>
     <div class="text-center pt-2">
-      <v-pagination v-model="page" :length="pageCount"></v-pagination>
-      <v-text-field
-        :value="itemsPerPage"
-        label="Itens por página"
-        type="number"
-        min="-1"
-        max="15"
-        @input="itemsPerPage = parseInt($event, 10)"
-      ></v-text-field>
+      <v-pagination
+        v-model="page"
+        :length="pagesLength"
+        circle
+        v-on:change="changePage"
+      ></v-pagination>
     </div>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getTutorCourseClasses, deleteCourseClass } from '@/graphql/queries';
+
 export default {
   data() {
     return {
+      loading: true,
       page: 1,
-      pageCount: 0,
+      pagesLength: 1,
+      pages: [],
       itemsPerPage: 10,
       search: '',
       newClass: {
-        id: 0,
+        id: null,
         name: '',
-        course: '',
+        course_id: '',
         description: '',
         image: '',
-        start: '',
-        end: '',
-        access: '',
+        start_date: '',
+        end_date: '',
+        how_to_access: '',
+        created_at: '',
+        updated_at: '',
+        duration: '',
+        schedule: '',
+        posts: [],
       },
-      classes: [
-        {
-          id: 1,
-          name: 'Programação C# Turma de Julho',
-          course: 'Programação C#',
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          access: '',
-          image: '',
-          start: '2021-07-21',
-          end: '2021-10-22',
-        },
-        {
-          id: 2,
-          name: 'Redes de Computadores Turma de Julho',
-          course: 'Redes de Computadores',
-          description:
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus maxime incidunt non neque molestias eligendi? Qui pariatur recusandae et, sit cupiditate iste explicabo consequuntur architecto exercitationem, odit veritatis odio placeat.',
-          access: '',
-          image: '',
-          start: '2021-07-23',
-          end: '2021-10-25',
-        },
-      ],
+      classes: [],
     };
   },
   computed: {
+    ...mapGetters('auth', ['currentUser']),
     headers() {
       return [
         {
@@ -101,24 +89,95 @@ export default {
           align: 'start',
           value: 'name',
         },
-        {
-          text: 'Curso',
-          value: 'course',
-        },
-        { text: 'Começa em', value: 'start', align: 'center' },
-        { text: 'Termina em', value: 'end', align: 'center' },
+        { text: 'Começa em', value: 'start_date', align: 'center' },
+        { text: 'Termina em', value: 'end_date', align: 'center' },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
       ];
     },
   },
   methods: {
+    // eslint-disable-next-line camelcase
+    cronToDatetime(start_date, schedule) {
+      const startDate = new Date(Date.parse(start_date));
+      const options = {
+        currentDate: startDate,
+        endDate: this.addDays(startDate, 7),
+        iterator: true,
+      };
+      const optionsFormatDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
+      const interval = this.$parser.parseExpression(schedule, options);
+      const frequency = [];
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        try {
+          const obj = interval.next();
+          const d = new Date(obj.value);
+          const formattedDate = d.toLocaleDateString('pt-br', optionsFormatDate);
+          frequency.push(formattedDate);
+        } catch (e) {
+          break;
+        }
+      }
+      const uniqueFrequency = [...new Set(frequency)];
+      return uniqueFrequency.join('; ');
+    },
     edit(event, item) {
       console.log(event, item);
     },
     remove(event, item) {
-      console.log(event, item);
+      this.deleteCourseClass(item.id);
     },
+    paginate() {
+      const numPages = Math.ceil(this.filteredClasses.length / 12);
+      const paginated = this.$chunkify(this.filteredClasses, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredClasses = paginated[0];
+    },
+    changePage() {
+      this.filteredClasses = this.pages[this.page - 1];
+    },
+    getTutorCourseClasses() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getTutorCourseClasses),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getTutorCourseClasses);
+          this.classes = result;
+          this.filteredClasses = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    deleteCourseClass(courseId) {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(deleteCourseClass),
+          fetchPolicy: 'network-only',
+          variables: { id: courseId },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.classes.forEach((course) => {
+            if (course.id === courseId) {
+              const index = this.classes.indexOf(course);
+              if (index > -1) {
+                this.classes.splice(index, 1);
+              }
+            }
+          });
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getTutorCourseClasses();
   },
 };
 </script>

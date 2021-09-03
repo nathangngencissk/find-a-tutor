@@ -4,7 +4,7 @@
       <v-col cols="10">
         <v-data-table
           :headers="headers"
-          :items="exercisesLists"
+          :items="filteredExercisesLists"
           :page.sync="page"
           :items-per-page="itemsPerPage"
           @page-count="pageCount = $event"
@@ -41,170 +41,55 @@
           </template>
         </v-data-table>
         <div class="text-center pt-2">
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
-          <v-text-field
-            :value="itemsPerPage"
-            label="Itens por página"
-            type="number"
-            min="-1"
-            max="15"
-            @input="itemsPerPage = parseInt($event, 10)"
-          ></v-text-field>
+          <v-pagination
+            v-model="page"
+            :length="pagesLength"
+            circle
+            v-on:change="changePage"
+          ></v-pagination>
         </div>
       </v-col>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getTutorExerciseLists, deleteExerciseList } from '@/graphql/queries';
+
 export default {
   data() {
     return {
+      loading: true,
       page: 1,
-      pageCount: 0,
+      pagesLength: 1,
+      pages: [],
       itemsPerPage: 10,
       search: '',
       newExerciseList: {
-        id: 0,
-        name: '',
+        id: null,
+        creator_id: null,
+        title: '',
+        status: 'EM AVALIAÇÃO',
         description: '',
         tags: [],
-        exercises: [
-          {
-            id: 1,
-            question: '',
-            status: 'EM AVALIAÇÃO',
-            rightOptions: [],
-            options: [
-              {
-                id: 1,
-                text: '',
-              },
-              {
-                id: 2,
-                text: '',
-              },
-              {
-                id: 3,
-                text: '',
-              },
-              {
-                id: 4,
-                text: '',
-              },
-              {
-                id: 5,
-                text: '',
-              },
-            ],
-          },
-        ],
+        exercises: [],
       },
-      exercisesLists: [
-        {
-          id: 1,
-          name: 'Programação básica para jogos',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quia vitae voluptatum sequi. Iste eos, sapiente tempora voluptatem excepturi dignissimos accusamus officia esse neque expedita soluta iusto quaerat dolores veritatis?',
-          tags: ['Programação', 'Jogos'],
-          status: 'APROVADO',
-          exercises: [
-            {
-              id: 1,
-              question:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quia vitae voluptatum sequi. Iste eos, sapiente tempora voluptatem excepturi dignissimos accusamus officia esse neque expedita soluta iusto quaerat dolores veritatis?',
-              rightOptions: [2],
-              options: [
-                {
-                  id: 1,
-                  text: 'Opção 1',
-                },
-                {
-                  id: 2,
-                  text: 'Opção 2',
-                },
-                {
-                  id: 3,
-                  text: 'Opção 3',
-                },
-                {
-                  id: 4,
-                  text: 'Opção 4',
-                },
-                {
-                  id: 5,
-                  text: 'Opção 5',
-                },
-              ],
-            },
-            {
-              id: 2,
-              question:
-                '12 ipsum dolor sit amet consectetur adipisicing elit. Quisquam quia vitae voluptatum sequi. Iste eos, sapiente tempora voluptatem excepturi dignissimos accusamus officia esse neque expedita soluta iusto quaerat dolores veritatis?',
-              rightOptions: [2],
-              options: [
-                {
-                  id: 1,
-                  text: 'Opção 1',
-                },
-                {
-                  id: 2,
-                  text: 'Opção 2',
-                },
-                {
-                  id: 3,
-                  text: 'Opção 3',
-                },
-                {
-                  id: 4,
-                  text: 'Opção 4',
-                },
-                {
-                  id: 5,
-                  text: 'Opção 5',
-                },
-              ],
-            },
-            {
-              id: 3,
-              question:
-                '213 ipsum dolor sit amet consectetur adipisicing elit. Quisquam quia vitae voluptatum sequi. Iste eos, sapiente tempora voluptatem excepturi dignissimos accusamus officia esse neque expedita soluta iusto quaerat dolores veritatis?',
-              rightOptions: [2],
-              options: [
-                {
-                  id: 1,
-                  text: 'Opção 1',
-                },
-                {
-                  id: 2,
-                  text: 'Opção 2',
-                },
-                {
-                  id: 3,
-                  text: 'Opção 3',
-                },
-                {
-                  id: 4,
-                  text: 'Opção 4',
-                },
-                {
-                  id: 5,
-                  text: 'Opção 5',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      exercisesLists: [],
+      filteredExercisesLists: [],
     };
   },
   computed: {
+    ...mapGetters('auth', ['currentUser']),
     headers() {
       return [
         {
           text: 'Nome',
           align: 'start',
-          value: 'name',
+          value: 'title',
         },
         { text: 'Tags', value: 'tags', align: 'center' },
         { text: 'Status', value: 'status', align: 'center' },
@@ -218,8 +103,58 @@ export default {
       console.log(event, item);
     },
     remove(event, item) {
-      console.log(event, item);
+      this.deleteExerciseList(item.id);
     },
+    paginate() {
+      const numPages = Math.ceil(this.filteredExercisesLists.length / 12);
+      const paginated = this.$chunkify(this.filteredExercisesLists, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredExercisesLists = paginated[0];
+    },
+    changePage() {
+      this.filteredExercisesLists = this.pages[this.page - 1];
+    },
+    getTutorExerciseLists() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getTutorExerciseLists),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getTutorExerciseLists);
+          this.exercisesLists = result;
+          this.filteredExercisesLists = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    deleteExerciseList(courseId) {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(deleteExerciseList),
+          fetchPolicy: 'network-only',
+          variables: { id: courseId },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.exercisesLists.forEach((course) => {
+            if (course.id === courseId) {
+              const index = this.exercisesLists.indexOf(course);
+              if (index > -1) {
+                this.exercisesLists.splice(index, 1);
+              }
+            }
+          });
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getTutorExerciseLists();
   },
 };
 </script>

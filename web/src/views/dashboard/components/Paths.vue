@@ -4,7 +4,7 @@
       <v-col cols="10">
         <v-data-table
           :headers="headers"
-          :items="paths"
+          :items="filteredPaths"
           :page.sync="page"
           :items-per-page="itemsPerPage"
           @page-count="pageCount = $event"
@@ -38,73 +38,50 @@
           </template>
         </v-data-table>
         <div class="text-center pt-2">
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
-          <v-text-field
-            :value="itemsPerPage"
-            label="Itens por página"
-            type="number"
-            min="-1"
-            max="15"
-            @input="itemsPerPage = parseInt($event, 10)"
-          ></v-text-field>
+          <v-pagination
+            v-model="page"
+            :length="pagesLength"
+            circle
+            v-on:change="changePage"
+          ></v-pagination>
         </div>
       </v-col>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { getTutorPaths, deletePath } from '@/graphql/queries';
+
 export default {
   data() {
     return {
+      loading: true,
       page: 1,
-      pageCount: 0,
+      pagesLength: 1,
+      pages: [],
       itemsPerPage: 10,
       search: '',
       newPath: {
-        id: 0,
+        id: null,
         name: '',
-        rating: 0,
-        reviews: 0,
         description: '',
-        sections: [],
+        image: '',
+        creator_id: '',
+        created_at: this.$getFormattedDate(),
+        updated_at: this.$getFormattedDate(),
+        courses: [],
       },
-      paths: [
-        {
-          id: 1,
-          name: 'Programação C#',
-          rating: 4.5,
-          reviews: 49,
-          image: 'https://miro.medium.com/max/1000/1*c34daw_rg89UAh4uFCZ96w.jpeg',
-          description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit dolore eligendi magni, pariatur, earum repudiandae possimus quos expedita totam error nemo neque eum officiis dicta voluptatibus doloribus nihil et aperiam.',
-          sections: [
-            {
-              id: 1,
-              name: 'Lógica de programação',
-              course: 1,
-            },
-            {
-              id: 2,
-              name: 'Condicionais',
-              course: 1,
-            },
-            {
-              id: 3,
-              name: 'Loops',
-              course: 1,
-            },
-            {
-              id: 4,
-              name: 'OOP',
-              course: 1,
-            },
-          ],
-        },
-      ],
+      paths: [],
+      filteredPaths: [],
     };
   },
   computed: {
+    ...mapGetters('auth', ['currentUser']),
     headers() {
       return [
         {
@@ -112,7 +89,7 @@ export default {
           align: 'start',
           value: 'name',
         },
-        { text: 'description', value: 'description', align: 'center' },
+        { text: 'Descrição', value: 'description', align: 'center' },
         { text: 'Editar', value: 'edit', sortable: false, align: 'center' },
         { text: 'Remover', value: 'remove', sortable: false, align: 'center' },
       ];
@@ -123,8 +100,58 @@ export default {
       console.log(event, item);
     },
     remove(event, item) {
-      console.log(event, item);
+      this.deletePath(item.id);
     },
+    paginate() {
+      const numPages = Math.ceil(this.filteredPaths.length / 12);
+      const paginated = this.$chunkify(this.filteredPaths, numPages, false);
+      this.pagesLength = paginated.length;
+      this.pages = paginated;
+      // eslint-disable-next-line prefer-destructuring
+      this.filteredPaths = paginated[0];
+    },
+    changePage() {
+      this.filteredPaths = this.pages[this.page - 1];
+    },
+    getTutorPaths() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(getTutorPaths),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.currentUser.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getTutorPaths);
+          this.paths = result;
+          this.filteredPaths = result;
+          this.paginate();
+          this.loading = false;
+        });
+    },
+    deletePath(courseId) {
+      this.loading = true;
+      this.$gqlClient
+        .query({
+          query: this.$gql(deletePath),
+          fetchPolicy: 'network-only',
+          variables: { id: courseId },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.paths.forEach((course) => {
+            if (course.id === courseId) {
+              const index = this.paths.indexOf(course);
+              if (index > -1) {
+                this.paths.splice(index, 1);
+              }
+            }
+          });
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getTutorPaths();
   },
 };
 </script>

@@ -549,12 +549,14 @@ export const createExerciseList = /* GraphQL */ `
     $creator_id: String
     $title: String
     $tags: String
+    $status: String
     $description: String
   ) {
     createExerciseList(
       creator_id: $creator_id
       title: $title
       tags: $tags
+      status: $status
       description: $description
     )
   }
@@ -565,6 +567,7 @@ export const updateExerciseList = /* GraphQL */ `
     $creator_id: String
     $title: String
     $tags: String
+    $status: String
     $description: String
     $created_at: String
   ) {
@@ -573,6 +576,7 @@ export const updateExerciseList = /* GraphQL */ `
       creator_id: $creator_id
       title: $title
       tags: $tags
+      status: $status
       description: $description
       created_at: $created_at
     )

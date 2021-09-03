@@ -101,7 +101,7 @@
             <v-toolbar flat>
               <v-toolbar-title>Aulas</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
-              <v-btn color="success" dark class="mb-2" @click="addLecture" text>
+              <v-btn color="success" dark class="mb-2" @click="addLecture" text outlined>
                 Adicionar Aula
               </v-btn>
             </v-toolbar>
@@ -138,7 +138,7 @@
           </template>
         </v-data-table>
       </v-col>
-      <v-btn class="mr-4" color="success" @click="save"> Salvar </v-btn>
+      <v-btn class="mr-4" color="success" @click="save" x-large> Salvar </v-btn>
       <v-snackbar v-model="snackbar">
         {{ text }}
 

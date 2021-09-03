@@ -20,7 +20,7 @@ def handle(event, context):
 
         updated_post = CourseClassPost(**post)
 
-        db.update(updated_posts)
+        db.update(updated_post)
 
         updated_post.__dict__.pop("_sa_instance_state")
 
