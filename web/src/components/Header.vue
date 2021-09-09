@@ -303,7 +303,7 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString());
     },
-    changeToTutor() {
+    async changeToTutor() {
       this.$store.dispatch('common/changeToTutor');
       this.snackbar = true;
     },

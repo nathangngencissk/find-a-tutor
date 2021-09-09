@@ -25,11 +25,7 @@
     </v-overlay>
     <v-dialog v-model="dialog" scrollable max-width="600px">
       <v-card>
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          :src="$cloudfrontUrl + 'public/' + selectedCourse.image"
-        >
+        <v-img class="white--text align-end" height="200px" :src="coursePicture">
           <v-card-title>{{ selectedCourse.name }}</v-card-title>
         </v-img>
         <v-divider></v-divider>
@@ -44,17 +40,8 @@
           <div v-for="step in selectedCourse.steps" :key="step.id">
             <v-subheader class="subtitle-1">{{ step.name }}</v-subheader>
             <vue-plyr ref="plyr">
-              <video
-                controls
-                crossorigin
-                playsinline
-                :src="$cloudfrontUrl + 'public/' + step.video"
-              >
-                <source
-                  size="720"
-                  :src="$cloudfrontUrl + 'public/' + step.video"
-                  type="video/mp4"
-                />
+              <video controls crossorigin playsinline :src="getVideoUrl(step.video)">
+                <source size="720" :src="getVideoUrl(step.video)" type="video/mp4" />
               </video>
             </vue-plyr>
             <p class="mt-2">
@@ -98,6 +85,7 @@ export default {
       dialog: false,
       selectedCourse: {},
       itemsPerPage: -1,
+      coursePicture: '',
     };
   },
   computed: {
@@ -152,9 +140,13 @@ export default {
           this.getCoursesForApproval();
         });
     },
+    getVideoUrl(event, url) {
+      this.$getKeyUrl(url).then((videoUrl) => videoUrl);
+    },
   },
-  created() {
+  async created() {
     this.getCoursesForApproval();
+    this.coursePicture = await this.$getKeyUrl(this.selectedCourse.image);
   },
 };
 </script>

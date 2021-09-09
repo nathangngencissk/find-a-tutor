@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col xl="4" lg="6" md="12" sm="12" xs="12">
         <v-avatar class="mx-10" size="200" tile>
-          <v-img :src="$cloudfrontUrl + 'public/' + course.image" contain></v-img>
+          <v-img :src="coursePicture" contain></v-img>
         </v-avatar>
       </v-col>
       <v-col xl="5" lg="6" md="12" sm="12" xs="12">
@@ -34,7 +34,9 @@ export default {
 
   props: ['course'],
 
-  data: () => ({}),
+  data: () => ({
+    coursePicture: '',
+  }),
 
   computed: {},
 
@@ -44,6 +46,10 @@ export default {
         course,
       });
     },
+  },
+
+  async created() {
+    this.coursePicture = await this.$getKeyUrl(this.course.image);
   },
 };
 </script>

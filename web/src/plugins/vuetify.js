@@ -17,7 +17,7 @@ const vuetify = new Vuetify({
         secondary: colors.blue.lighten1,
         tertiary: colors.blue.lighten2,
         quaternary: colors.blue.lighten3,
-        primaryText: colors.blue.darken1,
+        primaryText: colors.blue.darken4,
         accent: colors.shades.black,
         error: colors.red.accent3,
       },

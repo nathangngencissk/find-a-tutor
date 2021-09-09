@@ -141,8 +141,8 @@ export default {
           this.classes = result;
         });
     },
-    changeVideo(video) {
-      this.videoUrl = `${this.$cloudfrontUrl}public/${video}`;
+    async changeVideo(video) {
+      this.videoUrl = await this.$getKeyUrl(video);
       document.querySelector('video').load();
     },
   },

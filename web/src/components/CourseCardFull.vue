@@ -1,10 +1,6 @@
 <template>
   <v-card class="mb-4 mr-2" max-width="400">
-    <v-img
-      class="white--text align-end"
-      height="200px"
-      :src="$cloudfrontUrl + 'public/' + courseImage"
-    >
+    <v-img class="white--text align-end" height="200px" :src="coursePicture">
       <v-card-title>{{ courseName }}</v-card-title>
     </v-img>
 
@@ -56,7 +52,9 @@ export default {
     'courseCost',
   ],
 
-  data: () => ({}),
+  data: () => ({
+    coursePicture: '',
+  }),
 
   computed: {
     flagLanguage() {
@@ -66,7 +64,9 @@ export default {
       return parseFloat(this.courseRating);
     },
   },
-
   methods: {},
+  async created() {
+    this.coursePicture = await this.$getKeyUrl(this.courseImage);
+  },
 };
 </script>

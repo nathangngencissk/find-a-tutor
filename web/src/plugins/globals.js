@@ -7,9 +7,23 @@
 import Vue from 'vue';
 import { Storage } from 'aws-amplify';
 
+const AWS = require('aws-sdk');
+
+AWS.config.update({ region: 'us-east-1' });
+
 Vue.use({
   install() {
     Vue.prototype.$cloudfrontUrl = 'https://d2xja4rap1t567.cloudfront.net/';
+
+    Vue.prototype.$getKeyUrl = async (key) => {
+      const picture = await Storage.get(key, {
+        level: 'public',
+        download: true,
+      });
+
+      const objUrl = URL.createObjectURL(picture.Body);
+      return objUrl;
+    };
 
     Vue.prototype.$getFormattedDate = () => {
       const m = new Date();

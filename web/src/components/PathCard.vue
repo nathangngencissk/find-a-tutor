@@ -1,10 +1,6 @@
 <template>
   <v-card class="mx-auto mr-4" max-width="400">
-    <v-img
-      class="white--text align-end"
-      height="200px"
-      :src="$cloudfrontUrl + 'public/' + pathImage"
-    >
+    <v-img class="white--text align-end" height="200px" :src="pathImageUrl">
       <v-card-title>{{ pathName }}</v-card-title>
     </v-img>
 
@@ -40,7 +36,9 @@ export default {
 
   props: ['pathName', 'pathImage', 'pathRating', 'pathReviews', 'pathDescription', 'pathId'],
 
-  data: () => ({}),
+  data: () => ({
+    pathImageUrl: '',
+  }),
 
   computed: {
     pathRatingInteger() {
@@ -48,6 +46,8 @@ export default {
     },
   },
 
-  methods: {},
+  async created() {
+    this.pathImageUrl = await this.$getKeyUrl(this.pathImage);
+  },
 };
 </script>
