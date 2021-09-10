@@ -132,12 +132,7 @@
           <v-hover>
             <template v-slot:default="{ hover }">
               <v-avatar width="600" height="400" tile>
-                <v-img
-                  :src="$cloudfrontUrl + 'public/' + cl.image"
-                  height="300"
-                  width="600"
-                  cover
-                ></v-img>
+                <v-img :src="classPicture" height="300" width="600" cover></v-img>
                 <v-fade-transition>
                   <v-overlay v-if="hover" absolute color="#1976d2">
                     <v-btn color="primary" @click="$refs.FileInput.click()">Alterar Imagem</v-btn>
@@ -300,6 +295,7 @@ export default {
     editingPost: {},
     courseClassId: null,
     loading: false,
+    classPicture: '',
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -581,7 +577,7 @@ export default {
       });
     },
   },
-  created() {
+  async created() {
     this.getCourses();
     const classSchedule = this.$route.params.class.schedule.split(' ');
     this.days = classSchedule.at(-1).split(',');
@@ -594,6 +590,7 @@ export default {
     const endHour =
       parseInt(classSchedule[1], 10) + parseInt(this.$route.params.class.duration, 10);
     this.scheduleEnd = `${endHour}:${classSchedule[0]}`;
+    this.classPicture = await this.$getKeyUrl(this.$route.params.class.image);
   },
 };
 </script>

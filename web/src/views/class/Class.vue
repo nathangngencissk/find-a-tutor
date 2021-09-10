@@ -4,7 +4,7 @@
     <v-row class="mt-4">
       <v-col xl="3" lg="3" md="4" sm="12" xs="12">
         <v-card class="mb-4 mr-2" max-width="400" height="100%">
-          <v-img class="white--text align-end" height="200px" :src="cl.image" />
+          <v-img class="white--text align-end" height="200px" :src="classImage" />
 
           <v-list dense>
             <v-list-item v-for="item in items" :key="item.title">
@@ -58,6 +58,7 @@ export default {
       { title: 'Postagens', icon: 'fas fa-chalkboard', url: 'ClassPosts' },
     ],
     cl: {},
+    classImage: '',
   }),
   methods: {
     getCourseClass() {
@@ -66,10 +67,11 @@ export default {
           query: this.$gql(getCourseClass),
           variables: { id: this.$route.params.id },
         })
-        .then((response) => {
+        .then(async (response) => {
           const result = JSON.parse(response.data.getCourseClass);
           // eslint-disable-next-line prefer-destructuring
           this.cl = result[0];
+          this.classImage = await this.$getKeyUrl(this.cl.image);
         });
     },
   },

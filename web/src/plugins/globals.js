@@ -25,6 +25,13 @@ Vue.use({
       return objUrl;
     };
 
+    Vue.prototype.$getKeyUrlSync = (key) => {
+      Storage.get(key, {
+        level: 'public',
+        download: true,
+      }).then((picture) => URL.createObjectURL(picture.Body));
+    };
+
     Vue.prototype.$getFormattedDate = () => {
       const m = new Date();
       const dateString = `${m.getUTCFullYear()}-${`0${m.getUTCMonth() + 1}`.slice(

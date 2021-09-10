@@ -55,7 +55,7 @@
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-avatar width="600" height="400" tile>
-              <img :src="$cloudfrontUrl + 'public/' + course.image" alt="imagem do curso" />
+              <img :src="courseImage" alt="imagem do curso" />
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="#1976d2">
                   <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
@@ -227,6 +227,7 @@ export default {
     toDeleteSteps: [],
     loading: false,
     courseId: null,
+    courseImage: '',
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -518,8 +519,13 @@ export default {
         });
     },
   },
-  created() {
+  async created() {
     this.getAllCourseCategories();
+    try {
+      this.courseImage = await this.$getKeyUrl(this.course.image);
+    } catch (error) {
+      console.error(error);
+    }
   },
   watch: {
     isDragging(newValue) {

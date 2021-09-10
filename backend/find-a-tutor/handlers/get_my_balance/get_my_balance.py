@@ -1,4 +1,5 @@
 import os
+from math import ceil
 
 from utils.database import Database
 from utils import DateTimeEncoder
@@ -24,7 +25,7 @@ def handle(event, context):
     balance = 0.0
 
     for payment in result_payments:
-        balance += payment["value"]
+        balance += ceil(payment["value"] * 0.66)
 
     for payout in result_payouts:
         balance -= payout["value"]

@@ -40,8 +40,8 @@
           <div v-for="step in selectedCourse.steps" :key="step.id">
             <v-subheader class="subtitle-1">{{ step.name }}</v-subheader>
             <vue-plyr ref="plyr">
-              <video controls crossorigin playsinline :src="getVideoUrl(step.video)">
-                <source size="720" :src="getVideoUrl(step.video)" type="video/mp4" />
+              <video controls crossorigin playsinline :src="step.video">
+                <source size="720" :src="step.video" type="video/mp4" />
               </video>
             </vue-plyr>
             <p class="mt-2">
@@ -105,8 +105,15 @@ export default {
     },
   },
   methods: {
-    selectCourse(event, course) {
+    async selectCourse(event, course) {
       this.selectedCourse = course;
+      this.selectedCourse.steps.forEach((step) => {
+        this.$getKeyUrl(step.video).then((videoUrl) => {
+          // eslint-disable-next-line no-param-reassign
+          step.video = videoUrl;
+        });
+      });
+      this.coursePicture = await this.$getKeyUrl(this.selectedCourse.image);
       this.dialog = true;
     },
     getCoursesForApproval() {
@@ -140,13 +147,9 @@ export default {
           this.getCoursesForApproval();
         });
     },
-    getVideoUrl(event, url) {
-      this.$getKeyUrl(url).then((videoUrl) => videoUrl);
-    },
   },
-  async created() {
+  created() {
     this.getCoursesForApproval();
-    this.coursePicture = await this.$getKeyUrl(this.selectedCourse.image);
   },
 };
 </script>

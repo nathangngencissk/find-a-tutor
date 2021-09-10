@@ -28,17 +28,6 @@ def handle(event, context):
     result = db.query(query=query, arguments=arguments)
 
     course = dict(result[0])
-    course_classes = []
-    for c in course["classes"].split("|"):
-        start_date, schedule = c.split(" - ")
-        course_classes.append(
-            {
-                "start_date": start_date,
-                "schedule": get_description(schedule, options=options),
-            }
-        )
-
-    course["classes"] = course_classes
 
     response_user = cognito_idp.admin_get_user(
         UserPoolId=USER_POOL_ID, Username=course["owner"]

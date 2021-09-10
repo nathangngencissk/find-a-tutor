@@ -168,7 +168,7 @@
       </v-col>
       <v-col xl="3" lg="3" md="6" sm="12" xs="12">
         <v-card width="400">
-          <v-img height="200px" :src="$cloudfrontUrl + 'public/' + courseImage" />
+          <v-img height="200px" :src="courseImage" />
 
           <v-card-text class="text--primary">
             <h1>R${{ courseCost }},00</h1>
@@ -261,11 +261,11 @@ export default {
           fetchPolicy: 'network-only',
           variables: { id: this.$route.params.id },
         })
-        .then((response) => {
+        .then(async (response) => {
           const result = JSON.parse(response.data.getCourse);
           this.course = result;
           this.courseName = result.name;
-          this.courseImage = result.image;
+          this.courseImage = await this.$getKeyUrl(result.image);
           this.courseRating = result.avg_rating;
           this.courseRating1 = result.rating_1;
           this.courseRating2 = result.rating_2;
@@ -289,7 +289,6 @@ export default {
               this.ownerPicture = responsePicture;
             }
           );
-          this.classes = result.classes;
           this.loading = false;
         });
     },
@@ -355,6 +354,7 @@ export default {
     this.getCourse();
     this.getCourseSteps();
     this.getCourseReviews();
+    this.getCourseClasses();
   },
 };
 </script>

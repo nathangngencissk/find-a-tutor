@@ -24,12 +24,7 @@
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-avatar width="600" height="400" tile>
-              <v-img
-                :src="$cloudfrontUrl + 'public/' + path.image"
-                height="300"
-                width="600"
-                cover
-              ></v-img>
+              <v-img :src="pathImage" height="300" width="600" cover></v-img>
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="#1976d2">
                   <v-btn color="primary" @click="$refs.FileInput.click()">Alterar Imagem</v-btn>
@@ -80,7 +75,7 @@
         <h3 class="mb-2">Curso: {{ course.name }}</h3>
         <v-hover>
           <template v-slot:default="{ hover }">
-            <v-img :src="$cloudfrontUrl + 'public/' + course.image" height="300" width="600" cover>
+            <v-img :src="course.picture" height="300" width="600" cover>
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="rgba(0, 0, 0, 0.87)">
                   <v-btn color="primary" @click="change($event, course)">Alterar</v-btn>
@@ -119,11 +114,7 @@
                 v-for="result in searchResults"
                 :key="result.id"
               >
-                <v-img
-                  class="white--text align-end"
-                  height="200px"
-                  :src="$cloudfrontUrl + 'public/' + result.image"
-                >
+                <v-img class="white--text align-end" height="200px" :src="result.resultImage">
                   <v-card-title>{{ result.name }}</v-card-title>
                 </v-img>
 
@@ -233,6 +224,7 @@ export default {
     keywords: [],
     dialogPathCourse: false,
     sectionName: '',
+    pathImage: '',
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -470,10 +462,20 @@ export default {
         .then((response) => {
           const result = JSON.parse(response.data.searchCourse);
           this.searchResults = result;
+          this.searchResults.forEach(async (searchResult) => {
+            // eslint-disable-next-line no-param-reassign
+            searchResult.resultImage = await this.$getKeyUrl(searchResult.image);
+          });
           this.loading = false;
         });
     },
   },
-  created() {},
+  async created() {
+    this.pathImage = await this.$getKeyUrl(this.path.image);
+    this.path.courses.forEach(async (course) => {
+      // eslint-disable-next-line no-param-reassign
+      course.picture = await this.$getKeyUrl(course.image);
+    });
+  },
 };
 </script>

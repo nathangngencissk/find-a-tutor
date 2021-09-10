@@ -51,7 +51,7 @@
           v-if="loadingPath"
         ></v-skeleton-loader>
         <v-card width="400" v-else>
-          <v-img height="200px" :src="$cloudfrontUrl + 'public/' + path.image"> </v-img>
+          <v-img height="200px" :src="pathImage"> </v-img>
 
           <v-card-text class="text--primary">
             <v-row align="center" class="mx-0 my-2">
@@ -149,6 +149,7 @@ export default {
         section_name: 'seção',
       },
     ],
+    pathImage: '',
   }),
   computed: {
     bookmarkIcon() {
@@ -173,9 +174,10 @@ export default {
           variables: { id: this.$route.params.id },
           fetchPolicy: 'network-only',
         })
-        .then((response) => {
+        .then(async (response) => {
           const result = JSON.parse(response.data.getPath);
           this.path = result;
+          this.pathImage = await this.$getKeyUrl(result.image);
           this.$getProfilePicture(result.creator_id, result.owner_picture).then((resultPicture) => {
             this.pathOwnerPicture = resultPicture;
           });

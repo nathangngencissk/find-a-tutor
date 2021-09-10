@@ -23,7 +23,6 @@ select c.id,
        c.category_id,
        c.price,
        c.owner_id as owner,
-	   string_agg(distinct CONCAT(cc.start_date::varchar, ' - ', cc.schedule), '|') as classes,
 	   cat.name as category_name,
 	   cte_total.total as reviews,
 	   cte_reviews.rating_1 as rating_1,
@@ -35,10 +34,10 @@ select c.id,
        (select avg(r.rating) from reviews r inner join courses on courses.id = r.course_id where courses.owner_id = c.owner_id) as avg_rating_owner,
        (select count(*) from courses where courses.owner_id = c.owner_id) as count_user_courses
 from courses c
-join cte_total on cte_total.course_id = c.id
-join cte_reviews on cte_reviews.course_id = c.id
-inner join course_classes cc on cc.course_id = c.id
+left join cte_total on cte_total.course_id = c.id
+left join cte_reviews on cte_reviews.course_id = c.id
+left join course_classes cc on cc.course_id = c.id
 inner join courses_categories cat on cat.id = c.category_id
-inner join reviews r on r.course_id = c.id
+left join reviews r on r.course_id = c.id
 where c.id = :course_id
 group by c.id, c.name, c.description, c.short_description, c.image, c.status, c.category_id, c.owner_id, c.price, category_name, reviews, rating_1, rating_2, rating_3, rating_4, rating_5;

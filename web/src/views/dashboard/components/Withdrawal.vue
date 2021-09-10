@@ -2,6 +2,9 @@
   <v-container>
     <v-row justify="center">
       <v-col xl="10" cols="12">
+        <v-alert type="error" :value="alert">
+          {{ alertMessage }}
+        </v-alert>
         <v-sheet elevation="1" class="pa-4">
           <h3>Visão geral</h3>
           <v-sheet elevation="2" class="ma-2 pa-2">
@@ -81,24 +84,68 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </v-row>
-    <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
-      <v-card class="pa-4" min-width="600px">
-        <v-form>
-          <v-text-field label="Valor" v-model="amount"></v-text-field>
-        </v-form>
-        <v-btn class="white--text mr-4" color="success" @click="createPayout"> Sacar </v-btn>
-        <v-btn class="white--text" color="error" @click="overlay = false" text> Fechar </v-btn>
+    <v-dialog v-model="dialog" scrollable max-width="450px">
+      <v-card class="pa-4" min-width="450px">
+        <v-card-title>Saque</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 150px" class="mt-2">
+          <validation-observer ref="observer" v-slot="{ invalid }">
+            <v-form @submit.prevent="submit">
+              <validation-provider
+                v-slot="{ errors }"
+                name="amount"
+                :rules="{ required: true, min_value: 1, regex: /^\d*\.?\d*$/ }"
+              >
+                <v-text-field
+                  label="Valor"
+                  v-model="amount"
+                  :error-messages="errors"
+                  required
+                ></v-text-field>
+              </validation-provider>
+              <v-btn class="white--text mr-4" color="success" type="submit" :disabled="invalid">
+                Sacar
+              </v-btn>
+              <v-btn class="white--text" color="error" @click="dialog = false" text> Fechar </v-btn>
+            </v-form>
+          </validation-observer>
+        </v-card-text>
       </v-card>
-    </v-overlay>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { getMyBankAccounts, getMyPayouts, createPayout, getMyBalance } from '@/graphql/queries';
+// eslint-disable-next-line camelcase
+import { required, regex, min_value } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+
+extend('required', {
+  ...required,
+  message: 'valor não pode ser vazio',
+});
+
+extend('regex', {
+  ...regex,
+  message: 'valor valor em formato inválido.',
+});
+
+extend('min_value', {
+  // eslint-disable-next-line camelcase
+  ...min_value,
+  message: 'valor não pode ser 0 ou negativo.',
+});
 
 export default {
   title: 'Saque | Find a Tutor',
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
   data() {
     return {
       page: 1,
@@ -106,15 +153,17 @@ export default {
       pages: [],
       itemsPerPage: 10,
       search: '',
-      amount: '',
+      amount: 0.0,
       loading: true,
       show: false,
-      overlay: false,
+      dialog: false,
       zIndex: 2,
       payouts: [],
       filteredPayouts: [],
       accountBalance: 0.0,
       selectedAccount: {},
+      alert: false,
+      alertMessage: '',
     };
   },
   computed: {
@@ -129,8 +178,8 @@ export default {
   },
   methods: {
     withdraw() {
-      this.amount = '';
-      this.overlay = true;
+      this.amount = 0.0;
+      this.dialog = true;
     },
     paginate() {
       const numPages = Math.ceil(this.filteredPayouts.length / 12);
@@ -176,16 +225,31 @@ export default {
         });
     },
     getMyBalance() {
-      this.$gqlClient
-        .query({
-          query: this.$gql(getMyBalance),
-          fetchPolicy: 'network-only',
-          variables: { user_id: this.currentUser.username },
-        })
-        .then((response) => {
-          const result = JSON.parse(response.data.getMyBalance);
-          this.accountBalance = result;
-        });
+      try {
+        this.$gqlClient
+          .query({
+            query: this.$gql(getMyBalance),
+            fetchPolicy: 'network-only',
+            variables: { user_id: this.currentUser.username },
+          })
+          .then((response) => {
+            const result = JSON.parse(response.data.getMyBalance);
+            this.accountBalance = result;
+          });
+      } catch (error) {
+        this.alertMessage = 'Ocorreu um erro.';
+        this.alert = true;
+      }
+    },
+    submit() {
+      this.$refs.observer.validate();
+      if (this.amount > this.accountBalance) {
+        this.dialog = false;
+        this.alertMessage = 'Você não possui saldo suficiente para essa operação';
+        this.alert = true;
+      } else {
+        this.createPayout();
+      }
     },
     createPayout() {
       this.$gqlClient
@@ -202,7 +266,9 @@ export default {
           this.payouts.push(result);
           this.paginate();
           this.changePage(-1);
-          this.overlay = false;
+          this.dialog = false;
+          this.alert = false;
+          this.getMyBalance();
         });
     },
   },

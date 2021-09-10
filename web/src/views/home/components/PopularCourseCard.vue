@@ -4,7 +4,7 @@
       <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
     </template>
 
-    <v-img height="250" :src="$cloudfrontUrl + 'public/' + image"></v-img>
+    <v-img height="250" :src="picture"></v-img>
 
     <v-card-title>{{ name }}</v-card-title>
 
@@ -53,6 +53,11 @@ export default {
     'image',
     'loading',
   ],
-  data: () => ({}),
+  data: () => ({
+    picture: '',
+  }),
+  async created() {
+    this.picture = await this.$getKeyUrl(this.image);
+  },
 };
 </script>
