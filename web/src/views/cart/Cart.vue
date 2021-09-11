@@ -10,7 +10,7 @@
       <v-col xl="3" lg="4" md="12" sm="12" xs="12">
         <v-card width="350">
           <v-subheader> Total:</v-subheader>
-          <h1 class="ml-5">R$ {{ cartTotal }},00</h1>
+          <h1 class="ml-5">R$ {{ parseFloat(cartTotal).toFixed(2) }}</h1>
           <v-card-text class="text--primary">
             <div class="my-2">
               <v-btn

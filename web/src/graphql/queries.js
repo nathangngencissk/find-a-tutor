@@ -253,12 +253,14 @@ export const rateCourse = /* GraphQL */ `
     $user_id: String
     $rating: Float
     $content: String
+    $created_at: String
   ) {
     rateCourse(
       course_id: $course_id
       user_id: $user_id
       rating: $rating
       content: $content
+      created_at: $created_at
     )
   }
 `;
@@ -289,6 +291,21 @@ export const enrollCourseClass = /* GraphQL */ `
       user_id: $user_id
       created_at: $created_at
       updated_at: $updated_at
+    )
+  }
+`;
+export const contactEmail = /* GraphQL */ `
+  query ContactEmail(
+    $email: String
+    $user_id: String
+    $subject: String
+    $text: String
+  ) {
+    contactEmail(
+      email: $email
+      user_id: $user_id
+      subject: $subject
+      text: $text
     )
   }
 `;

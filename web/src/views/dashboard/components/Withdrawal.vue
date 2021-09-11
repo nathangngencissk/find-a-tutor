@@ -93,7 +93,7 @@
             <v-form @submit.prevent="submit">
               <validation-provider
                 v-slot="{ errors }"
-                name="amount"
+                name="valor"
                 :rules="{ required: true, min_value: 1, regex: /^\d*\.?\d*$/ }"
               >
                 <v-text-field
@@ -126,18 +126,18 @@ setInteractionMode('eager');
 
 extend('required', {
   ...required,
-  message: 'valor não pode ser vazio',
+  message: '{_field_} não pode ser vazio',
 });
 
 extend('regex', {
   ...regex,
-  message: 'valor valor em formato inválido.',
+  message: '{_field_} em formato inválido.',
 });
 
 extend('min_value', {
   // eslint-disable-next-line camelcase
   ...min_value,
-  message: 'valor não pode ser 0 ou negativo.',
+  message: '{_field_} não pode ser 0 ou negativo.',
 });
 
 export default {

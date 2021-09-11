@@ -271,7 +271,7 @@ export default {
         .query({
           query: this.$gql(getDashboardData),
           fetchPolicy: 'network-only',
-          variables: { user_id: this.user.username },
+          variables: { user_id: this.currentUser.username },
         })
         .then((response) => {
           const result = JSON.parse(response.data.getDashboardData);

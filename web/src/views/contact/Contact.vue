@@ -22,7 +22,7 @@
       <v-col xl="6" lg="6" md="8" sm="12" xs="12">
         <v-sheet elevation="1" class="pa-6">
           <validation-observer ref="observer" v-slot="{ invalid }">
-            <form>
+            <form @submit.prevent="submit">
               <h2>Email</h2>
               <validation-provider v-slot="{ errors }" name="email" rules="required|email">
                 <v-text-field
@@ -36,9 +36,11 @@
               <v-text-field label="Assunto" placeholder="Assunto" v-model="subject"></v-text-field>
               <h2>Mensagem</h2>
               <v-textarea outlined name="input-7-4" label="Mensagem" v-model="body"></v-textarea>
+              <v-btn color="success" type="submit" :disabled="invalid" @click="submit"
+                >Enviar</v-btn
+              >
             </form>
           </validation-observer>
-          <v-btn color="success" @click="clear">Enviar</v-btn>
         </v-sheet>
       </v-col>
     </v-row>
@@ -55,6 +57,8 @@
 <script>
 import { required, email } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+import { mapGetters } from 'vuex';
+import { contactEmail } from '@/graphql/queries';
 
 setInteractionMode('eager');
 
@@ -73,9 +77,7 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-
   title: 'Contato | Find a Tutor',
-
   data: () => ({
     subject: '',
     body: '',
@@ -83,17 +85,37 @@ export default {
     snackbar: false,
     text: `Sua mensagem foi enviada com sucesso!`,
   }),
-
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
   methods: {
     submit() {
       this.$refs.observer.validate();
+      this.contactEmail();
     },
     clear() {
       this.subject = '';
       this.body = '';
       this.email = '';
       this.$refs.observer.reset();
-      this.snackbar = true;
+    },
+    contactEmail() {
+      this.$gqlClient
+        .query({
+          query: this.$gql(contactEmail),
+          fetchPolicy: 'network-only',
+          variables: {
+            user_id: this.currentUser.username,
+            email: this.email,
+            subject: this.subject,
+            text: this.body,
+          },
+        })
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {
+          this.clear();
+          this.snackbar = true;
+        });
     },
   },
 };

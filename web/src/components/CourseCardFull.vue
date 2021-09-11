@@ -14,11 +14,13 @@
           dense
           half-increments
           readonly
+          empty-icon="$ratingFull"
+          background-color="grey darken-1"
           size="14"
         ></v-rating>
 
         <div class="grey--text ml-2 mr-4">{{ courseRating }} ({{ courseReviews }})</div>
-        <div v-if="courseCost" class="subtitle-1">R${{ courseCost }}</div>
+        <div v-if="courseCost" class="subtitle-1">R${{ parseFloat(courseCost).toFixed(2) }}</div>
         <div class="ml-4">
           <v-img max-height="20" max-width="20" :src="flagLanguage"></v-img>
         </div>
@@ -61,10 +63,9 @@ export default {
       return `@/assets/flags/${this.courseLanguage}.png`;
     },
     courseRatingInteger() {
-      return parseFloat(this.courseRating);
+      return parseFloat(this.courseRating) ? parseFloat(this.courseRating) : 0;
     },
   },
-  methods: {},
   async created() {
     this.coursePicture = await this.$getKeyUrl(this.courseImage);
   },

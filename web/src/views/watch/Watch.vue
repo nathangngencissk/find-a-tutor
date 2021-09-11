@@ -85,7 +85,10 @@ export default {
     ],
     courseSteps: [],
     player: {},
-    rate: {},
+    rate: {
+      rating: 0,
+      content: '',
+    },
     notes: [],
     classes: [],
     videoUrl: '',
@@ -113,8 +116,10 @@ export default {
         })
         .then((response) => {
           const result = JSON.parse(response.data.getCourseRate);
-          // eslint-disable-next-line prefer-destructuring
-          this.rate = result[0];
+          if (result.length > 0) {
+            // eslint-disable-next-line prefer-destructuring
+            this.rate = result[0];
+          }
         });
     },
     getCourseNotes() {

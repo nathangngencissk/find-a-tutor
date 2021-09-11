@@ -16,7 +16,7 @@ select c.id,
 from courses c
 join cte_total on cte_total.course_id = c.id
 inner join courses_categories cat on cat.id = c.category_id
-inner join reviews r on r.course_id = c.id
+left join reviews r on r.course_id = c.id
 inner join paths_courses pc on pc.course_id = c.id
 where  pc.path_id = :path_id
 group by c.id,

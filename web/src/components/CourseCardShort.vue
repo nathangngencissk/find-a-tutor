@@ -21,7 +21,7 @@
             Remover
           </v-btn>
           <v-btn color="primary" text class="mx-0" :to="'/course/' + course.id"> Ver Curso </v-btn>
-          <h4 class="mt-16">R$ {{ course.price }},00</h4>
+          <h4 class="mt-16">R$ {{ parseFloat(course.price).toFixed(2) }}</h4>
         </v-card-actions>
       </v-col>
     </v-row>

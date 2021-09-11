@@ -28,11 +28,7 @@
           </v-col>
           <v-col xs="12" sm="12" md="6" lg="6" xl="8">
             <h2>CEO</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet repudiandae earum
-              nesciunt excepturi. Molestiae totam odit ex, natus ipsam iste, temporibus libero
-              corporis rem similique vel, explicabo iusto laudantium culpa!
-            </p>
+            <p>Guilherme Ruiz de Assis</p>
           </v-col>
         </v-row>
       </v-col>
@@ -45,11 +41,7 @@
           </v-col>
           <v-col xs="12" sm="12" md="6" lg="6" xl="8">
             <h2>CTO</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet repudiandae earum
-              nesciunt excepturi. Molestiae totam odit ex, natus ipsam iste, temporibus libero
-              corporis rem similique vel, explicabo iusto laudantium culpa!
-            </p>
+            <p>Nathan George Nascimento Gencissk</p>
           </v-col>
         </v-row>
       </v-col>
@@ -64,28 +56,20 @@
           </v-col>
           <v-col xs="12" sm="12" md="6" lg="6" xl="8">
             <h2>COO</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet repudiandae earum
-              nesciunt excepturi. Molestiae totam odit ex, natus ipsam iste, temporibus libero
-              corporis rem similique vel, explicabo iusto laudantium culpa!
-            </p>
+            <p>Kamila Reis</p>
           </v-col>
         </v-row>
       </v-col>
       <v-col xs="12" sm="8" md="8" lg="4" xl="4">
         <v-row>
           <v-col xs="12" sm="12" md="6" lg="6" xl="4">
-            <v-avatar color="indigo" size="150">
+            <v-avatar color="orange" size="150">
               <span class="white--text text-h5">VP</span>
             </v-avatar>
           </v-col>
           <v-col xs="12" sm="12" md="6" lg="6" xl="8">
             <h2>CDO</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet repudiandae earum
-              nesciunt excepturi. Molestiae totam odit ex, natus ipsam iste, temporibus libero
-              corporis rem similique vel, explicabo iusto laudantium culpa!
-            </p>
+            <p>Vinícius Peters</p>
           </v-col>
         </v-row>
       </v-col>

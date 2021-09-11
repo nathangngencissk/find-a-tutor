@@ -34,9 +34,9 @@ def handle(event, context):
             cte_total.total as reviews,
             avg(r.rating) as avg_rating
         from courses c
-        join cte_total on cte_total.course_id = c.id
+        left join cte_total on cte_total.course_id = c.id
         inner join courses_categories cat on cat.id = c.category_id
-        inner join reviews r on r.course_id = c.id
+        left join reviews r on r.course_id = c.id
         where c.status = 'APROVADO'
     """
 

@@ -16,6 +16,9 @@
           <v-text-field v-model="search" label="Filtrar" class="mx-4"></v-text-field>
         </v-toolbar>
       </template>
+      <template v-slot:item.value="{ item }">
+        {{ parseFloat(item.value).toFixed(2) }}
+      </template>
       <template v-slot:item.confirm="{ item }">
         <v-btn
           color="primary"

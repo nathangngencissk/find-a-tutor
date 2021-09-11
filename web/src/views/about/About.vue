@@ -21,24 +21,9 @@
     <v-row justify="center">
       <v-col cols="8">
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id, cum molestias.
-          Exercitationem laudantium rerum fugiat perspiciatis hic voluptas vero illo itaque
-          dignissimos adipisci fugit, voluptate commodi cum aliquam ea quisquam! Lorem ipsum dolor,
-          sit amet consectetur adipisicing elit. Id, cum molestias. Exercitationem laudantium rerum
-          fugiat perspiciatis hic voluptas vero illo itaque dignissimos adipisci fugit, voluptate
-          commodi cum aliquam ea quisquam! Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-          Id, cum molestias. Exercitationem laudantium rerum fugiat perspiciatis hic voluptas vero
-          illo itaque dignissimos adipisci fugit, voluptate commodi cum aliquam ea quisquam!
-        </p>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id, cum molestias.
-          Exercitationem laudantium rerum fugiat perspiciatis hic voluptas vero illo itaque
-          dignissimos adipisci fugit, voluptate commodi cum aliquam ea quisquam! Lorem ipsum dolor,
-          sit amet consectetur adipisicing elit. Id, cum molestias. Exercitationem laudantium rerum
-          fugiat perspiciatis hic voluptas vero illo itaque dignissimos adipisci fugit, voluptate
-          commodi cum aliquam ea quisquam! Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-          Id, cum molestias. Exercitationem laudantium rerum fugiat perspiciatis hic voluptas vero
-          illo itaque dignissimos adipisci fugit, voluptate commodi cum aliquam ea quisquam!
+          Plataforma de comercialização de cursos, apresentada como requisito parcial de aprovação
+          da disciplina de Trabalho de Conclusão de Curso de Bacharelado em Sistemas de Informação
+          da Universidade Positivo.
         </p>
       </v-col>
     </v-row>

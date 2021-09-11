@@ -10,7 +10,16 @@
 
     <v-card-text>
       <v-row align="center" class="mx-0">
-        <v-rating :value="rating" color="amber" dense half-increments readonly size="14"></v-rating>
+        <v-rating
+          :value="rating"
+          color="amber"
+          dense
+          half-increments
+          readonly
+          empty-icon="$ratingFull"
+          background-color="grey darken-1"
+          size="14"
+        ></v-rating>
 
         <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
       </v-row>

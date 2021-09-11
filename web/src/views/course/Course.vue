@@ -51,6 +51,7 @@
               color="indigo"
               half-increments
               readonly
+              empty-icon="$ratingFull"
               size="40"
             ></v-rating>
           </v-col>
@@ -63,6 +64,7 @@
             <v-rating
               :value="parseInt('5')"
               background-color="indigo lighten-3"
+              empty-icon="$ratingFull"
               color="indigo"
               half-increments
               readonly
@@ -80,6 +82,7 @@
             <v-rating
               :value="parseInt('4')"
               background-color="indigo lighten-3"
+              empty-icon="$ratingFull"
               color="indigo"
               half-increments
               readonly
@@ -97,6 +100,7 @@
             <v-rating
               :value="parseInt('3')"
               background-color="indigo lighten-3"
+              empty-icon="$ratingFull"
               color="indigo"
               half-increments
               readonly
@@ -114,6 +118,7 @@
             <v-rating
               :value="parseInt('2')"
               background-color="indigo lighten-3"
+              empty-icon="$ratingFull"
               color="indigo"
               half-increments
               readonly
@@ -131,6 +136,7 @@
             <v-rating
               :value="parseInt('1')"
               background-color="indigo lighten-3"
+              empty-icon="$ratingFull"
               color="indigo"
               half-increments
               readonly
@@ -177,7 +183,7 @@
           <v-img height="200px" :src="courseImage" />
 
           <v-card-text class="text--primary">
-            <h1>R${{ courseCost }},00</h1>
+            <h1>R${{ parseFloat(courseCost).toFixed(2) }}</h1>
             <div class="my-6">
               <v-btn x-large color="success" block @click="addToCart">
                 Adicionar ao Carrinho
@@ -187,6 +193,8 @@
               <v-rating
                 :value="courseRatingFloat"
                 color="amber"
+                empty-icon="$ratingFull"
+                background-color="grey darken-1"
                 dense
                 half-increments
                 readonly
@@ -238,7 +246,7 @@ export default {
     courseDescription: '',
     courseId: '1',
     courseLanguage: 'pt-br',
-    courseCost: '',
+    courseCost: 0.0,
     countUserCourses: '',
     ownerName: '',
     ownerPicture: '',

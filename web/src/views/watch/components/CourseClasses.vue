@@ -55,6 +55,8 @@ export default {
       this.sheet = !this.sheet;
       this.enrollCourseClass(cl);
       this.enrolled = cl.id;
+      // eslint-disable-next-line no-param-reassign
+      cl.enrolled = true;
     },
     cronToDatetime(cl) {
       const startDate = new Date(Date.parse(cl.start_date));

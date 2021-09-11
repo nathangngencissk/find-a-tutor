@@ -1,152 +1,186 @@
 <template>
   <v-container>
-    <v-container>
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Nome</h2>
-          <v-text-field label="Nome" v-model="course.name"></v-text-field>
-        </v-col>
-        <v-col xl="3" xs="12" cols="6">
-          <h2>Categoria</h2>
-          <v-select
-            :items="categories"
-            item-text="name"
-            item-value="id"
-            v-model="course.category_id"
-            label="Categoria"
-            dense
-            outlined
-          >
-          </v-select>
-        </v-col>
-        <v-col xl="3" xs="12" cols="6">
-          <h2>Valor (R$)</h2>
-          <v-text-field label="Valor" v-model="course.price"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Descrição</h2>
-          <textarea v-model="course.description" auto-grow @input="update($event)"></textarea>
-        </v-col>
-        <v-col xl="6" cols="12">
-          <h2>Preview</h2>
-          <div v-html="compiledMarkdown"></div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Descrição curta (Preview)</h2>
-          <textarea
-            v-model="course.short_description"
-            auto-grow
-            @input="updateShort($event)"
-          ></textarea>
-        </v-col>
-        <v-col xl="6" cols="12">
-          <h2>Preview</h2>
-          <div v-html="compiledMarkdownShort"></div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-row justify="center">
-      <v-col xl="6" cols="12">
-        <h2 class="mb-2">Imagem de capa</h2>
-        <v-hover>
-          <template v-slot:default="{ hover }">
-            <v-avatar width="600" height="400" tile>
-              <img :src="courseImage" alt="imagem do curso" />
-              <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="#1976d2">
-                  <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
-                </v-overlay>
-              </v-fade-transition>
-              <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
-            </v-avatar>
-          </template>
-        </v-hover>
-        <v-dialog v-model="dialog" width="500">
-          <v-card>
-            <v-card-text>
-              <VueCropper
-                v-show="selectedFile"
-                ref="cropper"
-                :src="selectedFile"
-                alt="Source Image"
-              ></VueCropper>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
-              <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12">
-        <h2 class="mb-2">Aulas</h2>
-        <v-data-table
-          :headers="headers"
-          :items="course.steps"
-          :page.sync="page"
-          :items-per-page="itemsPerPage"
-          @page-count="pageCount = $event"
-          hide-default-footer
-          item-key="name"
-          class="elevation-1 page__table"
-          :search="search"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Aulas</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-btn color="success" dark class="mb-2" @click="addLecture" text outlined>
-                Adicionar Aula
-              </v-btn>
-            </v-toolbar>
-          </template>
-          <template v-slot:body="props">
-            <draggable
-              ghost-class="ghost"
-              v-bind="dragOptions"
-              :move="onMove"
-              @start="isDragging = true"
-              @end="onEnd"
-              :list="course.steps"
-              tag="tbody"
+    <v-alert type="error" :value="alert">
+      {{ alertMessage }}
+    </v-alert>
+    <validation-observer ref="observer" v-slot="{ invalid }">
+      <v-form @submit.prevent="submit">
+        <v-container>
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Nome</h2>
+              <validation-provider v-slot="{ errors }" name="nome" rules="required">
+                <v-text-field
+                  label="Nome"
+                  v-model="course.name"
+                  :error-messages="errors"
+                  required
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+            <v-col xl="3" xs="12" cols="6">
+              <h2>Categoria</h2>
+              <validation-provider v-slot="{ errors }" name="categoria" rules="required">
+                <v-select
+                  :items="categories"
+                  item-text="name"
+                  item-value="id"
+                  v-model="course.category_id"
+                  label="Categoria"
+                  dense
+                  outlined
+                  data-vv-name="select"
+                  :error-messages="errors"
+                  required
+                >
+                </v-select>
+              </validation-provider>
+            </v-col>
+            <v-col xl="3" xs="12" cols="6">
+              <h2>Valor (R$)</h2>
+              <validation-provider
+                v-slot="{ errors }"
+                name="valor"
+                :rules="{ required: true, min_value: 1, regex: /^\d*\.?\d*$/ }"
+              >
+                <v-text-field
+                  label="Valor"
+                  v-model="course.price"
+                  :error-messages="errors"
+                  required
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Descrição</h2>
+              <textarea v-model="course.description" auto-grow @input="update($event)"></textarea>
+            </v-col>
+            <v-col xl="6" cols="12">
+              <h2>Preview</h2>
+              <div v-html="compiledMarkdown"></div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Descrição curta (Preview)</h2>
+              <textarea
+                v-model="course.short_description"
+                auto-grow
+                @input="updateShort($event)"
+              ></textarea>
+            </v-col>
+            <v-col xl="6" cols="12">
+              <h2>Preview</h2>
+              <div v-html="compiledMarkdownShort"></div>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-row justify="center">
+          <v-col xl="6" cols="12">
+            <h2 class="mb-2">Imagem de capa</h2>
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-avatar width="600" height="400" tile>
+                  <img :src="courseImage" alt="imagem do curso" />
+                  <v-fade-transition>
+                    <v-overlay v-if="hover" absolute color="#1976d2">
+                      <v-btn color="primary" @click="$refs.FileInput.click()">Mudar Foto</v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                  <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
+                </v-avatar>
+              </template>
+            </v-hover>
+            <v-dialog v-model="dialog" width="500">
+              <v-card>
+                <v-card-text>
+                  <VueCropper
+                    v-show="selectedFile"
+                    ref="cropper"
+                    :src="selectedFile"
+                    alt="Source Image"
+                  ></VueCropper>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
+                  <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="12">
+            <h2 class="mb-2">Aulas</h2>
+            <v-data-table
+              :headers="headers"
+              :items="course.steps"
+              :page.sync="page"
+              :items-per-page="itemsPerPage"
+              @page-count="pageCount = $event"
+              hide-default-footer
+              item-key="name"
+              class="elevation-1 page__table"
+              :search="search"
             >
-              <tr v-for="(lecture, index) in course.steps" :key="index">
-                <td>
-                  <v-icon small class="page__grab-icon"> mdi-arrow-all </v-icon>
-                </td>
-                <td>
-                  <b>{{ index + 1 }}</b>
-                </td>
-                <td>{{ lecture.name }}</td>
-                <td>{{ lecture.description }}</td>
-                <td>
-                  <v-btn color="primary" @click="editLecture($event, lecture)" text>Editar</v-btn>
-                </td>
-                <td>
-                  <v-btn color="error" text @click="deleteCourseStep($event, lecture)"
-                    >Remover</v-btn
-                  >
-                </td>
-              </tr>
-            </draggable>
-          </template>
-        </v-data-table>
-      </v-col>
-      <v-btn class="mr-4" color="success" @click="save" x-large> Salvar </v-btn>
-      <v-snackbar v-model="snackbar">
-        {{ text }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
-        </template>
-      </v-snackbar>
-    </v-row>
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>Aulas</v-toolbar-title>
+                  <v-divider class="mx-4" inset vertical></v-divider>
+                  <v-btn color="success" dark class="mb-2" @click="addLecture" text outlined>
+                    Adicionar Aula
+                  </v-btn>
+                </v-toolbar>
+              </template>
+              <template v-slot:body="props">
+                <draggable
+                  ghost-class="ghost"
+                  v-bind="dragOptions"
+                  :move="onMove"
+                  @start="isDragging = true"
+                  @end="onEnd"
+                  :list="course.steps"
+                  tag="tbody"
+                >
+                  <tr v-for="(lecture, index) in course.steps" :key="index">
+                    <td>
+                      <v-icon small class="page__grab-icon"> mdi-arrow-all </v-icon>
+                    </td>
+                    <td>
+                      <b>{{ index + 1 }}</b>
+                    </td>
+                    <td>{{ lecture.name }}</td>
+                    <td>{{ lecture.description }}</td>
+                    <td>
+                      <v-btn color="primary" @click="editLecture($event, lecture)" text
+                        >Editar</v-btn
+                      >
+                    </td>
+                    <td>
+                      <v-btn color="error" text @click="deleteCourseStep($event, lecture)"
+                        >Remover</v-btn
+                      >
+                    </td>
+                  </tr>
+                </draggable>
+              </template>
+            </v-data-table>
+          </v-col>
+          <v-btn
+            class="mr-4"
+            color="success"
+            @click="submit"
+            x-large
+            type="submit"
+            :disabled="invalid"
+          >
+            Salvar
+          </v-btn>
+        </v-row>
+      </v-form>
+    </validation-observer>
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
@@ -175,6 +209,13 @@
         <v-btn color="error" outlined @click="overlay = false" text> Fechar </v-btn>
       </v-card>
     </v-overlay>
+    <v-snackbar v-model="snackbar">
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -193,10 +234,31 @@ import {
   updateCourse,
 } from '@/graphql/queries';
 import DOMPurify from 'dompurify';
+// eslint-disable-next-line camelcase
+import { required, regex, min_value } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+
+extend('required', {
+  ...required,
+  message: '{_field_} não pode ser vazio',
+});
+
+extend('regex', {
+  ...regex,
+  message: '{_field_} em formato inválido.',
+});
+
+extend('min_value', {
+  // eslint-disable-next-line camelcase
+  ...min_value,
+  message: '{_field_} não pode ser 0 ou negativo.',
+});
 
 export default {
   name: 'DashboardEditCourse',
-  components: { draggable, VueCropper },
+  components: { draggable, VueCropper, ValidationProvider, ValidationObserver },
   data: () => ({
     items: ['Tecnologia', 'Música', 'Matemática', 'Desenho'],
     input: '# hello',
@@ -228,6 +290,8 @@ export default {
     loading: false,
     courseId: null,
     courseImage: '',
+    alert: false,
+    alertMessage: '',
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -276,7 +340,18 @@ export default {
     },
   },
   methods: {
+    submit() {
+      this.$refs.observer.validate();
+      if (this.course.steps.length <= 0) {
+        this.loading = false;
+        this.alertMessage = 'O curso precisa ter pelo menos uma aula!';
+        this.alert = true;
+      } else {
+        this.save();
+      }
+    },
     save() {
+      this.loading = true;
       if (Number.isInteger(this.course.id)) {
         this.updateCourse(this.course);
       } else {
@@ -404,6 +479,7 @@ export default {
           fileName,
         });
         this.course.image = fileName;
+        this.courseImage = await this.$getKeyUrl(fileName);
       }, this.mime_type);
       this.overlayUpload = !this.overlayUpload;
     },
@@ -470,7 +546,6 @@ export default {
       });
     },
     createCourse() {
-      this.loading = true;
       this.$gqlClient
         .query({
           query: this.$gql(createCourse),
@@ -491,10 +566,11 @@ export default {
           this.courseId = result.id;
           this.saveSteps();
           this.loading = false;
+          this.alert = false;
+          this.snackbar = true;
         });
     },
     updateCourse() {
-      this.loading = true;
       this.$gqlClient
         .query({
           query: this.$gql(updateCourse),
@@ -516,15 +592,15 @@ export default {
           this.courseId = result.id;
           this.saveSteps();
           this.loading = false;
+          this.alert = false;
+          this.snackbar = true;
         });
     },
   },
   async created() {
     this.getAllCourseCategories();
-    try {
+    if (this.course.image !== '') {
       this.courseImage = await this.$getKeyUrl(this.course.image);
-    } catch (error) {
-      console.error(error);
     }
   },
   watch: {

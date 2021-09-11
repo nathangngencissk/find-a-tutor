@@ -25,17 +25,17 @@ export default {
       slides: [
         {
           image: ad2,
-          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 20 de Junho.',
+          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 2 de Dezembro.',
           title: 'Aprenda para o seu futuro',
         },
         {
           image: ad,
-          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 20 de Junho.',
+          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 2 de Dezembro.',
           title: 'Aprenda para o seu futuro',
         },
         {
           image: ad1,
-          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 20 de Junho.',
+          body: 'Se prepare para chegar aonde quiser. Cursos a partir de R$22,90 até 2 de Dezembro.',
           title: 'Aprenda para o seu futuro',
         },
       ],

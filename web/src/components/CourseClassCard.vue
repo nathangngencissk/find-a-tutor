@@ -1,6 +1,6 @@
 <template>
   <v-card class="mb-4 mr-2" max-width="400">
-    <v-img class="white--text align-end" height="200px" :src="courseClass.image" />
+    <v-img class="white--text align-end" height="200px" :src="classPicture" />
     <v-card-title>{{ courseClass.name }}</v-card-title>
     <v-card-subtitle class="pb-0"> {{ courseClass.category }} </v-card-subtitle>
 
@@ -22,7 +22,12 @@
 <script>
 export default {
   name: 'CourseClassCard',
-
   props: ['courseClass'],
+  data: () => ({
+    classPicture: '',
+  }),
+  async created() {
+    this.classPicture = await this.$getKeyUrl(this.courseClass.image);
+  },
 };
 </script>

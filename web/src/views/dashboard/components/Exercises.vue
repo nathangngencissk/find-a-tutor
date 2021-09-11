@@ -28,6 +28,18 @@
               </v-btn>
             </v-toolbar>
           </template>
+          <template v-slot:item.status="{ item }">
+            <v-tooltip bottom v-if="item.status === 'NEGADO'">
+              <template v-slot:activator="{ on, attrs }">
+                <span v-bind="attrs" v-on="on">{{ item.status }}</span>
+              </template>
+              <span
+                >Este Exercício infringiu algum de nossos termos, por favor entre em contato com o
+                suporte!</span
+              >
+            </v-tooltip>
+            <span v-else>{{ item.status }}</span>
+          </template>
           <template v-slot:item.edit="{ item }">
             <v-btn
               color="primary"
@@ -37,7 +49,7 @@
             >
           </template>
           <template v-slot:item.remove="{ item }">
-            <v-btn color="error" text @click="remove($event, item)">Remover</v-btn>
+            <v-btn color="error" text @click="confirmRemove($event, item)">Remover</v-btn>
           </template>
         </v-data-table>
         <div class="text-center pt-2">
@@ -52,6 +64,15 @@
       <v-overlay :value="loading">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
+      <v-bottom-sheet v-model="sheet">
+        <v-sheet class="text-center" height="200px">
+          <v-btn class="mt-6" text color="red" @click="remove"> Remover </v-btn>
+          <v-btn class="mt-6" color="primary" @click="sheet = !sheet"> Fechar </v-btn>
+          <div class="py-3">
+            Tem certeza que deseja remover o exercício <b>{{ removingExercise.title }}</b>
+          </div>
+        </v-sheet>
+      </v-bottom-sheet>
     </v-row>
   </v-container>
 </template>
@@ -80,6 +101,8 @@ export default {
       },
       exercisesLists: [],
       filteredExercisesLists: [],
+      removingExercise: {},
+      sheet: false,
     };
   },
   computed: {
@@ -102,8 +125,13 @@ export default {
     edit(event, item) {
       console.log(event, item);
     },
+    confirmRemove(event, item) {
+      this.sheet = true;
+      this.removingExercise = item;
+    },
     remove(event, item) {
       this.deleteExerciseList(item.id);
+      this.sheet = false;
     },
     paginate() {
       const numPages = Math.ceil(this.filteredExercisesLists.length / 12);

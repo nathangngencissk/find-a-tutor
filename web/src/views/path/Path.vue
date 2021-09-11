@@ -63,6 +63,8 @@
                 dense
                 half-increments
                 readonly
+                empty-icon="$ratingFull"
+                background-color="grey darken-1"
                 size="14"
               ></v-rating>
 
@@ -91,6 +93,7 @@
               class="mb-4"
               v-model="rating"
               background-color="orange lighten-3"
+              empty-icon="$ratingFull"
               color="orange"
               half-increments
               large
@@ -117,7 +120,7 @@ import {
 } from '@/graphql/queries';
 
 export default {
-  name: 'Path',
+  name: 'PathOfCourses',
   title: 'Detalhes da trilha | Find a Tutor',
   components: {
     CourseCardFull,

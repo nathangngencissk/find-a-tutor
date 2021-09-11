@@ -1,204 +1,239 @@
 <template>
   <v-container>
-    <v-container>
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Nome</h2>
-          <v-text-field label="Nome" v-model="cl.name"></v-text-field>
-        </v-col>
-        <v-col xl="6" cols="12">
-          <h2>Curso</h2>
-          <v-select
-            :items="courses"
-            item-text="name"
-            item-value="id"
-            v-model="cl.course_id"
-            label="Curso"
-            dense
-            outlined
-          >
-          </v-select>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Descrição</h2>
-          <textarea v-model="cl.description" auto-grow @input="update($event)"></textarea>
-        </v-col>
-        <v-col xl="6" cols="12">
-          <h2>Preview</h2>
-          <div v-html="compiledMarkdown"></div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col xl="6" cols="12">
-          <h2>Como acessar</h2>
-          <textarea v-model="cl.how_to_access" auto-grow @input="updateAccess($event)"></textarea>
-        </v-col>
-        <v-col xl="6" cols="12">
-          <h2>Preview</h2>
-          <div v-html="compiledMarkdownAccess"></div>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col xl="6" cols="12">
-          <h2 class="mb-2">Datas de início e fim</h2>
-          <v-row justify="center">
-            <v-col cols="12">
-              <v-dialog
-                ref="dialog"
-                v-model="modal"
-                :return-value.sync="cl.start_date"
-                persistent
-                width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="cl.start_date"
-                    label="Início"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="cl.start_date" scrollable locale="pt-br">
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="modal = false"> Cancelar </v-btn>
-                  <v-btn text color="primary" @click="$refs.dialog.save(cl.start_date)"> OK </v-btn>
-                </v-date-picker>
-              </v-dialog>
+    <validation-observer ref="observer" v-slot="{ invalid }">
+      <v-form @submit.prevent="submit">
+        <v-container>
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Nome</h2>
+              <validation-provider v-slot="{ errors }" name="nome" rules="required">
+                <v-text-field
+                  label="Nome"
+                  v-model="cl.name"
+                  :error-messages="errors"
+                  required
+                ></v-text-field>
+              </validation-provider>
             </v-col>
-            <v-col cols="12">
-              <v-dialog
-                ref="dialog"
-                v-model="modal"
-                :return-value.sync="cl.end_date"
-                persistent
-                width="290px"
+            <v-col xl="6" cols="12">
+              <h2>Curso</h2>
+              <v-select
+                :items="courses"
+                item-text="name"
+                item-value="id"
+                v-model="cl.course_id"
+                label="Curso"
+                dense
+                outlined
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="cl.end_date"
-                    label="Fim"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
+              </v-select>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Descrição</h2>
+              <textarea v-model="cl.description" auto-grow @input="update($event)"></textarea>
+            </v-col>
+            <v-col xl="6" cols="12">
+              <h2>Preview</h2>
+              <div v-html="compiledMarkdown"></div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col xl="6" cols="12">
+              <h2>Como acessar</h2>
+              <textarea
+                v-model="cl.how_to_access"
+                auto-grow
+                @input="updateAccess($event)"
+              ></textarea>
+            </v-col>
+            <v-col xl="6" cols="12">
+              <h2>Preview</h2>
+              <div v-html="compiledMarkdownAccess"></div>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col xl="6" cols="12">
+              <h2 class="mb-2">Datas de início e fim</h2>
+              <v-row justify="center">
+                <v-col cols="12">
+                  <v-dialog
+                    ref="dialogStart"
+                    v-model="modalStart"
+                    :return-value.sync="cl.start_date"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ attrs, on }">
+                      <v-text-field
+                        v-model="cl.start_date"
+                        label="Início"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="cl.start_date" scrollable locale="pt-br">
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="modalStart = false"> Cancelar </v-btn>
+                      <v-btn text color="primary" @click="$refs.dialogStart.save(cl.start_date)">
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+                <v-col cols="12">
+                  <v-dialog
+                    ref="dialogEnd"
+                    v-model="modal"
+                    :return-value.sync="cl.end_date"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="cl.end_date"
+                        label="Fim"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="cl.end_date" scrollable locale="pt-br">
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="modal = false"> Cancelar </v-btn>
+                      <v-btn text color="primary" @click="$refs.dialogEnd.save(cl.end_date)">
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+              <h2 class="mb-2">Horários</h2>
+              <v-col cols="12">
+                <v-select
+                  v-model="days"
+                  :items="daysOfTheWeek"
+                  item-text="label"
+                  item-value="value"
+                  :menu-props="{ maxHeight: '400' }"
+                  label="Dias"
+                  multiple
+                  hint="Escolha os dias da sua aula"
+                  persistent-hint
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <div>
+                  <v-row justify="space-around" align="center">
+                    <v-col style="width: 250px; flex: 0 1 auto">
+                      <h2>Começo:</h2>
+                      <v-time-picker v-model="scheduleStart" :max="scheduleEnd"></v-time-picker>
+                    </v-col>
+                    <v-col style="width: 250px; flex: 0 1 auto">
+                      <h2>Término:</h2>
+                      <v-time-picker v-model="scheduleEnd" :min="scheduleStart"></v-time-picker>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-col>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col xl="6" cols="12">
+              <h2 class="mb-2">Imagem de capa</h2>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-avatar width="600" height="400" tile>
+                    <v-img :src="classPicture" height="300" width="600" cover></v-img>
+                    <v-fade-transition>
+                      <v-overlay v-if="hover" absolute color="#1976d2">
+                        <v-btn color="primary" @click="$refs.FileInput.click()"
+                          >Alterar Imagem</v-btn
+                        >
+                      </v-overlay>
+                    </v-fade-transition>
+                    <input
+                      ref="FileInput"
+                      type="file"
+                      style="display: none"
+                      @change="onFileSelect"
+                    />
+                  </v-avatar>
                 </template>
-                <v-date-picker v-model="cl.end_date" scrollable locale="pt-br">
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="modal = false"> Cancelar </v-btn>
-                  <v-btn text color="primary" @click="$refs.dialog.save(cl.end_date)"> OK </v-btn>
-                </v-date-picker>
+              </v-hover>
+              <v-dialog v-model="dialog" width="500">
+                <v-card>
+                  <v-card-text>
+                    <VueCropper
+                      v-show="selectedFile"
+                      ref="cropper"
+                      :src="selectedFile"
+                      alt="Source Image"
+                    ></VueCropper>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
+                    <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
+                  </v-card-actions>
+                </v-card>
               </v-dialog>
             </v-col>
           </v-row>
-          <h2 class="mb-2">Horários</h2>
-          <v-col cols="12">
-            <v-select
-              v-model="days"
-              :items="daysOfTheWeek"
-              item-text="label"
-              item-value="value"
-              :menu-props="{ maxHeight: '400' }"
-              label="Dias"
-              multiple
-              hint="Escolha os dias da sua aula"
-              persistent-hint
-            ></v-select>
+        </v-container>
+        <v-row justify="center">
+          <v-col cols="10">
+            <h2 class="mb-2">Postagens</h2>
+            <v-data-table
+              :headers="headers"
+              :items="cl.posts"
+              :page.sync="page"
+              :items-per-page="itemsPerPage"
+              @page-count="pageCount = $event"
+              hide-default-footer
+              item-key="name"
+              class="elevation-1"
+              :search="search"
+            >
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>Postagens</v-toolbar-title>
+                  <v-divider class="mx-4" inset vertical></v-divider>
+                  <v-btn color="success" dark class="mb-2" @click="addPost" text outlined>
+                    Nova Postagem
+                  </v-btn>
+                </v-toolbar>
+              </template>
+              <template v-slot:item.edit="{ item }">
+                <v-btn color="primary" text @click="editPost($event, item)">Editar</v-btn>
+              </template>
+              <template v-slot:item.remove="{ item }">
+                <v-btn color="error" text @click="deleteCoursePost($event, item)">Remover</v-btn>
+              </template>
+            </v-data-table>
           </v-col>
-          <v-col cols="12">
-            <div>
-              <v-row justify="space-around" align="center">
-                <v-col style="width: 250px; flex: 0 1 auto">
-                  <h2>Começo:</h2>
-                  <v-time-picker v-model="scheduleStart" :max="scheduleEnd"></v-time-picker>
-                </v-col>
-                <v-col style="width: 250px; flex: 0 1 auto">
-                  <h2>Término:</h2>
-                  <v-time-picker v-model="scheduleEnd" :min="scheduleStart"></v-time-picker>
-                </v-col>
-              </v-row>
-            </div>
-          </v-col>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col xl="6" cols="12">
-          <h2 class="mb-2">Imagem de capa</h2>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <v-avatar width="600" height="400" tile>
-                <v-img :src="classPicture" height="300" width="600" cover></v-img>
-                <v-fade-transition>
-                  <v-overlay v-if="hover" absolute color="#1976d2">
-                    <v-btn color="primary" @click="$refs.FileInput.click()">Alterar Imagem</v-btn>
-                  </v-overlay>
-                </v-fade-transition>
-                <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
-              </v-avatar>
-            </template>
-          </v-hover>
-          <v-dialog v-model="dialog" width="500">
-            <v-card>
-              <v-card-text>
-                <VueCropper
-                  v-show="selectedFile"
-                  ref="cropper"
-                  :src="selectedFile"
-                  alt="Source Image"
-                ></VueCropper>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
-                <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-row justify="center">
-      <v-col cols="10">
-        <h2 class="mb-2">Postagens</h2>
-        <v-data-table
-          :headers="headers"
-          :items="cl.posts"
-          :page.sync="page"
-          :items-per-page="itemsPerPage"
-          @page-count="pageCount = $event"
-          hide-default-footer
-          item-key="name"
-          class="elevation-1"
-          :search="search"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Postagens</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-btn color="success" dark class="mb-2" @click="addPost" text outlined>
-                Nova Postagem
-              </v-btn>
-            </v-toolbar>
-          </template>
-          <template v-slot:item.edit="{ item }">
-            <v-btn color="primary" text @click="editPost($event, item)">Editar</v-btn>
-          </template>
-          <template v-slot:item.remove="{ item }">
-            <v-btn color="error" text @click="deleteCoursePost($event, item)">Remover</v-btn>
-          </template>
-        </v-data-table>
-      </v-col>
-      <v-overlay :value="loading">
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-      </v-overlay>
-    </v-row>
-    <v-row justify="center">
-      <v-btn class="mr-4" color="success" x-large @click="save"> Salvar </v-btn>
-    </v-row>
+          <v-overlay :value="loading">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
+        </v-row>
+        <v-row justify="center">
+          <v-btn
+            class="mr-4"
+            color="success"
+            x-large
+            @click="submit"
+            type="submit"
+            :disabled="invalid"
+          >
+            Salvar
+          </v-btn>
+        </v-row>
+      </v-form>
+    </validation-observer>
     <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark">
       <v-card class="pa-4" min-width="600px">
         <v-form>
@@ -214,6 +249,13 @@
         <v-btn color="error" outlined @click="overlay = false"> Fechar </v-btn>
       </v-card>
     </v-overlay>
+    <v-snackbar v-model="snackbar">
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -231,10 +273,31 @@ import {
   createCourseClass,
   updateCourseClass,
 } from '@/graphql/queries';
+// eslint-disable-next-line camelcase
+import { required, regex, min_value } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+
+extend('required', {
+  ...required,
+  message: '{_field_} não pode ser vazio',
+});
+
+extend('regex', {
+  ...regex,
+  message: '{_field_} em formato inválido.',
+});
+
+extend('min_value', {
+  // eslint-disable-next-line camelcase
+  ...min_value,
+  message: '{_field_} não pode ser 0 ou negativo.',
+});
 
 export default {
   name: 'DashboardEditCourse',
-  components: { VueCropper },
+  components: { VueCropper, ValidationObserver, ValidationProvider },
   data: () => ({
     daysOfTheWeek: [
       {
@@ -271,6 +334,7 @@ export default {
     scheduleEnd: '',
     menu: false,
     modal: false,
+    modalStart: false,
     input: '# hello',
     page: 1,
     pageCount: 0,
@@ -296,6 +360,8 @@ export default {
     courseClassId: null,
     loading: false,
     classPicture: '',
+    text: 'Salvo com sucesso!',
+    snackbar: false,
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -335,6 +401,10 @@ export default {
     },
   },
   methods: {
+    submit() {
+      this.$refs.observer.validate();
+      this.save();
+    },
     save() {
       const start = this.scheduleStart.split(':');
       const end = this.scheduleEnd.split(':');
@@ -455,6 +525,7 @@ export default {
           fileName,
         });
         this.cl.image = fileName;
+        this.classPicture = await this.$getKeyUrl(fileName);
       }, this.mime_type);
       this.overlayUpload = !this.overlayUpload;
     },
@@ -580,17 +651,19 @@ export default {
   async created() {
     this.getCourses();
     const classSchedule = this.$route.params.class.schedule.split(' ');
-    this.days = classSchedule.at(-1).split(',');
-    const daysInteger = [];
-    this.days.forEach((day) => {
-      daysInteger.push(parseInt(day, 10));
-    });
-    this.days = daysInteger;
-    this.scheduleStart = `${classSchedule[1]}:${classSchedule[0]}`;
-    const endHour =
-      parseInt(classSchedule[1], 10) + parseInt(this.$route.params.class.duration, 10);
-    this.scheduleEnd = `${endHour}:${classSchedule[0]}`;
-    this.classPicture = await this.$getKeyUrl(this.$route.params.class.image);
+    if (classSchedule.length > 1) {
+      this.days = classSchedule.at(-1).split(',');
+      const daysInteger = [];
+      this.days.forEach((day) => {
+        daysInteger.push(parseInt(day, 10));
+      });
+      this.days = daysInteger;
+      this.scheduleStart = `${classSchedule[1]}:${classSchedule[0]}`;
+      const endHour =
+        parseInt(classSchedule[1], 10) + parseInt(this.$route.params.class.duration, 10);
+      this.scheduleEnd = `${endHour}:${classSchedule[0]}`;
+      this.classPicture = await this.$getKeyUrl(this.$route.params.class.image);
+    }
   },
 };
 </script>

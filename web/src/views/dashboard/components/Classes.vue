@@ -32,7 +32,7 @@
         >
       </template>
       <template v-slot:item.remove="{ item }">
-        <v-btn color="error" text @click="remove($event, item)">Remover</v-btn>
+        <v-btn color="error" text @click="confirmRemove($event, item)">Remover</v-btn>
       </template>
     </v-data-table>
     <div class="text-center pt-2">
@@ -46,6 +46,15 @@
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
+    <v-bottom-sheet v-model="sheet">
+      <v-sheet class="text-center" height="200px">
+        <v-btn class="mt-6" text color="red" @click="remove"> Remover </v-btn>
+        <v-btn class="mt-6" color="primary" @click="sheet = !sheet"> Fechar </v-btn>
+        <div class="py-3">
+          Tem certeza que deseja remover o curso <b>{{ removingClass.name }}</b>
+        </div>
+      </v-sheet>
+    </v-bottom-sheet>
   </v-container>
 </template>
 
@@ -78,6 +87,8 @@ export default {
         posts: [],
       },
       classes: [],
+      removingClass: {},
+      sheet: false,
     };
   },
   computed: {
@@ -127,6 +138,11 @@ export default {
     },
     remove(event, item) {
       this.deleteCourseClass(item.id);
+      this.sheet = false;
+    },
+    confirmRemove(event, item) {
+      this.sheet = true;
+      this.removingClass = item;
     },
     paginate() {
       const numPages = Math.ceil(this.filteredClasses.length / 12);

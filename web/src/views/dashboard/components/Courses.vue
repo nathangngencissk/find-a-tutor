@@ -26,18 +26,42 @@
           </v-btn>
         </v-toolbar>
       </template>
+      <template v-slot:item.price="{ item }">
+        {{ parseFloat(item.price).toFixed(2) }}
+      </template>
+      <template v-slot:item.status="{ item }">
+        <v-tooltip bottom v-if="item.status === 'NEGADO'">
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on">{{ item.status }}</span>
+          </template>
+          <span
+            >Este Curso infringiu algum de nossos termos, por favor entre em contato com o
+            suporte!</span
+          >
+        </v-tooltip>
+        <span v-else>{{ item.status }}</span>
+      </template>
       <template v-slot:item.edit="{ item }">
         <v-btn color="primary" text :to="{ name: 'DashboardEditCourse', params: { course: item } }"
           >Editar</v-btn
         >
       </template>
       <template v-slot:item.remove="{ item }">
-        <v-btn color="error" text @click="remove($event, item)">Remover</v-btn>
+        <v-btn color="error" text @click="confirmRemove($event, item)">Remover</v-btn>
       </template>
     </v-data-table>
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
+    <v-bottom-sheet v-model="sheet">
+      <v-sheet class="text-center" height="200px">
+        <v-btn class="mt-6" text color="red" @click="remove"> Remover </v-btn>
+        <v-btn class="mt-6" color="primary" @click="sheet = !sheet"> Fechar </v-btn>
+        <div class="py-3">
+          Tem certeza que deseja remover o curso <b>{{ removingCourse.name }}</b>
+        </div>
+      </v-sheet>
+    </v-bottom-sheet>
     <div class="text-center pt-2">
       <v-pagination
         v-model="page"
@@ -54,6 +78,7 @@ import { mapGetters } from 'vuex';
 import { getCourses, deleteCourse } from '@/graphql/queries';
 
 export default {
+  name: 'DashboardCourses',
   title: 'Cursos | Find a Tutor',
   data() {
     return {
@@ -79,6 +104,8 @@ export default {
       },
       courses: [],
       filteredCourses: [],
+      removingCourse: {},
+      sheet: false,
     };
   },
   computed: {
@@ -101,8 +128,13 @@ export default {
     edit(event, item) {
       console.log(event, item);
     },
-    remove(event, item) {
-      this.deleteCourse(item.id);
+    remove() {
+      this.deleteCourse(this.removingCourse.id);
+      this.sheet = false;
+    },
+    confirmRemove(event, item) {
+      this.sheet = true;
+      this.removingCourse = item;
     },
     paginate() {
       const numPages = Math.ceil(this.filteredCourses.length / 12);

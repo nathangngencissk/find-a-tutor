@@ -1,115 +1,149 @@
 <template>
   <v-container>
-    <v-row align="center">
-      <v-col xl="6" cols="12">
-        <h2>Nome</h2>
-        <v-text-field label="Nome" v-model="exerciseList.title" class="mt-3"></v-text-field>
-      </v-col>
-      <v-col xl="6" cols="12">
-        <h2>Tags</h2>
-        <v-combobox
-          v-model="selectedTags"
-          :items="tags"
-          :search-input.sync="search"
-          hide-selected
-          multiple
-          small-chips
-        >
-          <template v-slot:no-data>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>
-                  Nenhum resultado para "<strong>{{ search }}</strong
-                  >". Aperte <kbd>enter</kbd> para adicionar de qualquer maneira.
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-combobox>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col xl="6" cols="12">
-        <h2>Descrição</h2>
-        <textarea v-model="exerciseList.description" auto-grow @input="update($event)"></textarea>
-      </v-col>
-      <v-col xl="6" cols="12">
-        <h2>Preview</h2>
-        <div v-html="compiledMarkdown"></div>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="10">
-        <h2 class="mb-2">Exercicios</h2>
-        <v-data-table
-          :headers="headers"
-          :items="exerciseList.exercises"
-          :page.sync="page"
-          :items-per-page="itemsPerPage"
-          @page-count="pageCount = $event"
-          hide-default-footer
-          item-key="name"
-          class="elevation-1"
-          :search="search"
-        >
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Exercicios</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-btn color="success" dark class="mb-2" @click="addExercise" text outlined>
-                Novo Exercício
-              </v-btn>
-            </v-toolbar>
-          </template>
-          <template v-slot:item.edit="{ item }">
-            <v-btn color="primary" text @click="editExercise($event, item)">Editar</v-btn>
-          </template>
-          <template v-slot:item.remove="{ item }">
-            <v-btn color="error" text @click="deleteExercise($event, item)">Remover</v-btn>
-          </template>
-        </v-data-table>
-      </v-col>
-      <v-overlay :value="loading">
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-      </v-overlay>
-    </v-row>
-    <v-row justify="center">
-      <v-btn class="mr-4" color="success" x-large @click="save"> Salvar </v-btn>
-    </v-row>
+    <v-alert type="error" :value="alert">
+      {{ alertMessage }}
+    </v-alert>
+    <validation-observer ref="observer" v-slot="{ invalid }">
+      <v-form @submit.prevent="submit">
+        <v-row align="center">
+          <v-col xl="6" cols="12">
+            <h2>Nome</h2>
+            <validation-provider v-slot="{ errors }" name="nome" rules="required">
+              <v-text-field
+                label="Nome"
+                v-model="exerciseList.title"
+                class="mt-3"
+                :error-messages="errors"
+                required
+              ></v-text-field>
+            </validation-provider>
+          </v-col>
+          <v-col xl="6" cols="12">
+            <h2>Tags</h2>
+            <v-combobox
+              v-model="selectedTags"
+              :items="tags"
+              :search-input.sync="search"
+              hide-selected
+              multiple
+              small-chips
+            >
+              <template v-slot:no-data>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      Nenhum resultado para "<strong>{{ search }}</strong
+                      >". Aperte <kbd>enter</kbd> para adicionar de qualquer maneira.
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-combobox>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col xl="6" cols="12">
+            <h2>Descrição</h2>
+            <textarea
+              v-model="exerciseList.description"
+              auto-grow
+              @input="update($event)"
+            ></textarea>
+          </v-col>
+          <v-col xl="6" cols="12">
+            <h2>Preview</h2>
+            <div v-html="compiledMarkdown"></div>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="10">
+            <h2 class="mb-2">Exercicios</h2>
+            <v-data-table
+              :headers="headers"
+              :items="exerciseList.exercises"
+              :page.sync="page"
+              :items-per-page="itemsPerPage"
+              @page-count="pageCount = $event"
+              hide-default-footer
+              item-key="name"
+              class="elevation-1"
+              :search="search"
+            >
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>Exercicios</v-toolbar-title>
+                  <v-divider class="mx-4" inset vertical></v-divider>
+                  <v-btn color="success" dark class="mb-2" @click="addExercise" text outlined>
+                    Novo Exercício
+                  </v-btn>
+                </v-toolbar>
+              </template>
+              <template v-slot:item.edit="{ item }">
+                <v-btn color="primary" text @click="editExercise($event, item)">Editar</v-btn>
+              </template>
+              <template v-slot:item.remove="{ item }">
+                <v-btn color="error" text @click="deleteExercise($event, item)">Remover</v-btn>
+              </template>
+            </v-data-table>
+          </v-col>
+          <v-overlay :value="loading">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
+        </v-row>
+        <v-row justify="center">
+          <v-btn
+            class="mr-4"
+            color="success"
+            x-large
+            @click="submit"
+            type="submit"
+            :disabled="invalid"
+          >
+            Salvar
+          </v-btn>
+        </v-row>
+        <v-dialog v-model="dialog" scrollable max-width="600px">
+          <v-card class="pa-4" min-width="600px">
+            <v-card-text style="height: 500px" class="mt-2">
+              <v-form>
+                <v-text-field label="Questão" v-model="editingExercise.description"></v-text-field>
+                <v-subheader>Marque a alternativa correta</v-subheader>
+                <v-radio-group v-model="editingExercise.right_option_id">
+                  <v-radio
+                    v-for="option in editingExercise.options"
+                    :key="option.id"
+                    :value="option.id"
+                  >
+                    <template v-slot:label>
+                      <v-text-field
+                        label="Alternativa"
+                        placeholder="Alternativa"
+                        v-model="option.description"
+                      ></v-text-field>
+                    </template>
+                  </v-radio>
+                </v-radio-group>
+                <v-textarea
+                  outlineds
+                  name="input-7-4"
+                  label="Explicação da resposta"
+                  v-model="editingExercise.justification"
+                ></v-textarea>
+                <v-btn class="mr-4" color="success" @click="saveExercise"> Salvar </v-btn>
+                <v-btn color="error" outlined @click="dialog = false"> Fechar </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-form>
+    </validation-observer>
     <v-snackbar v-model="snackbar">
       {{ text }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
+        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
       </template>
     </v-snackbar>
-    <v-overlay :z-index="zIndex" :value="overlay" :dark="$vuetify.theme.dark" scrollable>
-      <v-card class="pa-4" min-width="600px">
-        <v-form>
-          <v-text-field label="Questão" v-model="editingExercise.description"></v-text-field>
-          <v-subheader>Marque a alternativa correta</v-subheader>
-          <v-radio-group v-model="editingExercise.right_option_id">
-            <v-radio v-for="option in editingExercise.options" :key="option.id" :value="option.id">
-              <template v-slot:label>
-                <v-text-field
-                  label="Alternativa"
-                  placeholder="Alternativa"
-                  v-model="option.description"
-                ></v-text-field>
-              </template>
-            </v-radio>
-          </v-radio-group>
-          <v-textarea
-            outlineds
-            name="input-7-4"
-            label="Explicação da resposta"
-            v-model="editingExercise.justification"
-          ></v-textarea>
-        </v-form>
-        <v-btn class="mr-4" color="success" @click="saveExercise"> Salvar </v-btn>
-        <v-btn color="error" outlined @click="overlay = false"> Fechar </v-btn>
-      </v-card>
-    </v-overlay>
   </v-container>
 </template>
 
@@ -123,9 +157,31 @@ import {
   createExerciseList,
   updateExerciseList,
 } from '@/graphql/queries';
+// eslint-disable-next-line camelcase
+import { required, regex, min_value } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+
+extend('required', {
+  ...required,
+  message: '{_field_} não pode ser vazio',
+});
+
+extend('regex', {
+  ...regex,
+  message: '{_field_} em formato inválido.',
+});
+
+extend('min_value', {
+  // eslint-disable-next-line camelcase
+  ...min_value,
+  message: '{_field_} não pode ser 0 ou negativo.',
+});
 
 export default {
   name: 'DashboardEditExercise',
+  components: { ValidationProvider, ValidationObserver },
   data: () => ({
     tags: ['Programação', 'Música', 'Matemática', 'Desenho', 'Tecnologia', 'Jogos'],
     input: '# hello',
@@ -149,6 +205,9 @@ export default {
     exerciseListId: null,
     loading: false,
     selectedTags: [],
+    alert: false,
+    alertMessage: '',
+    dialog: false,
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -183,6 +242,16 @@ export default {
     },
   },
   methods: {
+    submit() {
+      this.$refs.observer.validate();
+      if (this.exerciseList.exercises.length <= 0) {
+        this.loading = false;
+        this.alertMessage = 'A lista de exercícios precisa ter pelo menos um exercício!';
+        this.alert = true;
+      } else {
+        this.save();
+      }
+    },
     // eslint-disable-next-line func-names
     update(event) {
       this.exerciseList.description = event.target.value;
@@ -195,7 +264,7 @@ export default {
     editExercise(event, exercise) {
       this.editingExercise = null;
       this.editingExercise = exercise;
-      this.overlay = true;
+      this.dialog = true;
     },
     addExercise() {
       this.editingExercise = {};
@@ -243,7 +312,7 @@ export default {
           updated_at: this.$getFormattedDate(),
         },
       ];
-      this.overlay = true;
+      this.dialog = true;
     },
     save() {
       if (Number.isInteger(this.exerciseList.id)) {
@@ -278,7 +347,7 @@ export default {
       } else {
         this.toUpdateExercises.push(this.editingExercise);
       }
-      this.overlay = false;
+      this.dialog = false;
     },
     createExercises(exercises) {
       this.$gqlClient.query({
@@ -342,6 +411,7 @@ export default {
           this.exerciseListId = result.id;
           this.saveExercises();
           this.loading = false;
+          this.snackbar = true;
         });
     },
     updateExerciseList() {
@@ -365,6 +435,7 @@ export default {
           this.exerciseListId = result.id;
           this.saveExercises();
           this.loading = false;
+          this.snackbar = true;
         });
     },
   },
@@ -380,7 +451,7 @@ export default {
     },
   },
   created() {
-    if (this.$route.params.exerciseList.tags !== []) {
+    if (this.$route.params.exerciseList.tags.length > 0) {
       this.selectedTags = this.$route.params.exerciseList.tags.split(',');
     } else {
       this.selectedTags = [];

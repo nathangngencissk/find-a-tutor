@@ -216,7 +216,6 @@ const routes = [
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
     component: () => import('@/views/dashboard/Dashboard.vue'),
     meta: {
       middleware: [auth, tutor],
@@ -281,7 +280,6 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'Admin',
     component: () => import('@/views/admin/Admin.vue'),
     meta: {
       middleware: auth,

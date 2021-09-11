@@ -81,6 +81,9 @@
           </v-col>
         </v-row>
       </v-col>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-row>
     <div class="text-center my-10">
       <v-pagination
@@ -123,6 +126,7 @@ export default {
     courses: [],
     filteredCourses: [],
     ratingsRange: [1, 5],
+    loading: true,
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -140,6 +144,7 @@ export default {
           this.courses = courses;
           this.filteredCourses = courses;
           this.paginate();
+          this.loading = false;
         });
     },
     getCategories() {
@@ -186,7 +191,8 @@ export default {
       this.filteredCourses = this.pages[this.page - 1];
     },
   },
-  created() {
+  async created() {
+    await this.$store.dispatch('course/updateUserCourses');
     this.myCourses();
     this.getCategories();
   },

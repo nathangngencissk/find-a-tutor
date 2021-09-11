@@ -23,6 +23,7 @@ const actions = {
       Vue.gqlClient
         .query({
           query: Vue.gql(getUserCourses),
+          fetchPolicy: 'network-only',
           variables: { user_id: currentUser.username },
         })
         .then(async (response) => {

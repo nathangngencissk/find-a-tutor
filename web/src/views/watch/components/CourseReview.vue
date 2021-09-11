@@ -3,8 +3,9 @@
     <v-rating
       class="mb-4"
       v-model="rate.rating"
-      background-color="orange lighten-3"
-      color="orange"
+      background-color="grey lighten-3"
+      color="amber"
+      empty-icon="$ratingFull"
       large
     ></v-rating>
     <v-textarea
@@ -22,6 +23,7 @@
 
 <script>
 import { rateCourse } from '@/graphql/queries';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'CourseReview',
@@ -32,6 +34,9 @@ export default {
     editing: false,
     notes: [],
   }),
+  computed: {
+    ...mapGetters('auth', ['currentUser']),
+  },
   methods: {
     save() {
       this.editing = false;
@@ -45,6 +50,7 @@ export default {
           user_id: this.currentUser.username,
           rating: this.rate.rating,
           content: this.rate.content,
+          created_at: this.$getFormattedDate(),
         },
       });
     },

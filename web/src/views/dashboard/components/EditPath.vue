@@ -1,97 +1,113 @@
 <template>
   <v-container>
-    <v-row justify="center">
-      <v-col xl="6" cols="12">
-        <h2>Nome</h2>
-        <v-text-field label="Nome" v-model="path.name"></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col xl="6" cols="12">
-        <h2>Descrição</h2>
-        <v-textarea
-          class="mt-2"
-          outlined
-          name="input-7-4"
-          label="Descrição"
-          v-model="path.description"
-        ></v-textarea>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col xl="6" cols="12">
-        <h2 class="mb-2">Imagem de capa</h2>
-        <v-hover>
-          <template v-slot:default="{ hover }">
-            <v-avatar width="600" height="400" tile>
-              <v-img :src="pathImage" height="300" width="600" cover></v-img>
-              <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="#1976d2">
-                  <v-btn color="primary" @click="$refs.FileInput.click()">Alterar Imagem</v-btn>
-                </v-overlay>
-              </v-fade-transition>
-              <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
-            </v-avatar>
-          </template>
-        </v-hover>
-        <v-dialog v-model="dialog" width="500">
-          <v-card>
-            <v-card-text>
-              <VueCropper
-                v-show="selectedFile"
-                ref="cropper"
-                :src="selectedFile"
-                alt="Source Image"
-              ></VueCropper>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
-              <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-col>
-    </v-row>
-    <v-row justify="center" v-for="course in path.courses" :key="course.id">
-      <v-col xl="6" cols="12">
-        <v-row>
-          <v-col cols="10">
-            <v-subheader>{{ course.section_name }} </v-subheader>
-          </v-col>
-          <v-col cols="2">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              color="error"
-              @click="deletePathCourse($event, course)"
-            >
-              <v-icon dark> mdi-minus </v-icon>
-            </v-btn>
+    <v-alert type="error" :value="alert">
+      {{ alertMessage }}
+    </v-alert>
+    <validation-observer ref="observer" v-slot="{ invalid }">
+      <v-form @submit.prevent="submit">
+        <v-row justify="center">
+          <v-col xl="6" cols="12">
+            <h2>Nome</h2>
+            <validation-provider v-slot="{ errors }" name="nome" rules="required">
+              <v-text-field
+                label="Nome"
+                v-model="path.name"
+                :error-messages="errors"
+                required
+              ></v-text-field>
+            </validation-provider>
           </v-col>
         </v-row>
+        <v-row justify="center">
+          <v-col xl="6" cols="12">
+            <h2>Descrição</h2>
+            <v-textarea
+              class="mt-2"
+              outlined
+              name="input-7-4"
+              label="Descrição"
+              v-model="path.description"
+            ></v-textarea>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col xl="6" cols="12">
+            <h2 class="mb-2">Imagem de capa</h2>
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-avatar width="600" height="400" tile>
+                  <v-img :src="pathImage" height="300" width="600" cover></v-img>
+                  <v-fade-transition>
+                    <v-overlay v-if="hover" absolute color="#1976d2">
+                      <v-btn color="primary" @click="$refs.FileInput.click()">Alterar Imagem</v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                  <input ref="FileInput" type="file" style="display: none" @change="onFileSelect" />
+                </v-avatar>
+              </template>
+            </v-hover>
+            <v-dialog v-model="dialog" width="500">
+              <v-card>
+                <v-card-text>
+                  <VueCropper
+                    v-show="selectedFile"
+                    ref="cropper"
+                    :src="selectedFile"
+                    alt="Source Image"
+                  ></VueCropper>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn class="primary" @click="saveImage(), (dialog = false)">Recortar</v-btn>
+                  <v-btn color="error" outlined text @click="dialog = false">Cancelar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <v-row justify="center" v-for="course in path.courses" :key="course.id">
+          <v-col xl="6" cols="12">
+            <v-row>
+              <v-col cols="10">
+                <v-subheader>{{ course.section_name }} </v-subheader>
+              </v-col>
+              <v-col cols="2">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="error"
+                  @click="deletePathCourse($event, course)"
+                >
+                  <v-icon dark> mdi-minus </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
 
-        <h3 class="mb-2">Curso: {{ course.name }}</h3>
-        <v-hover>
-          <template v-slot:default="{ hover }">
-            <v-img :src="course.picture" height="300" width="600" cover>
-              <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="rgba(0, 0, 0, 0.87)">
-                  <v-btn color="primary" @click="change($event, course)">Alterar</v-btn>
-                </v-overlay>
-              </v-fade-transition>
-            </v-img>
-          </template>
-        </v-hover>
-      </v-col>
-    </v-row>
-    <v-row justify="center" class="my-3">
-      <v-btn color="primary" @click="addSection">Adicionar Seção</v-btn>
-    </v-row>
-    <v-row justify="center">
-      <v-btn color="success" x-large @click="save"> Salvar </v-btn>
-    </v-row>
+            <h3 class="mb-2">Curso: {{ course.name }}</h3>
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-img :src="course.picture" height="300" width="600" cover>
+                  <v-fade-transition>
+                    <v-overlay v-if="hover" absolute color="rgba(0, 0, 0, 0.87)">
+                      <v-btn color="primary" @click="change($event, course)">Alterar</v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                </v-img>
+              </template>
+            </v-hover>
+          </v-col>
+        </v-row>
+        <v-row justify="center" class="my-3">
+          <v-btn color="primary" @click="addSection">Adicionar Seção</v-btn>
+        </v-row>
+        <v-row justify="center">
+          <v-btn color="success" x-large @click="submit" type="submit" :disabled="invalid">
+            Salvar
+          </v-btn>
+        </v-row>
+      </v-form>
+    </validation-observer>
     <v-dialog v-model="dialogPathCourse" scrollable max-width="600px">
       <v-card>
         <v-card-title>Selecione o Curso</v-card-title>
@@ -175,6 +191,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar">
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="primary" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -191,10 +214,31 @@ import {
   updatePath,
   searchCourse,
 } from '@/graphql/queries';
+// eslint-disable-next-line camelcase
+import { required, regex, min_value } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+
+extend('required', {
+  ...required,
+  message: '{_field_} não pode ser vazio',
+});
+
+extend('regex', {
+  ...regex,
+  message: '{_field_} em formato inválido.',
+});
+
+extend('min_value', {
+  // eslint-disable-next-line camelcase
+  ...min_value,
+  message: '{_field_} não pode ser 0 ou negativo.',
+});
 
 export default {
   name: 'DashboardEditPath',
-  components: { VueCropper },
+  components: { VueCropper, ValidationProvider, ValidationObserver },
   data: () => ({
     menu: false,
     modal: false,
@@ -225,6 +269,10 @@ export default {
     dialogPathCourse: false,
     sectionName: '',
     pathImage: '',
+    alert: false,
+    alertMessage: '',
+    text: 'Salvo com sucesso!',
+    snackbar: false,
   }),
   computed: {
     ...mapGetters('auth', ['currentUser']),
@@ -233,6 +281,16 @@ export default {
     },
   },
   methods: {
+    submit() {
+      this.$refs.observer.validate();
+      if (this.path.courses.length <= 0) {
+        this.loading = false;
+        this.alertMessage = 'A trilha precisa ter pelo menos um curso!';
+        this.alert = true;
+      } else {
+        this.save();
+      }
+    },
     changeSectionCourse(event, result) {
       this.editingPathCourse.course_id = result.id;
       this.editingPathCourse.name = result.name;
@@ -425,6 +483,7 @@ export default {
           this.pathId = result.id;
           this.savePaths();
           this.loading = false;
+          this.snackbar = true;
         });
     },
     updatePath() {
@@ -447,6 +506,7 @@ export default {
           this.pathId = result.id;
           this.savePaths();
           this.loading = false;
+          this.snackbar = true;
         });
     },
     searchCourse() {
@@ -471,7 +531,10 @@ export default {
     },
   },
   async created() {
-    this.pathImage = await this.$getKeyUrl(this.path.image);
+    if (this.path.image !== '') {
+      this.pathImage = await this.$getKeyUrl(this.path.image);
+    }
+
     this.path.courses.forEach(async (course) => {
       // eslint-disable-next-line no-param-reassign
       course.picture = await this.$getKeyUrl(course.image);

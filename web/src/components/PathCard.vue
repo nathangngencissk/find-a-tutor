@@ -12,6 +12,8 @@
           dense
           half-increments
           readonly
+          empty-icon="$ratingFull"
+          background-color="grey darken-1"
           size="14"
         ></v-rating>
 

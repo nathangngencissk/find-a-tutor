@@ -2,6 +2,16 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: "AWS::Serverless-2016-10-31"
 Description: "Find a Tutor"
 
+Globals:
+  Function:
+    Runtime: "python3.8"
+    MemorySize: 128
+    Timeout: 300
+    Environment:
+      Variables:
+        LOG_LEVEL: "INFO"
+        POWERTOOLS_SERVICE_NAME: "find-a-tutor"
+
 Resources:
   FindATutorLambdaLayer:
     Type: "AWS::Serverless::LayerVersion"
@@ -13,3 +23,37 @@ Resources:
         - python3.8
       LicenseInfo: MIT
       RetentionPolicy: Retain
+
+  ExecutionRoleContactEmail:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "find-a-tutor-contact-email-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        - PolicyName: "SES"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ses:SendEmail"
+                Resource:
+                  - !Sub "arn:aws:ses:*:${AWS::AccountId}:identity/*"
+
+  ContactEmailHandler:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      FunctionName: "find-a-tutor-contact-email"
+      CodeUri: "../find-a-tutor/handlers/contact_email"
+      Handler: "contact_email.handle"
+      Role: !GetAtt ExecutionRoleContactEmail.Arn
