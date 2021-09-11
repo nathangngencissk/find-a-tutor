@@ -56,7 +56,9 @@ export default {
     ...mapGetters('shopping', ['shoppingCart']),
     ...mapGetters('auth', ['currentUser']),
     cartTotal() {
-      return this.shoppingCart.reduce((sum, obj) => sum + parseFloat(obj.price || 0), 0);
+      return this.shoppingCart.length > 0
+        ? this.shoppingCart.reduce((sum, obj) => sum + parseFloat(obj.price || 0), 0)
+        : 0;
     },
   },
 

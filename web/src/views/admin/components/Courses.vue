@@ -126,7 +126,9 @@ export default {
           const result = JSON.parse(response.data.getCoursesForApproval);
           this.courses = result;
           this.loading = false;
-        });
+        })
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.loading = false));
     },
     changeCourseStatus(event, course, status) {
       this.loading = true;
@@ -145,7 +147,9 @@ export default {
           this.loading = false;
           this.dialog = false;
           this.getCoursesForApproval();
-        });
+        })
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.loading = false));
     },
   },
   created() {

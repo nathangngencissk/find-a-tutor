@@ -20,6 +20,16 @@ const getters = {
 };
 
 const actions = {
+  async loadCart({ dispatch, commit, getters, rootGetters }) {
+    try {
+      const cartData = sessionStorage.getItem('cart');
+      if (cartData) {
+        await commit('loadCart', cartData);
+      }
+    } catch (error) {
+      console.error('Error loading cart: ', error);
+    }
+  },
   async addToCart({ dispatch, commit, getters, rootGetters }, { course }) {
     try {
       await commit('addToCart', course);
@@ -54,6 +64,7 @@ const mutations = {
     if (!duplicate) {
       state.shoppingCart.push(course);
     }
+    sessionStorage.setItem('cart', JSON.stringify(state.shoppingCart));
     router.push({ path: '/cart' });
   },
   removeFromCart(state, course) {
@@ -66,9 +77,14 @@ const mutations = {
     if (pos != -1) {
       state.shoppingCart.splice(pos, 1);
     }
+    sessionStorage.setItem('cart', JSON.stringify(state.shoppingCart));
   },
   clearCart(state) {
     state.shoppingCart = [];
+    sessionStorage.setItem('cart', JSON.stringify(state.shoppingCart));
+  },
+  loadCart(state, data) {
+    state.shoppingCart = JSON.parse(data);
   },
 };
 

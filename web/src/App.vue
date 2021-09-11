@@ -27,6 +27,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('auth/fetchUser');
+    await this.$store.dispatch('shopping/loadCart');
   },
   methods: {
     async logout() {

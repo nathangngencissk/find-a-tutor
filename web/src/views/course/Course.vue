@@ -7,10 +7,10 @@
         <v-sheet elevation="1" class="pa-6">
           <div v-html="compiledMarkdown"></div>
         </v-sheet>
-        <h3 class="mt-4">Turmas disponíveis em breve</h3>
-        <v-chip-group column>
+        <h3 class="mt-4" v-if="classes.length > 0">Turmas disponíveis em breve</h3>
+        <v-chip-group column v-if="classes.length > 0">
           <v-chip v-for="c in classes" :key="c.id">
-            {{ c.schedule }}
+            {{ cronToDatetime(c.start_date, c.schedule) }}
           </v-chip>
         </v-chip-group>
         <h3 class="my-4">Conteúdos</h3>
@@ -50,6 +50,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="40"
             ></v-rating>
           </v-col>
@@ -64,6 +65,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="10"
             ></v-rating>
           </v-col>
@@ -80,6 +82,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="10"
             ></v-rating>
           </v-col>
@@ -96,6 +99,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="10"
             ></v-rating>
           </v-col>
@@ -112,6 +116,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="10"
             ></v-rating>
           </v-col>
@@ -128,6 +133,7 @@
               background-color="indigo lighten-3"
               color="indigo"
               half-increments
+              readonly
               size="10"
             ></v-rating>
           </v-col>
@@ -254,6 +260,31 @@ export default {
   },
 
   methods: {
+    // eslint-disable-next-line camelcase
+    cronToDatetime(start_date, schedule) {
+      const startDate = new Date(Date.parse(start_date));
+      const options = {
+        currentDate: startDate,
+        endDate: this.addDays(startDate, 7),
+        iterator: true,
+      };
+      const optionsFormatDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
+      const interval = this.$parser.parseExpression(schedule, options);
+      const frequency = [];
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        try {
+          const obj = interval.next();
+          const d = new Date(obj.value);
+          const formattedDate = d.toLocaleDateString('pt-br', optionsFormatDate);
+          frequency.push(formattedDate);
+        } catch (e) {
+          break;
+        }
+      }
+      const uniqueFrequency = [...new Set(frequency)];
+      return uniqueFrequency.join('; ');
+    },
     getCourse() {
       this.$gqlClient
         .query({

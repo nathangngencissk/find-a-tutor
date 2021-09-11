@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Vue from 'vue';
 import gql from 'graphql-tag';
 import Amplify, { Auth } from 'aws-amplify';
@@ -30,6 +31,19 @@ const client = new AWSAppSyncClient({
   auth: {
     type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
     jwtToken: async () => (await Auth.currentSession()).getIdToken().getJwtToken(),
+  },
+  offlineConfig: {
+    callback: (err, succ) => {
+      if (err) {
+        const { mutation, variables } = err;
+
+        console.warn(`ERROR for ${mutation}`, err);
+      } else {
+        const { mutation, variables } = succ;
+
+        console.info(`SUCCESS for ${mutation}`, succ);
+      }
+    },
   },
 });
 

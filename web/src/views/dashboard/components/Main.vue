@@ -184,7 +184,7 @@ import { getDashboardData } from '@/graphql/queries';
 
 export default {
   name: 'DashboardMain',
-
+  title: 'Informações | Find a Tutor',
   data() {
     return {
       overlay: true,
@@ -267,36 +267,34 @@ export default {
 
   methods: {
     getDashboardData() {
-      try {
-        this.$gqlClient
-          .query({
-            query: this.$gql(getDashboardData),
-            fetchPolicy: 'network-only',
-            variables: { user_id: this.currentUser.username },
-          })
-          .then((response) => {
-            const result = JSON.parse(response.data.getDashboardData);
-            this.totalCount = result.total_count.toString();
-            this.totalSum = result.total_sum.toString();
-            this.totalUsers = result.total_users[0].count.toString();
-            this.lastAverage = result.last_average.toString();
-            result.sum_per_month.forEach((month) => {
-              this.sumPerMonth.data.labels.push(month.month_name);
-              this.sumPerMonth.data.series[0].push(month.total_month);
-            });
-            result.avg_rating_per_month.forEach((month) => {
-              this.avgRatingPerMonth.data.labels.push(month.month_name);
-              this.avgRatingPerMonth.data.series[0].push(month.cum_amt);
-            });
-            result.count_per_month.forEach((month) => {
-              this.countPerMonth.data.labels.push(month.month_name);
-              this.countPerMonth.data.series[0].push(month.count_month);
-            });
-            this.overlay = false;
+      this.$gqlClient
+        .query({
+          query: this.$gql(getDashboardData),
+          fetchPolicy: 'network-only',
+          variables: { user_id: this.user.username },
+        })
+        .then((response) => {
+          const result = JSON.parse(response.data.getDashboardData);
+          this.totalCount = result.total_count.toString();
+          this.totalSum = result.total_sum.toString();
+          this.totalUsers = result.total_users[0].count.toString();
+          this.lastAverage = result.last_average.toString();
+          result.sum_per_month.forEach((month) => {
+            this.sumPerMonth.data.labels.push(month.month_name);
+            this.sumPerMonth.data.series[0].push(month.total_month);
           });
-      } catch (error) {
-        this.overlay = false;
-      }
+          result.avg_rating_per_month.forEach((month) => {
+            this.avgRatingPerMonth.data.labels.push(month.month_name);
+            this.avgRatingPerMonth.data.series[0].push(month.cum_amt);
+          });
+          result.count_per_month.forEach((month) => {
+            this.countPerMonth.data.labels.push(month.month_name);
+            this.countPerMonth.data.series[0].push(month.count_month);
+          });
+          this.overlay = false;
+        })
+        // eslint-disable-next-line no-return-assign
+        .catch(() => (this.overlay = false));
     },
   },
   computed: {
