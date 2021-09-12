@@ -293,6 +293,11 @@ export default {
       const uniqueFrequency = [...new Set(frequency)];
       return uniqueFrequency.join('; ');
     },
+    addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    },
     getCourse() {
       this.$gqlClient
         .query({

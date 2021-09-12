@@ -76,15 +76,16 @@ export default {
       });
     },
     saveImage() {
-      this.overlayUpload = !this.overlayUpload;
       this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      const fileName = `${this.uuidv4()}.${this.mime_type.replace('image/', '')}`;
       this.$refs.cropper.getCroppedCanvas().toBlob(async (blob) => {
+        this.overlayUpload = !this.overlayUpload;
         await this.$store.dispatch('profile/updateProfilePicture', {
           file: blob,
-          fileName: `${this.uuidv4()}.${this.mime_type.replace('image/', '')}`,
+          fileName,
         });
+        this.overlayUpload = !this.overlayUpload;
       }, this.mime_type);
-      this.overlayUpload = !this.overlayUpload;
     },
     onFileSelect(e) {
       const file = e.target.files[0];

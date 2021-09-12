@@ -25,7 +25,7 @@ def handle(event, context):
     balance = 0.0
 
     for payment in result_payments:
-        balance += ceil(float(payment["value"]) * 0.66)
+        balance += ceil(float(payment["price"]) * 0.66)
 
     for payout in result_payouts:
         balance -= float(payout["value"])

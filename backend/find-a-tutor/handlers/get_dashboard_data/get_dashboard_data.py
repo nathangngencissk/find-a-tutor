@@ -35,7 +35,8 @@ def handle(event, context):
     total_sum = 0.0
 
     for result_sum in result_sum_per_month:
-        total_sum += float(result_sum["total_month"])
+        result_sum["total_month"] = float(result_sum["total_month"]) * 0.66
+        total_sum += result_sum["total_month"]
 
     total_count = 0
 

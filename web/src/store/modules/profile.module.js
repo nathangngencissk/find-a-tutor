@@ -26,7 +26,7 @@ const getters = {
 
 const actions = {
   async getProfilePicture({ dispatch, commit, getters, rootGetters }) {
-    const currentUser = rootGetters['auth/currentUser'];
+    const currentUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
     if (currentUser.username.includes('Facebook')) {
       const picture = await Storage.get('default-profile-picture.png', {
         level: 'public',

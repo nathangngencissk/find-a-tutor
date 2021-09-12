@@ -155,7 +155,7 @@
           color="success"
           icon="mdi-store"
           title="Ganhos"
-          :value="'R$ ' + totalSum"
+          :value="'R$' + parseFloat(totalSum).toFixed(2)"
           sub-icon="mdi-calendar"
           sub-text="Último mês"
         />

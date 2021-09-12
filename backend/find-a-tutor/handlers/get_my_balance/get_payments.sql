@@ -1,4 +1,5 @@
-select p.*
+select p.id,
+       c.price
 from payments p
 inner join orders o on o.payment_id = p.id 
 inner join courses c on c.id = o.course_id

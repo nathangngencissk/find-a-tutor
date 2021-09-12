@@ -5,7 +5,7 @@
       <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit" class="mx-4">
-            <validation-provider v-slot="{ errors }" name="oldPassword" rules="required">
+            <validation-provider v-slot="{ errors }" name="senha antiga" rules="required">
               <v-text-field
                 v-model="oldPassword"
                 :error-messages="errors"
@@ -16,7 +16,7 @@
                 @click:append="showOld = !showOld"
               ></v-text-field>
             </validation-provider>
-            <validation-provider v-slot="{ errors }" name="newPassword" rules="required|min:8">
+            <validation-provider v-slot="{ errors }" name="nova senha" rules="required|min:8">
               <v-text-field
                 v-model="newPassword"
                 :error-messages="errors"
@@ -30,7 +30,7 @@
             <validation-provider
               v-slot="{ errors }"
               name="confirmNewPassword"
-              rules="required|min:8|confirmPassword:@newPassword"
+              rules="required|min:8|confirmPassword:@nova senha"
             >
               <v-text-field
                 v-model="confirmNewPassword"
@@ -50,8 +50,13 @@
         </validation-observer>
       </v-container>
     </v-sheet>
-    <Snackbar :text="this.updateSuccess" timeout="5000" :show="this.showSuccess" />
-    <Snackbar :text="this.updateError" timeout="5000" :show="this.showError" />
+    <v-snackbar v-model="snackbar" timeout="5000">
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -61,7 +66,6 @@
 <script>
 import { required, min } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
-import Snackbar from '@/components/Snackbar.vue';
 
 setInteractionMode('eager');
 
@@ -89,7 +93,6 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
-    Snackbar,
   },
   data: () => ({
     oldPassword: '',
@@ -98,6 +101,8 @@ export default {
     showOld: false,
     showNew: false,
     showNewConfirm: false,
+    snackbar: false,
+    text: 'Sua senha foi alterada com sucesso!',
     overlay: false,
   }),
   computed: {
@@ -131,6 +136,7 @@ export default {
         newPassword: this.newPassword,
       });
       this.overlay = !this.overlay;
+      this.snackbar = true;
       this.clear();
     },
   },

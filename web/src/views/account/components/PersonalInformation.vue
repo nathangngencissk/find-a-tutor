@@ -44,6 +44,9 @@
         <v-btn color="blue" text v-bind="attrs" @click="show = false"> Fechar </v-btn>
       </template>
     </v-snackbar>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -78,6 +81,8 @@ export default {
   data: () => ({
     name: '',
     family_name: '',
+    show: false,
+    loading: false,
   }),
   computed: {
     updateSuccess() {
@@ -95,9 +100,6 @@ export default {
     text() {
       return this.showSuccess ? this.updateSuccess : this.updateError;
     },
-    show() {
-      return this.updateSuccess ? this.updateSuccess : this.updateError;
-    },
   },
   methods: {
     submit() {
@@ -109,12 +111,13 @@ export default {
       this.$refs.observer.reset();
     },
     async updateUserPersonalInformation() {
-      this.overlay = !this.overlay;
+      this.loading = !this.loading;
       await this.$store.dispatch('profile/updateProfilePersonalInformation', {
         name: this.name,
         family_name: this.family_name,
       });
-      this.overlay = !this.overlay;
+      this.loading = !this.loading;
+      this.show = true;
       this.clear();
     },
   },
