@@ -3,8 +3,8 @@
     <v-alert border="top" color="green lighten-2" v-if="forgotPasswordSubmitState" dark dismissible>
       Um código de verificação foi enviado ao seu email.
     </v-alert>
-    <v-row justify="space-around">
-      <v-col cols="12">
+    <v-row justify="center">
+      <v-col cols="4">
         <v-sheet elevation="12" class="my-8 mx-auto py-8 px-8">
           <validation-observer ref="observer">
             <v-form ref="form" lazy-validation @submit.prevent="submit">
