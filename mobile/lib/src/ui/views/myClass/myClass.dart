@@ -1,5 +1,5 @@
 import 'package:find_a_tutor/src/models/myClassModel.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/myClass/myClassView.dart';

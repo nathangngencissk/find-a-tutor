@@ -3,7 +3,7 @@ import 'package:find_a_tutor/src/ui/views/myCourses/myCourses.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
 import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 
 class NavigationBar extends StatefulWidget {

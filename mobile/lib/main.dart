@@ -4,10 +4,10 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:find_a_tutor/src/utils/amplifyconfiguration.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:find_a_tutor/src/ui/shared/navigation_home_screen.dart';
-
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
+import 'package:amplify_api/amplify_api.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Persistent Bottom Navigation Bar example project',
+      title: '',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureAmplify() async {
-    await _amplify.addPlugin(AmplifyAuthCognito());
+    await _amplify.addPlugins([AmplifyAuthCognito(), AmplifyAPI()]);
     try {
       await Amplify.configure(amplifyconfig);
       print('Successfully configured Amplify 🎉');

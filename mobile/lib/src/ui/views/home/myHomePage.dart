@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:find_a_tutor/src/models/popularCourse.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
+import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
 
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
@@ -17,14 +18,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  MyHomePageBloc homepagebloc = MyHomePageBloc();
   PopularCourseScreen popularCourseScreen;
   CategoryType categoryType = CategoryType.ui;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  PopularCourseView callback;
   Widget screenView;
 
   @override
   void initState() {
     super.initState();
+    homepagebloc.getPopularCourses();
 
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
@@ -376,13 +380,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        SizedBox(
-          height: size.height - 500,
-          child: PopularCourseScreen(
-              // callback: () {
-              //   moveToInfoScreen();
-              // },
-              ),
+        InkWell(
+          onTap: () {
+            moveToSeeAll();
+          },
+          child: SizedBox(
+            height: size.height - 500,
+            child: PopularCourseScreen(),
+          ),
         )
       ],
     );

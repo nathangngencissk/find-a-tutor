@@ -4,7 +4,7 @@ import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/courseListView.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 
 class CoursesHomeScreen extends StatefulWidget {
   @override
