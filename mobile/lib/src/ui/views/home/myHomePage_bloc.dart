@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_api/amplify_api.dart';
 
@@ -10,7 +9,8 @@ class MyHomePageBloc {
   Sink get input => _streamController.sink;
   Stream get output => _streamController.stream;
 
-  void getPopularCourses() async {
+  Future<List> getPopularCourse() async {
+    List popularCourses = [];
     try {
       String graphQLDocument = ''' query MyQuery {
       getPopularCourses
@@ -22,11 +22,10 @@ class MyHomePageBloc {
       var response = await operation.response;
       Map<String, dynamic> result = jsonDecode(response.data);
 
-      List getPopularCourses = jsonDecode(result['getPopularCourses']);
-
-      print(getPopularCourses[0].name);
+      popularCourses = jsonDecode(result['getPopularCourses']);
     } on ApiException catch (e) {
       print('Query failed: $e');
     }
+    return popularCourses;
   }
 }

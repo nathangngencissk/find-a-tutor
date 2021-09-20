@@ -1,6 +1,7 @@
 import 'package:find_a_tutor/src/models/category.dart';
 import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
+import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -10,13 +11,15 @@ class PopularCourseView extends StatelessWidget {
       this.popularCourseData,
       this.animationController,
       this.animation,
+      this.homepagebloc,
       this.callback})
       : super(key: key);
 
   final VoidCallback callback;
-  final PopularCourse popularCourseData;
+  final Map popularCourseData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final MyHomePageBloc homepagebloc;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class PopularCourseView extends StatelessWidget {
                       AspectRatio(
                         aspectRatio: 2,
                         child: Image.asset(
-                          popularCourseData.imagePath,
+                          popularCourseData['image'],
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -70,7 +73,7 @@ class PopularCourseView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        popularCourseData.titleTxt,
+                                        popularCourseData['name'],
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -109,13 +112,14 @@ class PopularCourseView extends StatelessWidget {
                                             SmoothStarRating(
                                               allowHalfRating: true,
                                               starCount: 5,
-                                              rating: popularCourseData.rating,
+                                              rating: popularCourseData[
+                                                  'avg_rating'],
                                               size: 20,
                                               color: Colors.lightBlue,
                                               borderColor: Colors.lightBlue,
                                             ),
                                             Text(
-                                              ' ${popularCourseData.reviews} Reviews',
+                                              ' ${popularCourseData["reviews"]} Reviews',
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.grey
@@ -136,7 +140,7 @@ class PopularCourseView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    popularCourseData.price,
+                                    popularCourseData['price'].toString(),
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,

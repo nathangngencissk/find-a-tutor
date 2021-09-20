@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    homepagebloc.getPopularCourses();
+    // homepagebloc.getPopularCourses();
 
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
