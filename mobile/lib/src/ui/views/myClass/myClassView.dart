@@ -2,25 +2,37 @@ import 'package:find_a_tutor/src/models/myClassModel.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/views/detailClass/detailClass.dart';
 import 'package:flutter/material.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 
 class MyClassView extends StatefulWidget {
   final VoidCallback callback;
   final MyClassModel myClassData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final ImageFromS3 imageFromS3;
+  final Map myClassDataBloc;
+
   const MyClassView(
       {Key key,
       this.myClassData,
       this.animationController,
       this.animation,
+      this.imageFromS3,
+      this.myClassDataBloc,
       this.callback})
       : super(key: key);
 
   @override
-  _MyClassViewState createState() => _MyClassViewState();
+  _MyClassViewState createState() =>
+      _MyClassViewState(this.imageFromS3, this.myClassDataBloc);
 }
 
 class _MyClassViewState extends State<MyClassView> {
+  final ImageFromS3 imageFromS3;
+  final Map myClassDataBloc;
+
+  _MyClassViewState(this.imageFromS3, this.myClassDataBloc);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -58,9 +70,18 @@ class _MyClassViewState extends State<MyClassView> {
                           children: <Widget>[
                             AspectRatio(
                               aspectRatio: 2,
-                              child: Image.asset(
-                                widget.myClassData.imagePath,
-                                fit: BoxFit.cover,
+                              child: FutureBuilder(
+                                future: this.imageFromS3.getDownloadUrl(
+                                    this.myClassDataBloc['image']),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot image) {
+                                  if (image.hasData) {
+                                    return Image.network(image.data,
+                                        fit: BoxFit.cover);
+                                  } else {
+                                    return new Container();
+                                  }
+                                },
                               ),
                             ),
                             Container(
@@ -82,7 +103,7 @@ class _MyClassViewState extends State<MyClassView> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              widget.myClassData.titleTxt,
+                                              myClassDataBloc['name'],
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -96,7 +117,7 @@ class _MyClassViewState extends State<MyClassView> {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  widget.myClassData.subTxt,
+                                                  myClassDataBloc['name'],
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -104,7 +125,7 @@ class _MyClassViewState extends State<MyClassView> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    'Tecnologia',
+                                                    myClassDataBloc['name'],
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(

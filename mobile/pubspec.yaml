@@ -28,6 +28,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   graphql: ^4.0.0-beta
+  amplify_storage_s3: ^0.2.0
   bloc: ^7.0.0
   camera: any
   path_provider: any

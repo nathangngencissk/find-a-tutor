@@ -2,6 +2,7 @@ import 'package:find_a_tutor/src/models/andamentCourse.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/watchClass.dart/watchClass.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 
 class MyCourseView extends StatefulWidget {
@@ -9,19 +10,30 @@ class MyCourseView extends StatefulWidget {
   final AndamentCourse myCourseData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final ImageFromS3 imageFromS3;
+  final Map myCourseDataBloc;
+
   const MyCourseView(
       {Key key,
       this.myCourseData,
       this.animationController,
       this.animation,
+      this.imageFromS3,
+      this.myCourseDataBloc,
       this.callback})
       : super(key: key);
 
   @override
-  _MyCourseViewState createState() => _MyCourseViewState();
+  _MyCourseViewState createState() =>
+      _MyCourseViewState(this.imageFromS3, this.myCourseDataBloc);
 }
 
 class _MyCourseViewState extends State<MyCourseView> {
+  final ImageFromS3 imageFromS3;
+  final Map myCourseDataBloc;
+
+  _MyCourseViewState(this.imageFromS3, this.myCourseDataBloc);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -59,9 +71,19 @@ class _MyCourseViewState extends State<MyCourseView> {
                           children: <Widget>[
                             AspectRatio(
                               aspectRatio: 2,
-                              child: Image.asset(
-                                widget.myCourseData.imagePath,
-                                fit: BoxFit.cover,
+                              child: FutureBuilder(
+                                future: this
+                                    .imageFromS3
+                                    .getDownloadUrl(myCourseDataBloc['image']),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot image) {
+                                  if (image.hasData) {
+                                    return Image.network(image.data,
+                                        fit: BoxFit.cover);
+                                  } else {
+                                    return new Container();
+                                  }
+                                },
                               ),
                             ),
                             Container(

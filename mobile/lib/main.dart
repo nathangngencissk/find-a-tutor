@@ -7,6 +7,7 @@ import 'package:find_a_tutor/src/ui/shared/navigation_home_screen.dart';
 import 'package:find_a_tutor/src/ui/views/login/login_page.dart';
 import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_api/amplify_api.dart';
 
 void main() => runApp(MyApp());
@@ -84,7 +85,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureAmplify() async {
-    await _amplify.addPlugins([AmplifyAuthCognito(), AmplifyAPI()]);
+    await _amplify
+        .addPlugins([AmplifyAuthCognito(), AmplifyAPI(), AmplifyStorageS3()]);
     try {
       await Amplify.configure(amplifyconfig);
       print('Successfully configured Amplify 🎉');

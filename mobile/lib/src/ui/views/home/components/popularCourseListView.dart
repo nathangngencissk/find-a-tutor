@@ -2,28 +2,25 @@ import 'package:find_a_tutor/src/models/category.dart';
 import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class PopularCourseView extends StatelessWidget {
   const PopularCourseView(
-      {Key key,
-      this.popularCourseData,
-      this.animationController,
-      this.animation,
-      this.homepagebloc,
-      this.callback})
+      {Key key, this.popularCourseData, this.imageFromS3, this.callback})
       : super(key: key);
 
   final VoidCallback callback;
   final Map popularCourseData;
-  final AnimationController animationController;
-  final Animation<dynamic> animation;
-  final MyHomePageBloc homepagebloc;
+  final ImageFromS3 imageFromS3;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 320,
+      width: 450,
       child: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
         child: InkWell(
@@ -50,9 +47,18 @@ class PopularCourseView extends StatelessWidget {
                     children: <Widget>[
                       AspectRatio(
                         aspectRatio: 2,
-                        child: Image.asset(
-                          popularCourseData['image'],
-                          fit: BoxFit.cover,
+                        child: FutureBuilder(
+                          future: this
+                              .imageFromS3
+                              .getDownloadUrl(popularCourseData['image']),
+                          builder: (BuildContext context, AsyncSnapshot image) {
+                            if (image.hasData) {
+                              return Image.network(image.data,
+                                  fit: BoxFit.cover);
+                            } else {
+                              return new Container();
+                            }
+                          },
                         ),
                       ),
                       Container(
@@ -86,17 +92,10 @@ class PopularCourseView extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          // Text(
-                                          //   //aqui
-                                          //   'Teste de subtx',
-                                          //   style: TextStyle(
-                                          //       fontSize: 14,
-                                          //       color: Colors.grey
-                                          //           .withOpacity(0.8)),
-                                          // ),
                                           Expanded(
                                             child: Text(
-                                              'Julia Rodrigues',
+                                              popularCourseData[
+                                                  'category_name'],
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
@@ -140,7 +139,9 @@ class PopularCourseView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    popularCourseData['price'].toString(),
+                                    double.parse(popularCourseData['price']
+                                            .toString())
+                                        .toStringAsFixed(2),
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
@@ -162,10 +163,5 @@ class PopularCourseView extends StatelessWidget {
         ),
       ),
     );
-    // ),
-    // );
-    //   };
-    // );
   }
 }
-//}
