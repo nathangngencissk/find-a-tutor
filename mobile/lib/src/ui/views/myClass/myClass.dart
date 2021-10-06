@@ -93,6 +93,8 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                               callback: () {},
                               myClassDataBloc: snapshot.data[index],
                               imageFromS3: new ImageFromS3(),
+                              animation: animation,
+                              animationController: animationController,
                             );
                           },
                         );

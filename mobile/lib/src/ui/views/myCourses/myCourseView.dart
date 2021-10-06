@@ -105,7 +105,7 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              widget.myCourseData.titleTxt,
+                                              myCourseDataBloc['name'],
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -118,13 +118,6 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
-                                                Text(
-                                                  widget.myCourseData.subTxt,
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8)),
-                                                ),
                                                 Expanded(
                                                   child: Text(
                                                     'Julia Rodrigues',
@@ -144,7 +137,7 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               child: Row(
                                                 children: <Widget>[
                                                   Text(
-                                                    '73% concluído.',
+                                                    myCourseDataBloc['name'],
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -193,7 +186,9 @@ class _MyCourseViewState extends State<MyCourseView> {
                                                       ),
                                                     ),
                                                     onPressed: () {
-                                                      moveToWatchClass();
+                                                      moveToWatchClass(
+                                                          myCourseDataBloc[
+                                                              'id']);
                                                     }),
                                               ],
                                             )
@@ -219,11 +214,11 @@ class _MyCourseViewState extends State<MyCourseView> {
     );
   }
 
-  void moveToWatchClass() {
+  void moveToWatchClass(int id) {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => MyWatchClass(),
+        builder: (BuildContext context) => MyWatchClass(id: id),
       ),
     );
   }

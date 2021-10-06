@@ -7,7 +7,6 @@ class ImageFromS3 {
   Future<void> getDownloadUrl(String key) async {
     try {
       final GetUrlResult result = await Amplify.Storage.getUrl(key: key);
-      print(result.url);
       return result.url;
     } on StorageException catch (e) {
       print('Error getting download URL: $e');

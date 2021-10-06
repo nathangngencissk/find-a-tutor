@@ -17,13 +17,13 @@ class MyHomePageBloc {
       myCourses(id: \$id)
     }''';
       final awsUser = await Amplify.Auth.getCurrentUser();
-      print(awsUser.username);
+
       var operation = Amplify.API.query(
           request: GraphQLRequest<String>(
               document: graphQLDocument, variables: {"id": awsUser.username}));
 
       var response = await operation.response;
-      print(response.data);
+
       Map<String, dynamic> result = jsonDecode(response.data);
 
       myCourses = jsonDecode(result['myCourses']);

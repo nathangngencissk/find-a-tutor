@@ -28,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // homepagebloc.getPopularCourses();
 
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
@@ -274,6 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Container(
       padding: EdgeInsets.only(top: 5, bottom: 25),
       child: Column(
+        //futurebuilder, return column
         children: <Widget>[
           CarouselSlider(
             items: <Widget>[

@@ -40,10 +40,10 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
     await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
   }
-  
+
   @override
   void dispose() {
-    animationController.dispose();
+    // animationController.dispose();
     super.dispose();
   }
 
@@ -56,13 +56,16 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              title: const Text('Meus Cursos',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                    letterSpacing: 0.27,
-                    color: AppTheme.darkerText,
-                  )),
+              title: const Text(
+                'Meus Cursos',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22,
+                  letterSpacing: 0.27,
+                  color: AppTheme.darkerText,
+                ),
+              ),
+              centerTitle: true,
             ),
             body: Stack(
               children: <Widget>[
@@ -148,11 +151,13 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
                                           );
                                           animationController.forward();
                                           return MyCourseView(
-                                            callback: () {},
-                                            myCourseDataBloc:
-                                                snapshot.data[index],
-                                            imageFromS3: new ImageFromS3(),
-                                          );
+                                              callback: () {},
+                                              myCourseDataBloc:
+                                                  snapshot.data[index],
+                                              imageFromS3: new ImageFromS3(),
+                                              animation: animation,
+                                              animationController:
+                                                  animationController);
                                         },
                                       );
                                     } else if (snapshot.hasError) {

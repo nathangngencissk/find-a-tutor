@@ -117,7 +117,9 @@ class _MyClassViewState extends State<MyClassView> {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  myClassDataBloc['name'],
+                                                  '',
+                                                  // myClassDataBloc[
+                                                  //     ''],
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -125,13 +127,11 @@ class _MyClassViewState extends State<MyClassView> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    myClassDataBloc['name'],
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    '',
                                                     style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey[800],
-                                                    ),
+                                                        fontSize: 14,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.8)),
                                                   ),
                                                 ),
                                               ],
@@ -142,9 +142,9 @@ class _MyClassViewState extends State<MyClassView> {
                                               child: Row(
                                                 children: <Widget>[
                                                   Text(
-                                                    'Teste de descrição\ndescriçao do curso\ndescrição.',
+                                                    'Progresso: 88% ',
                                                     style: TextStyle(
-                                                        fontSize: 14,
+                                                        fontSize: 18,
                                                         color: Colors.grey
                                                             .withOpacity(0.8)),
                                                   ),
