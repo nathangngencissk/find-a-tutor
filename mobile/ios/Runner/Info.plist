@@ -47,5 +47,14 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 	</dict>
+    <key>CFBundleURLTypes</key>
+     <array>
+         <dict>
+             <key>CFBundleURLSchemes</key>
+             <array>
+                 <string>findatutor</string>
+             </array>
+         </dict>
+     </array>
 </dict>
 </plist>

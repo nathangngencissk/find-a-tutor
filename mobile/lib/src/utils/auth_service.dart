@@ -53,6 +53,38 @@ class AuthService {
     }
   }
 
+  void loginFb() async {
+    try {
+      var result =
+          await Amplify.Auth.signInWithWebUI(provider: AuthProvider.facebook);
+      if (result.isSignedIn) {
+        final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+        authStateController.add(state);
+      } else {
+        // 4
+        print('User could not be signed in');
+      }
+    } on AmplifyException catch (e) {
+      print(e.message);
+    }
+  }
+
+  void loginGoogle() async {
+    try {
+      var result =
+          await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
+      if (result.isSignedIn) {
+        final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+        authStateController.add(state);
+      } else {
+        // 4
+        print('User could not be signed in');
+      }
+    } on AmplifyException catch (e) {
+      print(e.message);
+    }
+  }
+
 // 2
   void signUpWithCredentials(SignUpCredentials credentials) async {
     try {
