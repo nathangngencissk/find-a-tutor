@@ -6,9 +6,9 @@ import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
-
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
+import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
 
@@ -24,9 +24,11 @@ class _MyHomePageState extends State<MyHomePage> {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   PopularCourseView callback;
   Widget screenView;
+  AuthService authService = AuthService();
 
   @override
   void initState() {
+    authService.checkAuthStatus();
     super.initState();
 
     tabIconsList.forEach((TabIconData tab) {

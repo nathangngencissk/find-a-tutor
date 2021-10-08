@@ -42,6 +42,7 @@ class AuthService {
 
       // 3
       if (result.isSignedIn) {
+        await Amplify.Auth.fetchAuthSession();
         final state = AuthState(authFlowStatus: AuthFlowStatus.session);
         authStateController.add(state);
       } else {
