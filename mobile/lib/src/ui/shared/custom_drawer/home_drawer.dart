@@ -1,8 +1,11 @@
 import 'package:amplify_flutter/amplify.dart';
+import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatefulWidget {
   final VoidCallback shouldLogOut;
@@ -25,40 +28,15 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
-  String provider = '';
-  String userName = '';
-  String picture = '';
-  ImageFromS3 imageFromS3 = ImageFromS3();
 
   @override
   void initState() {
     setDrawerListArray();
-    getUserInfo();
     super.initState();
   }
 
-  void getUserInfo() async {
-    final userInfo = await Amplify.Auth.fetchUserAttributes();
-    userInfo.forEach((element) {
-      if (element.userAttributeKey == 'identities') {
-        List<dynamic> providerJson = jsonDecode(element.value);
-        provider = providerJson[0]['providerName'];
-      }
-    });
-    userInfo.forEach((element) async {
-      if (element.userAttributeKey == 'picture') {
-        if (provider == 'Google') {
-          picture = element.value;
-        } else if (provider == 'Facebook') {
-          picture = await imageFromS3
-              .getDownloadUrlReturn('default-profile-picture.png');
-        } else {
-          picture = await imageFromS3.getDownloadUrlReturn(element.value);
-        }
-      } else if (element.userAttributeKey == 'name') {
-        userName = element.value;
-      }
-    });
+  void setDrawerListArrayProvider() {
+    drawerList.removeLast();
   }
 
   void setDrawerListArray() {
@@ -73,11 +51,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
         labelName: 'Ajuda',
         isAssetsImage: true,
         imageName: 'assets/images/supportIcon.png',
-      ),
-      DrawerList(
-        index: DrawerIndex.FeedBack,
-        labelName: 'FeedBack',
-        icon: Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.Invite,
@@ -109,60 +82,59 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  AnimatedBuilder(
-                    animation: widget.iconAnimationController,
-                    builder: (BuildContext context, Widget child) {
-                      return ScaleTransition(
-                        scale: AlwaysStoppedAnimation<double>(
-                            1.0 - (widget.iconAnimationController.value) * 0.2),
-                        child: RotationTransition(
-                          turns: AlwaysStoppedAnimation<double>(Tween<double>(
-                                      begin: 0.0, end: 24.0)
-                                  .animate(CurvedAnimation(
-                                      parent: widget.iconAnimationController,
-                                      curve: Curves.fastOutSlowIn))
-                                  .value /
-                              360),
-                          child: Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: AppTheme.grey.withOpacity(0.6),
-                                    offset: const Offset(2.0, 4.0),
-                                    blurRadius: 8),
-                              ],
-                            ),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                  alignment: Alignment.center,
-                                  width: 190.0,
-                                  height: 190.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: new NetworkImage(picture)))),
+                  Consumer<ProfileService>(
+                    builder: (context, atts, child) => AnimatedBuilder(
+                      animation: widget.iconAnimationController,
+                      builder: (BuildContext context, Widget child) {
+                        return ScaleTransition(
+                          scale: AlwaysStoppedAnimation<double>(1.0 -
+                              (widget.iconAnimationController.value) * 0.2),
+                          child: RotationTransition(
+                            turns: AlwaysStoppedAnimation<double>(Tween<double>(
+                                        begin: 0.0, end: 24.0)
+                                    .animate(CurvedAnimation(
+                                        parent: widget.iconAnimationController,
+                                        curve: Curves.fastOutSlowIn))
+                                    .value /
+                                360),
+                            child: Container(
+                              height: 120,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: AppTheme.grey.withOpacity(0.6),
+                                      offset: const Offset(2.0, 4.0),
+                                      blurRadius: 8),
+                                ],
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: CircleAvatar(
+                                  radius: 60.0,
+                                  backgroundImage: NetworkImage(atts.picture),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 4),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        userName,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.grey,
-                          fontSize: 18,
+                  Consumer<ProfileService>(
+                    builder: (context, atts, child) => Padding(
+                      padding: const EdgeInsets.only(top: 24, left: 4),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          atts.userName,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.grey,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                     ),

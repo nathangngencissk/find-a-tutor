@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -9,6 +10,7 @@ import 'package:find_a_tutor/src/ui/views/sign_up/sign_up_page.dart';
 import 'package:find_a_tutor/src/ui/views/verification/verification_page.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_api/amplify_api.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,50 +42,58 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Find a tutor',
-      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: StreamBuilder<AuthState>(
-          stream: _authService.authStateController.stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Navigator(
-                pages: [
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.login)
-                    MaterialPage(
-                        child: LoginPage(
-                            didProvideCredentials:
-                                _authService.loginWithCredentials,
-                            didLoginFb: _authService.loginFb,
-                            didLoginGoogle: _authService.loginGoogle,
-                            shouldShowSignUp: _authService.showSignUp)),
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.signUp)
-                    MaterialPage(
-                        child: SignUpPage(
-                            didProvideCredentials:
-                                _authService.signUpWithCredentials,
-                            shouldShowLogin: _authService.showLogin)),
-                  if (snapshot.data.authFlowStatus ==
-                      AuthFlowStatus.verification)
-                    MaterialPage(
-                        child: VerificationPage(
-                            didProvideVerificationCode:
-                                _authService.verifyCode)),
-                  if (snapshot.data.authFlowStatus == AuthFlowStatus.session)
-                    MaterialPage(
-                        child: NavigationHomeScreen(
-                            shouldLogOut: _authService.logOut))
-                ],
-                onPopPage: (route, result) => route.didPop(result),
-              );
-            } else {
-              return Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ProfileService>.value(
+            value: ProfileService(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Find a tutor',
+          theme:
+              ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+          home: StreamBuilder<AuthState>(
+              stream: _authService.authStateController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Navigator(
+                    pages: [
+                      if (snapshot.data.authFlowStatus == AuthFlowStatus.login)
+                        MaterialPage(
+                            child: LoginPage(
+                                didProvideCredentials:
+                                    _authService.loginWithCredentials,
+                                didLoginFb: _authService.loginFb,
+                                didLoginGoogle: _authService.loginGoogle,
+                                shouldShowSignUp: _authService.showSignUp)),
+                      if (snapshot.data.authFlowStatus == AuthFlowStatus.signUp)
+                        MaterialPage(
+                            child: SignUpPage(
+                                didProvideCredentials:
+                                    _authService.signUpWithCredentials,
+                                shouldShowLogin: _authService.showLogin)),
+                      if (snapshot.data.authFlowStatus ==
+                          AuthFlowStatus.verification)
+                        MaterialPage(
+                            child: VerificationPage(
+                                didProvideVerificationCode:
+                                    _authService.verifyCode)),
+                      if (snapshot.data.authFlowStatus ==
+                          AuthFlowStatus.session)
+                        MaterialPage(
+                            child: NavigationHomeScreen(
+                                shouldLogOut: _authService.logOut))
+                    ],
+                    onPopPage: (route, result) => route.didPop(result),
+                  );
+                } else {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+        ));
   }
 
   void _configureAmplify() async {

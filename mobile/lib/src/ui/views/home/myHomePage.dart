@@ -8,6 +8,7 @@ import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScree
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
+import 'package:find_a_tutor/src/ui/views/searchResults/searchResultsPage.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
@@ -39,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final ImageFromS3 imageFromS3;
   List studyngNow;
   List<Widget> carouselImages;
+  final _searchController = TextEditingController();
 
   _MyHomePageState(this.carouselData, this.imageFromS3);
 
@@ -50,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
       tab.isSelected = false;
     });
     tabIconsList[0].isSelected = true;
-    getStudyngNow();
     super.initState();
   }
 
@@ -60,43 +61,40 @@ class _MyHomePageState extends State<MyHomePage> {
     final ImageFromS3 imageFromS3carousel = ImageFromS3();
     studyngNow = await carouselBloc.getCarousel();
 
-    studyngNow.forEach(
-      (element) async {
-        print(element['image']);
-        carouselImages.add(
-          new GestureDetector(
-            onTap: () {
-              Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) =>
-                      CourseInfoScreen(id: element['id']),
-                ),
-              );
-            },
-            child: new Container(
-              width: 300,
-              alignment: Alignment.topCenter,
-              margin: EdgeInsets.only(top: 20, bottom: 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                    image: NetworkImage(await imageFromS3carousel
-                        .getDownloadUrlReturn(element['image'])),
-                    fit: BoxFit.cover),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black87,
-                    blurRadius: 15,
-                    offset: Offset(10, 10),
-                  ),
-                ],
+    for (var element in studyngNow) {
+      carouselImages.add(
+        new GestureDetector(
+          onTap: () {
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) =>
+                    CourseInfoScreen(id: element['id']),
               ),
+            );
+          },
+          child: new Container(
+            width: 300,
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(top: 20, bottom: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                  image: NetworkImage(await imageFromS3carousel
+                      .getDownloadUrlReturn(element['image'])),
+                  fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: 15,
+                  offset: Offset(10, 10),
+                ),
+              ],
             ),
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
     return carouselImages;
   }
 
@@ -242,14 +240,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                    child: Text(
-                      'Veja mais',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      moveToCateScreen();
-                    }),
+                OutlinedButton(
+                  onPressed: () {
+                    moveToSeeAll();
+                  },
+                  child: const Text('Veja Mais'),
+                ),
               ]),
         ),
         const SizedBox(
@@ -307,6 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       padding: const EdgeInsets.only(left: 16, right: 10),
                       child: TextFormField(
+                        controller: _searchController,
                         style: TextStyle(
                           fontFamily: 'WorkSans',
                           fontWeight: FontWeight.bold,
@@ -338,7 +335,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 60,
                     child: IconButton(
                       onPressed: () {
-                        moveToSeeAll();
+                        final searchKeyword = _searchController.text.trim();
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                SearchResultsPage(searchKeyword: searchKeyword),
+                          ),
+                        );
                       },
                       icon: Icon(Icons.search),
                       color: HexColor('#B9BABC'),
@@ -373,14 +377,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       )),
                 ],
               ),
-              ElevatedButton(
-                child: Text(
-                  'Veja mais',
-                  style: TextStyle(color: Colors.white),
-                ),
+              OutlinedButton(
                 onPressed: () {
                   moveToSeeAll();
                 },
+                child: const Text('Veja Mais'),
               ),
             ],
           ),

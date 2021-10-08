@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/drawer_user_controller.dart';
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/home_drawer.dart';
@@ -7,6 +8,7 @@ import 'package:find_a_tutor/src/ui/views/home/navigationBar.dart';
 import 'package:find_a_tutor/src/ui/views/invite_friend/invite_friend_screen.dart';
 import 'package:find_a_tutor/src/ui/views/myProfile/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   final VoidCallback shouldLogOut;

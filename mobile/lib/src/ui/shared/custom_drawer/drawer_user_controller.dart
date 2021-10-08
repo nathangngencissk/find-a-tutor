@@ -1,6 +1,8 @@
+import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/home_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DrawerUserController extends StatefulWidget {
   final VoidCallback shouldLogOut;
