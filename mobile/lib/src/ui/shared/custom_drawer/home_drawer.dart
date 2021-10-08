@@ -1,5 +1,8 @@
+import 'package:amplify_flutter/amplify.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class HomeDrawer extends StatefulWidget {
   final VoidCallback shouldLogOut;
@@ -22,10 +25,40 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
+  String provider = '';
+  String userName = '';
+  String picture = '';
+  ImageFromS3 imageFromS3 = ImageFromS3();
+
   @override
   void initState() {
     setDrawerListArray();
+    getUserInfo();
     super.initState();
+  }
+
+  void getUserInfo() async {
+    final userInfo = await Amplify.Auth.fetchUserAttributes();
+    userInfo.forEach((element) {
+      if (element.userAttributeKey == 'identities') {
+        List<dynamic> providerJson = jsonDecode(element.value);
+        provider = providerJson[0]['providerName'];
+      }
+    });
+    userInfo.forEach((element) async {
+      if (element.userAttributeKey == 'picture') {
+        if (provider == 'Google') {
+          picture = element.value;
+        } else if (provider == 'Facebook') {
+          picture = await imageFromS3
+              .getDownloadUrlReturn('default-profile-picture.png');
+        } else {
+          picture = await imageFromS3.getDownloadUrlReturn(element.value);
+        }
+      } else if (element.userAttributeKey == 'name') {
+        userName = element.value;
+      }
+    });
   }
 
   void setDrawerListArray() {
@@ -102,10 +135,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     blurRadius: 8),
                               ],
                             ),
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/szostak.jpg'),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  width: 190.0,
+                                  height: 190.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: new NetworkImage(picture)))),
                             ),
                           ),
                         ),
@@ -113,13 +153,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Marcelo Szostak',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.grey,
-                        fontSize: 18,
+                    padding: const EdgeInsets.only(top: 24, left: 4),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        userName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.grey,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),

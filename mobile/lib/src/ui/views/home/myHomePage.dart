@@ -10,6 +10,7 @@ import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
+import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
 
@@ -42,6 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    AuthService authService = AuthService();
+
+    authService.checkAuthStatus();
+
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
