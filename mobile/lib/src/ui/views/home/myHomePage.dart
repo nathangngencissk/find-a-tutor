@@ -3,18 +3,26 @@ import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/home/components/carouselBloc.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
-
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
 
 class MyHomePage extends StatefulWidget {
+  final ImageFromS3 imageFromS3;
+  final Map carouselData;
+
+  const MyHomePage({Key key, this.imageFromS3, this.carouselData})
+      : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() =>
+      _MyHomePageState(this.carouselData, this.imageFromS3);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -24,16 +32,27 @@ class _MyHomePageState extends State<MyHomePage> {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   PopularCourseView callback;
   Widget screenView;
+  CarouselBloc carouselBloc = CarouselBloc();
+
+  final Map carouselData;
+  final ImageFromS3 imageFromS3;
+  List studyngNow;
+
+  _MyHomePageState(this.carouselData, this.imageFromS3);
 
   @override
   void initState() {
-    super.initState();
-
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
     tabIconsList[0].isSelected = true;
+    getStudyngNow();
+
     super.initState();
+  }
+
+  void getStudyngNow() async {
+    studyngNow = await carouselBloc.getCarousel();
   }
 
   @override
@@ -273,7 +292,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Container(
       padding: EdgeInsets.only(top: 5, bottom: 25),
       child: Column(
-        //futurebuilder, return column
         children: <Widget>[
           CarouselSlider(
             items: <Widget>[
@@ -295,6 +313,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
+              // FutureBuilder(
+              //             future: this
+              //                 .imageFromS3
+              //                 .getDownloadUrl(myCourseDataBloc['image']),
+              //             builder: (BuildContext context,
+              //                 AsyncSnapshot image) {
+              //               if (image.hasData) {
+              //                 return Image.network(image.data,
+              //                     fit: BoxFit.cover);
+              //               } else {
+              //                 return new Container();
+              //               }
+              //             },
+              //           ),
               Container(
                 width: 300,
                 margin: EdgeInsets.only(top: 20, bottom: 30),
