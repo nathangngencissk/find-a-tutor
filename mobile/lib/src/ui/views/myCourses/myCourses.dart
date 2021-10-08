@@ -16,6 +16,7 @@ class MyCourses extends StatefulWidget {
 class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
   List<AndamentCourse> myCourseList = AndamentCourse.myCourseList;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+
   MyHomePageBloc mycoursebloc = MyHomePageBloc();
 
   AnimationController animationController;

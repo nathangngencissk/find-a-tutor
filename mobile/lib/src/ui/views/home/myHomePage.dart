@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/carouselBloc.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
@@ -38,26 +38,66 @@ class _MyHomePageState extends State<MyHomePage> {
   final Map carouselData;
   final ImageFromS3 imageFromS3;
   List studyngNow;
+  List<Widget> carouselImages;
 
   _MyHomePageState(this.carouselData, this.imageFromS3);
 
   @override
   void initState() {
     AuthService authService = AuthService();
-
     authService.checkAuthStatus();
-
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
     tabIconsList[0].isSelected = true;
     getStudyngNow();
-
     super.initState();
   }
 
-  void getStudyngNow() async {
+  Future<List<Widget>> getStudyngNow() async {
+    carouselImages = [];
+
+    final ImageFromS3 imageFromS3carousel = ImageFromS3();
     studyngNow = await carouselBloc.getCarousel();
+
+    studyngNow.forEach(
+      (element) async {
+        print(element['image']);
+        carouselImages.add(
+          new GestureDetector(
+            onTap: () {
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      CourseInfoScreen(id: element['id']),
+                ),
+              );
+            },
+            child: new Container(
+              width: 300,
+              alignment: Alignment.topCenter,
+              margin: EdgeInsets.only(top: 20, bottom: 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                    image: NetworkImage(await imageFromS3carousel
+                        .getDownloadUrlReturn(element['image'])),
+                    fit: BoxFit.cover),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black87,
+                    blurRadius: 15,
+                    offset: Offset(10, 10),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    return carouselImages;
   }
 
   @override
@@ -84,7 +124,29 @@ class _MyHomePageState extends State<MyHomePage> {
                           Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight / 3,
-                            child: carouselUi(),
+                            child: FutureBuilder<List<Widget>>(
+                              future: getStudyngNow(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot courses) {
+                                if (courses.hasData) {
+                                  return Container(
+                                    padding:
+                                        EdgeInsets.only(top: 5, bottom: 25),
+                                    child: Column(
+                                      children: <Widget>[
+                                        CarouselSlider(
+                                          items: courses.data,
+                                          options:
+                                              CarouselOptions(autoPlay: true),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return new Container();
+                                }
+                              },
+                            ),
                           ),
                           Container(
                             width: constraints.maxWidth,
@@ -286,100 +348,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget carouselUi() {
-    var size = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(top: 5, bottom: 25),
-      child: Column(
-        children: <Widget>[
-          CarouselSlider(
-            items: <Widget>[
-              Container(
-                width: 300,
-                alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/programacao.jpg"),
-                      fit: BoxFit.cover),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black87,
-                      blurRadius: 15,
-                      offset: Offset(10, 10),
-                    ),
-                  ],
-                ),
-              ),
-              // FutureBuilder(
-              //             future: this
-              //                 .imageFromS3
-              //                 .getDownloadUrl(myCourseDataBloc['image']),
-              //             builder: (BuildContext context,
-              //                 AsyncSnapshot image) {
-              //               if (image.hasData) {
-              //                 return Image.network(image.data,
-              //                     fit: BoxFit.cover);
-              //               } else {
-              //                 return new Container();
-              //               }
-              //             },
-              //           ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/powerbi.png"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/gambit.jpg"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/sql.jpg"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-            ],
-            options: CarouselOptions(autoPlay: true),
-          )
         ],
       ),
     );

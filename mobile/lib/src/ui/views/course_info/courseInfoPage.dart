@@ -3,18 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 
 class CourseInfoScreen extends StatefulWidget {
+  final int id;
+
+  const CourseInfoScreen({Key key, this.id}) : super(key: key);
+
   @override
-  _CourseInfoScreenState createState() => _CourseInfoScreenState();
+  _CourseInfoScreenState createState() => _CourseInfoScreenState(this.id);
 }
 
 class _CourseInfoScreenState extends State<CourseInfoScreen>
     with TickerProviderStateMixin {
+  int id;
   final double infoHeight = 364.0;
   AnimationController animationController;
   Animation<double> animation;
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
+  _CourseInfoScreenState(this.id);
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -24,6 +32,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
         curve: Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
     super.initState();
+    print(this.id);
   }
 
   Future<void> setData() async {

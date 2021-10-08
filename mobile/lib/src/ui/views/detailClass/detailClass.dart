@@ -16,6 +16,7 @@ final notifications = [
   CheckBoxState(title: 'Título 3'),
   CheckBoxState(title: 'Título 4'),
 ];
+
 DateTime selectedDay = DateTime.now();
 DateTime focusedDay = DateTime.now();
 
@@ -61,18 +62,6 @@ class _DetailClassState extends State<DetailClass> {
                     offset: Offset(5, 5),
                   ),
                 ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 25, left: 20, right: 222),
-              child: Text(
-                'Redes de computadores',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  letterSpacing: 0.27,
-                  color: AppTheme.darkerText,
-                ),
               ),
             ),
             SizedBox(
