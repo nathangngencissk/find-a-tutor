@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify.dart';
@@ -46,6 +47,9 @@ class _MyAppState extends State<MyApp> {
         providers: [
           ChangeNotifierProvider<ProfileService>.value(
             value: ProfileService(),
+          ),
+          ChangeNotifierProvider<CartService>.value(
+            value: CartService(),
           ),
         ],
         child: MaterialApp(

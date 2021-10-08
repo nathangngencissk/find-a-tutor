@@ -1,6 +1,10 @@
+import 'package:find_a_tutor/src/services/cart.dart';
+import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
+import 'package:find_a_tutor/src/ui/views/home/navigationBar.dart';
 import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:provider/provider.dart';
 
 class CourseInfoScreen extends StatefulWidget {
   final int id;
@@ -32,7 +36,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
         curve: Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
     super.initState();
-    print(this.id);
   }
 
   Future<void> setData() async {
@@ -233,16 +236,23 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                         ],
                                       ),
                                       child: SizedBox.expand(
-                                        child: FlatButton(
-                                          onPressed: () {
-                                            moveToShopCart();
-                                          },
-                                          child: Text(
-                                            'Adicionar ao carrinho',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 17),
+                                        child: Consumer<CartService>(
+                                          builder:
+                                              (context, cartService, child) =>
+                                                  FlatButton(
+                                            onPressed: () {
+                                              cartService.addToCart(
+                                                  {'id': id, 'price': 50.0});
+                                              print(cartService.cart);
+                                              moveToShopCart();
+                                            },
+                                            child: Text(
+                                              'Adicionar ao carrinho',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  fontSize: 17),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -288,7 +298,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CartScreen(),
+        builder: (BuildContext context) => MyBottomNavigationBar(),
       ),
     );
   }
