@@ -74,19 +74,19 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         items: [
           BottomNavigationBarItem(
               icon: new Icon(Icons.home),
-              title: new Text('Home'),
+              label: 'Home',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.bookmark),
-              title: new Text('Meus Cursos'),
+              label: 'Meus Cursos',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.access_time_rounded),
-              title: new Text('Turmas'),
+              label: 'Turmas',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.shopping_cart_rounded),
-              title: new Text('Carrinho'),
+              label: 'Carrinho',
               backgroundColor: Colors.white),
         ],
       ),

@@ -4,11 +4,6 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_api/amplify_api.dart';
 
 class MyHomePageBloc {
-  final StreamController<String> _streamController = StreamController<String>();
-
-  Sink get input => _streamController.sink;
-  Stream get output => _streamController.stream;
-
   Future<List> getPopularCourse() async {
     List popularCourses = [];
     try {

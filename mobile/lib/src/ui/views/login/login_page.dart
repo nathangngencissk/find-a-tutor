@@ -1,8 +1,4 @@
 import 'dart:ui';
-
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
-import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:find_a_tutor/src/utils/auth_credentials.dart';

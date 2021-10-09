@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:find_a_tutor/src/services/profile.dart';
-import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -298,22 +296,5 @@ class _ProfileState extends State<Profile> {
         );
       }),
     );
-  }
-
-  void _updateUserPicture(String picture) async {
-    try {
-      var res = await Amplify.Auth.updateUserAttribute(
-        userAttributeKey: 'picture',
-        value: picture,
-      );
-      if (res.nextStep.updateAttributeStep == 'CONFIRM_ATTRIBUTE_WITH_CODE') {
-        var destination = res.nextStep.codeDeliveryDetails?.destination;
-        print('Confirmation code sent to $destination');
-      } else {
-        print('Update completed');
-      }
-    } on AmplifyException catch (e) {
-      print(e.message);
-    }
   }
 }

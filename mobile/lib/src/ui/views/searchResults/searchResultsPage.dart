@@ -6,24 +6,26 @@ import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
 import 'package:find_a_tutor/src/ui/views/searchResults/searchResultsBloc.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'package:find_a_tutor/src/ui/views/seeall_courses/courseListView.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final String searchKeyword;
+  final String categoryId;
 
-  const SearchResultsPage({Key key, this.searchKeyword}) : super(key: key);
+  const SearchResultsPage({Key key, this.searchKeyword, this.categoryId})
+      : super(key: key);
 
   @override
   _SearchResultsPageState createState() =>
-      _SearchResultsPageState(this.searchKeyword);
+      _SearchResultsPageState(this.searchKeyword, this.categoryId);
 }
 
 class _SearchResultsPageState extends State<SearchResultsPage>
     with TickerProviderStateMixin {
   String searchKeyword;
-  _SearchResultsPageState(this.searchKeyword);
+  String categoryId;
+  _SearchResultsPageState(this.searchKeyword, this.categoryId);
   List<CategoriesCourses> categorieList = CategoriesCourses.categorieList;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   AnimationController animationController;
@@ -41,8 +43,13 @@ class _SearchResultsPageState extends State<SearchResultsPage>
     searchResults = [];
 
     final ImageFromS3 imageFromS3carousel = ImageFromS3();
-    searchResultsData =
-        await searchResultsBloc.getSearchResults(this.searchKeyword);
+    if (searchKeyword != null) {
+      searchResultsData =
+          await searchResultsBloc.getSearchResults(this.searchKeyword);
+    } else {
+      searchResultsData =
+          await searchResultsBloc.getSearchResults(this.categoryId);
+    }
 
     for (var element in searchResultsData) {
       searchResults.add(
@@ -223,12 +230,6 @@ class _SearchResultsPageState extends State<SearchResultsPage>
       padding: const EdgeInsets.only(top: 8),
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {
-        final int count = searchResults.length > 10 ? 10 : searchResults.length;
-        final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0)
-            .animate(CurvedAnimation(
-                parent: animationController,
-                curve: Interval((1 / count) * index, 1.0,
-                    curve: Curves.fastOutSlowIn)));
         animationController.forward();
         return searchResults[index];
       },
@@ -340,7 +341,6 @@ class _SearchResultsPageState extends State<SearchResultsPage>
     );
   }
 
-  @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back),

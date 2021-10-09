@@ -1,9 +1,6 @@
-import 'package:amplify_flutter/amplify.dart';
 import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 import 'package:provider/provider.dart';
 

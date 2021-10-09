@@ -101,7 +101,14 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                       return Text(
                           'Não há check-in de turmas realizadas ainda!');
                     } else {
-                      return LinearProgressIndicator();
+                      return Center(
+                          child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.blue),
+                                  strokeWidth: 5.0)));
                     }
                   },
                 ),

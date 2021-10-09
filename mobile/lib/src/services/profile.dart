@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProfileService with ChangeNotifier {
   String provider = '';

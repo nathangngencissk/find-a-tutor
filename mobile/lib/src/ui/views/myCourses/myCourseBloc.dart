@@ -2,14 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
 class MyHomePageBloc {
-  final StreamController<String> _streamController = StreamController<String>();
-
-  Sink get input => _streamController.sink;
-  Stream get output => _streamController.stream;
-
   Future<List> getMyCourses() async {
     List myCourses = [];
     try {

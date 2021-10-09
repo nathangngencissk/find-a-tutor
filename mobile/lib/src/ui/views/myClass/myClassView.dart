@@ -51,165 +51,104 @@ class _MyClassViewState extends State<MyClassView> {
                 onTap: () {
                   widget.callback();
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.6),
-                        offset: const Offset(4, 4),
-                        blurRadius: 16,
+                child: GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16.0)),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.6),
+                            offset: const Offset(4, 4),
+                            blurRadius: 16,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        Column(
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16.0)),
+                        child: Stack(
                           children: <Widget>[
-                            AspectRatio(
-                              aspectRatio: 2,
-                              child: FutureBuilder(
-                                future: this.imageFromS3.getDownloadUrl(
-                                    this.myClassDataBloc['image']),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot image) {
-                                  if (image.hasData) {
-                                    return Image.network(image.data,
-                                        fit: BoxFit.cover);
-                                  } else {
-                                    return new Container();
-                                  }
-                                },
-                              ),
-                            ),
-                            Container(
-                              color: CoursesAppTheme.buildLightTheme()
-                                  .backgroundColor,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 16, top: 8, bottom: 8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              myClassDataBloc['name'],
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 22,
-                                              ),
-                                            ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                            Column(
+                              children: <Widget>[
+                                AspectRatio(
+                                  aspectRatio: 2,
+                                  child: FutureBuilder(
+                                    future: this.imageFromS3.getDownloadUrl(
+                                        this.myClassDataBloc['image']),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot image) {
+                                      if (image.hasData) {
+                                        return Image.network(image.data,
+                                            fit: BoxFit.cover);
+                                      } else {
+                                        return new Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  color: CoursesAppTheme.buildLightTheme()
+                                      .backgroundColor,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 16, top: 8, bottom: 8),
+                                            child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  '',
-                                                  // myClassDataBloc[
-                                                  //     ''],
+                                                  myClassDataBloc['name'],
+                                                  textAlign: TextAlign.left,
                                                   style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8)),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    '',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 22,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    'Progresso: 88% ',
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 16, top: 8),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Container(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                              'Em andamento',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 22,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 2,
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                FlatButton(
-                                                    color: Colors.white,
-                                                    child: Text(
-                                                      'Ver turma',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 20,
-                                                        letterSpacing: 0.0,
-                                                        color: Colors.lightBlue,
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Text(
+                                                        myClassDataBloc[
+                                                            'description'],
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.8)),
                                                       ),
-                                                    ),
-                                                    onPressed: () {
-                                                      moveToWatchClass();
-                                                    }),
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
-                                            )
-                                          ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                    onTap: () {
+                      moveToWatchClass();
+                    }),
               ),
             ),
           ),
@@ -222,7 +161,8 @@ class _MyClassViewState extends State<MyClassView> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => DetailClass(),
+        builder: (BuildContext context) =>
+            DetailClass(id: myClassDataBloc['id']),
       ),
     );
   }

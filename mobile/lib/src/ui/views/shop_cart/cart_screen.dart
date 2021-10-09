@@ -1,8 +1,10 @@
 import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/ui/views/shop_cart/cartBloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
   AnimationController animationController;
+  CartBloc cartBloc = CartBloc();
 
   @override
   void initState() {
@@ -50,15 +53,6 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    final int count = cartService.cart.length > 10
-                        ? 10
-                        : cartService.cart.length;
-                    final Animation<double> animation =
-                        Tween<double>(begin: 0.0, end: 1.0).animate(
-                            CurvedAnimation(
-                                parent: animationController,
-                                curve: Interval((1 / count) * index, 1.0,
-                                    curve: Curves.fastOutSlowIn)));
                     animationController.forward();
                     return Container(
                       margin: EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -80,7 +74,9 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   BorderRadius.all(Radius.circular(14)),
                               color: Colors.blue.shade200,
                               image: DecorationImage(
-                                image: AssetImage("assets/images/php.jpg"),
+                                image: NetworkImage(
+                                    cartService.cart[index]['picture']),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -91,22 +87,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.only(right: 8, top: 4),
-                                    child: Text(
-                                      cartService.cart[index]['id'].toString(),
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 22,
-                                        letterSpacing: 0.27,
-                                        color: AppTheme.darkerText,
-                                      ),
-                                    ),
-                                  ),
                                   Text(
-                                    "Nesse curso, você aprenderá...",
+                                    cartService.cart[index]['name'],
                                     style: TextStyle(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 22,
@@ -120,7 +102,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text(
-                                          "R\$299,00",
+                                          "R\$${cartService.cart[index]['price'].toStringAsFixed(2)}",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 22,
@@ -201,7 +183,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                 builder: (context, cartService, child) => Container(
                   margin: EdgeInsets.only(right: 30),
                   child: Text(
-                    "R\$${cartService.total}",
+                    "R\$${cartService.total.toStringAsFixed(2)}",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 22,
@@ -216,22 +198,33 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           Container(
             height: 30,
           ),
-          RaisedButton(
-            onPressed: () {
-              // Navigator.push(context,
-              //     new MaterialPageRoute(builder: (context) => CheckOutPage()));
-            },
-            color: Colors.lightBlue,
-            padding: EdgeInsets.only(top: 12, left: 60, right: 60, bottom: 12),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(24))),
-            child: Text(
-              "Confirmar",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 22,
-                letterSpacing: 0.27,
-                color: Colors.white,
+          Consumer<CartService>(
+            builder: (context, cartService, child) => RaisedButton(
+              onPressed: () async {
+                List cartIds = cartService.getCartIds();
+                String checkoutLink = await cartBloc.createPayment(
+                    cartIds, cartService.total.toString());
+                if (await canLaunch(checkoutLink)) {
+                  await launch(checkoutLink);
+                } else {
+                  throw 'Could not launch $checkoutLink';
+                }
+                cartService.clearCart();
+                Navigator.of(context).pop();
+              },
+              color: Colors.lightBlue,
+              padding:
+                  EdgeInsets.only(top: 12, left: 60, right: 60, bottom: 12),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(24))),
+              child: Text(
+                "Confirmar",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22,
+                  letterSpacing: 0.27,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

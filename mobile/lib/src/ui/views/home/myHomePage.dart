@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:find_a_tutor/src/models/popularCourse.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
@@ -7,6 +6,7 @@ import 'package:find_a_tutor/src/ui/views/home/components/carouselBloc.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
+import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesBloc.dart';
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
 import 'package:find_a_tutor/src/ui/views/searchResults/searchResultsPage.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
@@ -14,6 +14,7 @@ import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
+import 'package:getwidget/getwidget.dart';
 
 class MyHomePage extends StatefulWidget {
   final ImageFromS3 imageFromS3;
@@ -35,10 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
   PopularCourseView callback;
   Widget screenView;
   CarouselBloc carouselBloc = CarouselBloc();
+  CategoriesBloc categoriesBloc = CategoriesBloc();
 
   final Map carouselData;
   final ImageFromS3 imageFromS3;
   List studyngNow;
+  List<Widget> mainCategories;
   List<Widget> carouselImages;
   final _searchController = TextEditingController();
 
@@ -53,6 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     tabIconsList[0].isSelected = true;
     super.initState();
+  }
+
+  Future<List> getMainCategories() async {
+    mainCategories = [];
+    List mainCategoriesData = await categoriesBloc.getMainCategories();
+    return mainCategoriesData;
   }
 
   Future<List<Widget>> getStudyngNow() async {
@@ -127,18 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (BuildContext context,
                                   AsyncSnapshot courses) {
                                 if (courses.hasData) {
-                                  return Container(
-                                    padding:
-                                        EdgeInsets.only(top: 5, bottom: 25),
-                                    child: Column(
-                                      children: <Widget>[
-                                        CarouselSlider(
-                                          items: courses.data,
-                                          options:
-                                              CarouselOptions(autoPlay: true),
-                                        )
-                                      ],
-                                    ),
+                                  return CarouselSlider(
+                                    items: courses.data,
+                                    options: CarouselOptions(autoPlay: true),
                                   );
                                 } else {
                                   return new Container();
@@ -149,12 +149,123 @@ class _MyHomePageState extends State<MyHomePage> {
                           Container(
                             width: constraints.maxWidth,
                             height: size.width * 0.4,
-                            child: getCategoryUI(),
+                            child: FutureBuilder(
+                              future: getMainCategories(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List> categories) {
+                                if (categories.hasData) {
+                                  return Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 18, right: 16),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Categorias',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 22,
+                                                      letterSpacing: 0.27,
+                                                      color:
+                                                          AppTheme.darkerText,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  moveToCateScreen();
+                                                },
+                                                child: const Text('Veja Mais'),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(
+                                        height: 26,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        child: SizedBox(
+                                          height: 50,
+                                          child: ListView.separated(
+                                              itemCount: categories.data.length,
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      const Divider(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Container(
+                                                  margin: EdgeInsets.all(5),
+                                                  child: GFButton(
+                                                    onPressed: () {
+                                                      Navigator.push<dynamic>(
+                                                        context,
+                                                        MaterialPageRoute<
+                                                            dynamic>(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              SearchResultsPage(
+                                                                  categoryId: categories
+                                                                              .data[
+                                                                          index]
+                                                                      ['name']),
+                                                        ),
+                                                      );
+                                                    },
+                                                    text: categories.data[index]
+                                                        ['name'],
+                                                    shape: GFButtonShape.pills,
+                                                  ),
+                                                );
+                                              },
+                                              scrollDirection: Axis.horizontal),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return new Stack();
+                                }
+                              },
+                            ),
                           ),
-                          Container(
-                            width: constraints.maxWidth,
-                            height: size.width * 0.9,
-                            child: getPopularCourseUI(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18, right: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text('Cursos Populares',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 22,
+                                          letterSpacing: 0.27,
+                                          color: AppTheme.darkerText,
+                                        )),
+                                  ],
+                                ),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    moveToSeeAll();
+                                  },
+                                  child: const Text('Veja Mais'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height - 450,
+                            child: PopularCourseScreen(),
                           ),
                         ],
                       );
@@ -166,115 +277,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
-    String txt = '';
-    var icon;
-    if (CategoryType.ui == categoryTypeData) {
-      txt = 'Ui/Ux';
-    } else if (CategoryType.coding == categoryTypeData) {
-      txt = 'Codar';
-    } else if (CategoryType.basic == categoryTypeData) {
-      txt = 'Web Design';
-    }
-
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-            color: isSelected ? AppTheme.nearlyBlue : AppTheme.nearlyWhite,
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: AppTheme.nearlyBlue)),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            splashColor: Colors.white24,
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            onTap: () {
-              setState(() {
-                categoryType = categoryTypeData;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 12, bottom: 12, left: 18, right: 18),
-              child: Center(
-                child: Text(
-                  txt,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    letterSpacing: 0.25,
-                    color:
-                        isSelected ? AppTheme.nearlyWhite : AppTheme.nearlyBlue,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getCategoryUI() {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 18, right: 16),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'Categorias',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: 0.27,
-                        color: AppTheme.darkerText,
-                      ),
-                    ),
-                  ],
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    moveToSeeAll();
-                  },
-                  child: const Text('Veja Mais'),
-                ),
-              ]),
-        ),
-        const SizedBox(
-          height: 26,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Row(
-            children: <Widget>[
-              getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
-              const SizedBox(
-                width: 17,
-              ),
-              getButtonUI(
-                  CategoryType.coding, categoryType == CategoryType.coding),
-              const SizedBox(
-                width: 17,
-              ),
-              getButtonUI(
-                  CategoryType.basic, categoryType == CategoryType.basic),
-            ],
-          ),
-        ),
-        // PopularCourseListView()(
-        //   callBack: () {
-        //     moveToInfoScreen();
-        //   },
-        // ),
-      ],
     );
   }
 
@@ -354,48 +356,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget getPopularCourseUI() {
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 18, right: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text('Cursos Populares',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: 0.27,
-                        color: AppTheme.darkerText,
-                      )),
-                ],
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  moveToSeeAll();
-                },
-                child: const Text('Veja Mais'),
-              ),
-            ],
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            moveToSeeAll();
-          },
-          child: SizedBox(
-            height: size.height - 500,
-            child: PopularCourseScreen(),
-          ),
-        )
-      ],
     );
   }
 

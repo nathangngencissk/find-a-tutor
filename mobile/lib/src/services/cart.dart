@@ -1,10 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:amplify_flutter/amplify.dart';
-import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CartService with ChangeNotifier {
   List cart;
@@ -36,5 +30,13 @@ class CartService with ChangeNotifier {
     cart.clear();
     total = 0.0;
     notifyListeners();
+  }
+
+  List getCartIds() {
+    List cartIds = [];
+    for (var element in cart) {
+      cartIds.add(element['id']);
+    }
+    return cartIds;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:find_a_tutor/src/models/andamentCourse.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/watchClass.dart/watchClass.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass/watchClass.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 
@@ -112,91 +112,26 @@ class _MyCourseViewState extends State<MyCourseView> {
                                                 fontSize: 22,
                                               ),
                                             ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Text(
-                                                    'Julia Rodrigues',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                            FlatButton(
+                                                color: Colors.lightBlue,
+                                                child: Text(
+                                                  'Ver Curso',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 16,
+                                                    letterSpacing: 0.0,
+                                                    color: AppTheme.nearlyWhite,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    myCourseDataBloc['name'],
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                onPressed: () {
+                                                  moveToWatchClass(
+                                                      myCourseDataBloc['id']);
+                                                }),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 16, top: 8),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Em andamento',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 22,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 4,
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                FlatButton(
-                                                    color: Colors.lightBlue,
-                                                    child: Text(
-                                                      'Assistir aula ...',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 16,
-                                                        letterSpacing: 0.0,
-                                                        color: AppTheme
-                                                            .nearlyWhite,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      moveToWatchClass(
-                                                          myCourseDataBloc[
-                                                              'id']);
-                                                    }),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
                                 ],
                               ),
                             ),
