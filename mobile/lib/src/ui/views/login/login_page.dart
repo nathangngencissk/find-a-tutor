@@ -1,14 +1,20 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:find_a_tutor/src/utils/auth_credentials.dart';
 
 class LoginPage extends StatefulWidget {
   final ValueChanged<LoginCredentials> didProvideCredentials;
+  final VoidCallback didLoginFb;
+  final VoidCallback didLoginGoogle;
   final VoidCallback shouldShowSignUp;
 
-  LoginPage({Key key, this.didProvideCredentials, this.shouldShowSignUp})
+  LoginPage(
+      {Key key,
+      this.didProvideCredentials,
+      this.didLoginFb,
+      this.didLoginGoogle,
+      this.shouldShowSignUp})
       : super(key: key);
 
   @override
@@ -114,21 +120,25 @@ class _LoginPageState extends State<LoginPage> {
             SignInButton(
               Buttons.Facebook,
               mini: true,
-              onPressed: () {},
+              onPressed: _loginFb,
             ),
             SizedBox(
               width: 1,
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image(
-                  image: AssetImage("assets/images/google.png"),
-                  height: 36.0,
+            new GestureDetector(
+              onTap: _loginGoogle,
+              child: new Container(
+                margin: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image(
+                    image: AssetImage("assets/images/google.png"),
+                    height: 36.0,
+                  ),
                 ),
               ),
             ),
+
             // backgroundColor:
             //     button == Buttons.Google ? Color(0xFFFFFFFF) : Color(0xFF4285F4),
           ],
@@ -148,5 +158,13 @@ class _LoginPageState extends State<LoginPage> {
     final credentials =
         LoginCredentials(username: username, password: password);
     widget.didProvideCredentials(credentials);
+  }
+
+  void _loginFb() {
+    widget.didLoginFb();
+  }
+
+  void _loginGoogle() {
+    widget.didLoginGoogle();
   }
 }

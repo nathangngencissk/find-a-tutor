@@ -1,162 +1,215 @@
-import 'dart:ui';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
-import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
+import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'package:find_a_tutor/src/ui/views/seeall_courses/courseListView.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class CoursesHomeScreen extends StatefulWidget {
   @override
   _CoursesHomeScreenState createState() => _CoursesHomeScreenState();
 }
 
-class _CoursesHomeScreenState extends State<CoursesHomeScreen>
-    with TickerProviderStateMixin {
-  List<CategoriesCourses> categorieList = CategoriesCourses.categorieList;
-  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-  AnimationController animationController;
-  final ScrollController _scrollController = ScrollController();
+class _CoursesHomeScreenState extends State<CoursesHomeScreen> {
+  MyHomePageBloc myHomePageBloc = MyHomePageBloc();
+  ImageFromS3 imageFromS3 = ImageFromS3();
+  List popularCourses = [];
 
-  Widget tabBody = Container(
-    color: CoursesAppTheme.background,
-  );
-
-  @override
-  void initState() {
-    tabIconsList.forEach((TabIconData tab) {
-      tab.isSelected = false;
-    });
-    tabIconsList[0].isSelected = true;
-
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
-    super.initState();
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    return true;
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
+  Future<List> getAllPopularCourses() async {
+    popularCourses = await myHomePageBloc.getPopularCourse();
+    for (var course in popularCourses) {
+      course['picture'] =
+          await imageFromS3.getDownloadUrlReturn(course['image']);
+    }
+    return popularCourses;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: CoursesAppTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Resultado da pesquisa',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 22,
-                letterSpacing: 0.27,
-                color: AppTheme.darkerText,
-              ),
-            ),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: Colors.white,
-          ),
-          body: Stack(
-            children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
+    return Scaffold(
+      appBar: AppBar(
+        title: getSearchBarUI(),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+      ),
+      body: FutureBuilder(
+        future: getAllPopularCourses(),
+        builder: (BuildContext context, AsyncSnapshot popularCourses) {
+          if (popularCourses.hasData) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5),
                 child: Column(
-                  children: <Widget>[
-                    getSearchBarUI(),
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {},
-                                  childCount: 1),
+                  children: popularCourses.data.map<GestureDetector>((e) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                CourseInfoScreen(id: e['id']),
+                          ),
+                        );
+                      },
+                      child: new Container(
+                        margin: const EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.6),
+                              offset: const Offset(4, 4),
+                              blurRadius: 16,
                             ),
-                          ];
-                        },
-                        body: Container(
-                          color:
-                              CoursesAppTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: categorieList.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count = categorieList.length > 10
-                                  ? 10
-                                  : categorieList.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController.forward();
-                              return CategorieDataView(
-                                callback: () {},
-                                categorieData: categorieList[index],
-                                animation: animation,
-                                animationController: animationController,
-                              );
-                            },
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
+                          child: Stack(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  AspectRatio(
+                                    aspectRatio: 2,
+                                    child: Image.network(e['picture'],
+                                        fit: BoxFit.cover),
+                                  ),
+                                  Container(
+                                    color: CoursesAppTheme.buildLightTheme()
+                                        .backgroundColor,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Container(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 16, top: 8, bottom: 8),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    e['name'],
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 22,
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        child: Text(
+                                                          e['category_name'],
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors
+                                                                  .grey[500]),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 4),
+                                                    child: Row(
+                                                      children: <Widget>[
+                                                        SmoothStarRating(
+                                                          allowHalfRating: true,
+                                                          starCount: 5,
+                                                          rating:
+                                                              e['avg_rating'],
+                                                          size: 20,
+                                                          color:
+                                                              Colors.lightBlue,
+                                                          borderColor:
+                                                              Colors.lightBlue,
+                                                        ),
+                                                        Text(
+                                                          ' ${e["reviews"]} Reviews',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors.grey
+                                                                  .withOpacity(
+                                                                      0.8)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16, top: 8),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: <Widget>[
+                                              Text(
+                                                double.parse(
+                                                        e['price'].toString())
+                                                    .toStringAsFixed(2),
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 22,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
               ),
-            ],
-          ),
-        ),
+            );
+          } else {
+            return new Container();
+          }
+        },
       ),
-    );
-  }
-
-  void moveToSeeAll() {
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CoursesHomeScreen(),
-      ),
-    );
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.pop(context);
-      },
     );
   }
 
   Widget getSearchBarUI() {
     return Container(
-      color: Colors.white,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(left: 30, right: 25, top: 15),
+      padding: const EdgeInsets.only(right: 10),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -210,7 +263,7 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
                     height: 60,
                     child: IconButton(
                       onPressed: () {
-                        moveToSeeAll();
+                        // moveToSeeAll();
                       },
                       icon: Icon(Icons.search),
                       color: HexColor('#B9BABC'),
@@ -223,122 +276,5 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen>
         ],
       ),
     );
-  }
-
-  Widget getFilterBarUI() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 24,
-            decoration: BoxDecoration(
-              color: CoursesAppTheme.buildLightTheme().backgroundColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    offset: const Offset(0, -2),
-                    blurRadius: 8.0),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          color: CoursesAppTheme.buildLightTheme().backgroundColor,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '15 Cursos encontrados',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w100,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Divider(
-            height: 1,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: CoursesAppTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
-        child: Row(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-              ),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-    this.searchUI,
-  );
-  final Widget searchUI;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return searchUI;
-  }
-
-  @override
-  double get maxExtent => 52.0;
-
-  @override
-  double get minExtent => 52.0;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }

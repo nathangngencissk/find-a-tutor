@@ -1,36 +1,110 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:find_a_tutor/src/models/popularCourse.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/course_info/course_info_page.dart';
+import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
+import 'package:find_a_tutor/src/ui/views/home/components/carouselBloc.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseHomeScreen.dart';
 import 'package:find_a_tutor/src/ui/views/home/components/popularCourseListView.dart';
-
+import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
+import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesBloc.dart';
 import 'package:find_a_tutor/src/ui/views/seall_categories/categoriesScreen.dart';
+import 'package:find_a_tutor/src/ui/views/searchResults/searchResultsPage.dart';
 import 'package:find_a_tutor/src/ui/views/seeall_courses/coursesHomeScreen.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
+import 'package:find_a_tutor/src/utils/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../../../main.dart';
+import 'package:getwidget/getwidget.dart';
 
 class MyHomePage extends StatefulWidget {
+  final ImageFromS3 imageFromS3;
+  final Map carouselData;
+
+  const MyHomePage({Key key, this.imageFromS3, this.carouselData})
+      : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() =>
+      _MyHomePageState(this.carouselData, this.imageFromS3);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  MyHomePageBloc homepagebloc = MyHomePageBloc();
   PopularCourseScreen popularCourseScreen;
   CategoryType categoryType = CategoryType.ui;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  PopularCourseView callback;
   Widget screenView;
+  CarouselBloc carouselBloc = CarouselBloc();
+  CategoriesBloc categoriesBloc = CategoriesBloc();
+
+  final Map carouselData;
+  final ImageFromS3 imageFromS3;
+  List studyngNow;
+  List<Widget> mainCategories;
+  List<Widget> carouselImages;
+  final _searchController = TextEditingController();
+
+  _MyHomePageState(this.carouselData, this.imageFromS3);
 
   @override
   void initState() {
-    super.initState();
-
+    AuthService authService = AuthService();
+    authService.checkAuthStatus();
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
     tabIconsList[0].isSelected = true;
     super.initState();
+  }
+
+  Future<List> getMainCategories() async {
+    mainCategories = [];
+    List mainCategoriesData = await categoriesBloc.getMainCategories();
+    return mainCategoriesData;
+  }
+
+  Future<List<Widget>> getStudyngNow() async {
+    carouselImages = [];
+
+    final ImageFromS3 imageFromS3carousel = ImageFromS3();
+    studyngNow = await carouselBloc.getCarousel();
+
+    for (var element in studyngNow) {
+      carouselImages.add(
+        new GestureDetector(
+          onTap: () {
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) =>
+                    CourseInfoScreen(id: element['id']),
+              ),
+            );
+          },
+          child: new Container(
+            width: 300,
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(top: 20, bottom: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                  image: NetworkImage(await imageFromS3carousel
+                      .getDownloadUrlReturn(element['image'])),
+                  fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: 15,
+                  offset: Offset(10, 10),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return carouselImages;
   }
 
   @override
@@ -57,17 +131,141 @@ class _MyHomePageState extends State<MyHomePage> {
                           Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight / 3,
-                            child: carouselUi(),
+                            child: FutureBuilder<List<Widget>>(
+                              future: getStudyngNow(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot courses) {
+                                if (courses.hasData) {
+                                  return CarouselSlider(
+                                    items: courses.data,
+                                    options: CarouselOptions(autoPlay: true),
+                                  );
+                                } else {
+                                  return new Container();
+                                }
+                              },
+                            ),
                           ),
                           Container(
                             width: constraints.maxWidth,
                             height: size.width * 0.4,
-                            child: getCategoryUI(),
+                            child: FutureBuilder(
+                              future: getMainCategories(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List> categories) {
+                                if (categories.hasData) {
+                                  return Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 18, right: 16),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Categorias',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 22,
+                                                      letterSpacing: 0.27,
+                                                      color:
+                                                          AppTheme.darkerText,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  moveToCateScreen();
+                                                },
+                                                child: const Text('Veja Mais'),
+                                              ),
+                                            ]),
+                                      ),
+                                      const SizedBox(
+                                        height: 26,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        child: SizedBox(
+                                          height: 50,
+                                          child: ListView.separated(
+                                              itemCount: categories.data.length,
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      const Divider(),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Container(
+                                                  margin: EdgeInsets.all(5),
+                                                  child: GFButton(
+                                                    onPressed: () {
+                                                      Navigator.push<dynamic>(
+                                                        context,
+                                                        MaterialPageRoute<
+                                                            dynamic>(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              SearchResultsPage(
+                                                                  categoryId: categories
+                                                                              .data[
+                                                                          index]
+                                                                      ['name']),
+                                                        ),
+                                                      );
+                                                    },
+                                                    text: categories.data[index]
+                                                        ['name'],
+                                                    shape: GFButtonShape.pills,
+                                                  ),
+                                                );
+                                              },
+                                              scrollDirection: Axis.horizontal),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return new Stack();
+                                }
+                              },
+                            ),
                           ),
-                          Container(
-                            width: constraints.maxWidth,
-                            height: size.width * 0.9,
-                            child: getPopularCourseUI(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18, right: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text('Cursos Populares',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 22,
+                                          letterSpacing: 0.27,
+                                          color: AppTheme.darkerText,
+                                        )),
+                                  ],
+                                ),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    moveToSeeAll();
+                                  },
+                                  child: const Text('Veja Mais'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height - 450,
+                            child: PopularCourseScreen(),
                           ),
                         ],
                       );
@@ -79,117 +277,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
-    String txt = '';
-    var icon;
-    if (CategoryType.ui == categoryTypeData) {
-      txt = 'Ui/Ux';
-    } else if (CategoryType.coding == categoryTypeData) {
-      txt = 'Codar';
-    } else if (CategoryType.basic == categoryTypeData) {
-      txt = 'Web Design';
-    }
-
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-            color: isSelected ? AppTheme.nearlyBlue : AppTheme.nearlyWhite,
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: AppTheme.nearlyBlue)),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            splashColor: Colors.white24,
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            onTap: () {
-              setState(() {
-                categoryType = categoryTypeData;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 12, bottom: 12, left: 18, right: 18),
-              child: Center(
-                child: Text(
-                  txt,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    letterSpacing: 0.25,
-                    color:
-                        isSelected ? AppTheme.nearlyWhite : AppTheme.nearlyBlue,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getCategoryUI() {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 18, right: 16),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'Categorias',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: 0.27,
-                        color: AppTheme.darkerText,
-                      ),
-                    ),
-                  ],
-                ),
-                ElevatedButton(
-                    child: Text(
-                      'Veja mais',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      moveToCateScreen();
-                    }),
-              ]),
-        ),
-        const SizedBox(
-          height: 26,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Row(
-            children: <Widget>[
-              getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
-              const SizedBox(
-                width: 17,
-              ),
-              getButtonUI(
-                  CategoryType.coding, categoryType == CategoryType.coding),
-              const SizedBox(
-                width: 17,
-              ),
-              getButtonUI(
-                  CategoryType.basic, categoryType == CategoryType.basic),
-            ],
-          ),
-        ),
-        // PopularCourseListView()(
-        //   callBack: () {
-        //     moveToInfoScreen();
-        //   },
-        // ),
-      ],
     );
   }
 
@@ -218,6 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       padding: const EdgeInsets.only(left: 16, right: 10),
                       child: TextFormField(
+                        controller: _searchController,
                         style: TextStyle(
                           fontFamily: 'WorkSans',
                           fontWeight: FontWeight.bold,
@@ -249,7 +337,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 60,
                     child: IconButton(
                       onPressed: () {
-                        moveToSeeAll();
+                        final searchKeyword = _searchController.text.trim();
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                SearchResultsPage(searchKeyword: searchKeyword),
+                          ),
+                        );
                       },
                       icon: Icon(Icons.search),
                       color: HexColor('#B9BABC'),
@@ -261,130 +356,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget carouselUi() {
-    var size = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(top: 5, bottom: 25),
-      child: Column(
-        children: <Widget>[
-          CarouselSlider(
-            items: <Widget>[
-              Container(
-                width: 300,
-                alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/programacao.jpg"),
-                      fit: BoxFit.cover),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black87,
-                      blurRadius: 15,
-                      offset: Offset(10, 10),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/powerbi.png"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/gambit.jpg"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(top: 20, bottom: 30),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/sql.jpg"),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black87,
-                          blurRadius: 15,
-                          offset: Offset(10, 10))
-                    ]),
-              ),
-            ],
-            options: CarouselOptions(autoPlay: true),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget getPopularCourseUI() {
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 18, right: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text('Cursos Populares',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: 0.27,
-                        color: AppTheme.darkerText,
-                      )),
-                ],
-              ),
-              ElevatedButton(
-                child: Text(
-                  'Veja mais',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  moveToSeeAll();
-                },
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: size.height - 500,
-          child: PopularCourseScreen(
-              // callback: () {
-              //   moveToInfoScreen();
-              // },
-              ),
-        )
-      ],
     );
   }
 

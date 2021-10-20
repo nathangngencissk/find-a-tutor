@@ -1,10 +1,10 @@
 import 'package:find_a_tutor/src/models/myClassModel.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
-import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
+import 'package:find_a_tutor/src/ui/views/myClass/myClassBloc.dart';
 import 'package:find_a_tutor/src/ui/views/myClass/myClassView.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class MyClass extends StatefulWidget {
   @override
@@ -12,11 +12,8 @@ class MyClass extends StatefulWidget {
 }
 
 class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
-  // final List<Item> _data = generateItems(8);
-
-  CalendarFormat format = CalendarFormat.month;
-  DateTime selectedDay = DateTime.now();
-  DateTime focusedDay = DateTime.now();
+  MyClassPageBloc homepagebloc = MyClassPageBloc();
+  ImageFromS3 imageFromS3 = ImageFromS3();
 
   List<MyClassModel> myClassList = MyClassModel.myClassList;
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
@@ -69,55 +66,50 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
           child: Column(
             children: [
               Container(
-                child: TableCalendar(
-                  rowHeight: 40,
-                  focusedDay: selectedDay,
-                  firstDay: DateTime(1990),
-                  lastDay: DateTime(2050),
-                  calendarStyle: CalendarStyle(
-                    selectedDecoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    selectedTextStyle: TextStyle(color: Colors.white),
-                  ),
-                  onDaySelected: (DateTime selectDay, DateTime focusDay) {
-                    setState(() {
-                      selectedDay = selectDay;
-                      focusedDay = focusDay;
-                    });
-                  },
-                  selectedDayPredicate: (DateTime date) {
-                    return isSameDay(selectedDay, date);
-                  },
-                ),
-              ),
-              Container(
                 height: 500,
                 width: 500,
                 color: Colors.grey.shade100,
-                child: ListView.builder(
-                  itemCount: myClassList.length,
-                  padding: const EdgeInsets.only(top: 8),
-                  // scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    final int count =
-                        myClassList.length > 10 ? 10 : myClassList.length;
-                    final Animation<double> animation =
-                        Tween<double>(begin: 0.0, end: 1.0).animate(
-                      CurvedAnimation(
-                        parent: animationController,
-                        curve: Interval((1 / count) * index, 1.0,
-                            curve: Curves.fastOutSlowIn),
-                      ),
-                    );
-                    animationController.forward();
-                    return MyClassView(
-                      callback: () {},
-                      myClassData: myClassList[index],
-                      animation: animation,
-                      animationController: animationController,
-                    );
+                child: FutureBuilder<List>(
+                  future: homepagebloc.getMyClass(),
+                  builder: (BuildContext c, AsyncSnapshot<List> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        padding: const EdgeInsets.only(top: 8),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (BuildContext context, int index) {
+                          final int count = snapshot.data.length > 10
+                              ? 10
+                              : snapshot.data.length;
+                          final Animation<double> animation =
+                              Tween<double>(begin: 0.0, end: 1.0).animate(
+                                  CurvedAnimation(
+                                      parent: animationController,
+                                      curve: Interval((1 / count) * index, 1.0,
+                                          curve: Curves.fastOutSlowIn)));
+                          animationController.forward();
+                          return MyClassView(
+                            callback: () {},
+                            myClassDataBloc: snapshot.data[index],
+                            imageFromS3: new ImageFromS3(),
+                            animation: animation,
+                            animationController: animationController,
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          'Não há check-in de turmas realizadas ainda!');
+                    } else {
+                      return Center(
+                          child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.blue),
+                                  strokeWidth: 5.0)));
+                    }
                   },
                 ),
               ),
@@ -127,29 +119,4 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
       ),
     );
   }
-
-//   Widget _buildPanel() {
-//     return ExpansionPanelList(
-//       expansionCallback: (int index, bool isExpanded) {
-//         setState(
-//           () {
-//             _data[index].isExpanded = !isExpanded;
-//           },
-//         );
-//       },
-//       children: _data.map<ExpansionPanel>((Item item) {
-//         return ExpansionPanel(
-//           headerBuilder: (BuildContext context, bool isExpanded) {
-//             return ListTile(
-//               title: Text(item.headerValue),
-//             );
-//           },
-//           body: ListTile(
-//             title: Text(item.expandedValue),
-//           ),
-//           isExpanded: item.isExpanded,
-//         );
-//       }).toList(),
-//     );
-//   }
 }

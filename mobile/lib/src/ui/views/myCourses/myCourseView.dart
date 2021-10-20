@@ -1,7 +1,8 @@
 import 'package:find_a_tutor/src/models/andamentCourse.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
-import 'package:find_a_tutor/src/ui/views/watchClass.dart/watchClass.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass/watchClass.dart';
+import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 
 class MyCourseView extends StatefulWidget {
@@ -9,19 +10,30 @@ class MyCourseView extends StatefulWidget {
   final AndamentCourse myCourseData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final ImageFromS3 imageFromS3;
+  final Map myCourseDataBloc;
+
   const MyCourseView(
       {Key key,
       this.myCourseData,
       this.animationController,
       this.animation,
+      this.imageFromS3,
+      this.myCourseDataBloc,
       this.callback})
       : super(key: key);
 
   @override
-  _MyCourseViewState createState() => _MyCourseViewState();
+  _MyCourseViewState createState() =>
+      _MyCourseViewState(this.imageFromS3, this.myCourseDataBloc);
 }
 
 class _MyCourseViewState extends State<MyCourseView> {
+  final ImageFromS3 imageFromS3;
+  final Map myCourseDataBloc;
+
+  _MyCourseViewState(this.imageFromS3, this.myCourseDataBloc);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -59,9 +71,19 @@ class _MyCourseViewState extends State<MyCourseView> {
                           children: <Widget>[
                             AspectRatio(
                               aspectRatio: 2,
-                              child: Image.asset(
-                                widget.myCourseData.imagePath,
-                                fit: BoxFit.cover,
+                              child: FutureBuilder(
+                                future: this
+                                    .imageFromS3
+                                    .getDownloadUrl(myCourseDataBloc['image']),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot image) {
+                                  if (image.hasData) {
+                                    return Image.network(image.data,
+                                        fit: BoxFit.cover);
+                                  } else {
+                                    return new Container();
+                                  }
+                                },
                               ),
                             ),
                             Container(
@@ -83,103 +105,33 @@ class _MyCourseViewState extends State<MyCourseView> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              widget.myCourseData.titleTxt,
+                                              myCourseDataBloc['name'],
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 22,
                                               ),
                                             ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  widget.myCourseData.subTxt,
+                                            FlatButton(
+                                                color: Colors.lightBlue,
+                                                child: Text(
+                                                  'Ver Curso',
                                                   style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8)),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    'Julia Rodrigues',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 16,
+                                                    letterSpacing: 0.0,
+                                                    color: AppTheme.nearlyWhite,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    '73% concluído.',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.8),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                onPressed: () {
+                                                  moveToWatchClass(
+                                                      myCourseDataBloc['id']);
+                                                }),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 16, top: 8),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Em andamento',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 22,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 4,
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                FlatButton(
-                                                    color: Colors.lightBlue,
-                                                    child: Text(
-                                                      'Assistir aula ...',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 16,
-                                                        letterSpacing: 0.0,
-                                                        color: AppTheme
-                                                            .nearlyWhite,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      moveToWatchClass();
-                                                    }),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
                                 ],
                               ),
                             ),
@@ -197,11 +149,11 @@ class _MyCourseViewState extends State<MyCourseView> {
     );
   }
 
-  void moveToWatchClass() {
+  void moveToWatchClass(int id) {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => MyWatchClass(),
+        builder: (BuildContext context) => MyWatchClass(id: id),
       ),
     );
   }

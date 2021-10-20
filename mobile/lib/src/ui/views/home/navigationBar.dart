@@ -3,7 +3,7 @@ import 'package:find_a_tutor/src/ui/views/myCourses/myCourses.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage.dart';
 import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:find_a_tutor/src/models/tabicon_data.dart';
+import 'package:find_a_tutor/src/models/tabiconData.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 
 class NavigationBar extends StatefulWidget {
@@ -74,19 +74,19 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         items: [
           BottomNavigationBarItem(
               icon: new Icon(Icons.home),
-              title: new Text('Home'),
+              label: 'Home',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.bookmark),
-              title: new Text('Meus Cursos'),
+              label: 'Meus Cursos',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.access_time_rounded),
-              title: new Text('Turmas'),
+              label: 'Turmas',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
               icon: new Icon(Icons.shopping_cart_rounded),
-              title: new Text('Carrinho'),
+              label: 'Carrinho',
               backgroundColor: Colors.white),
         ],
       ),
