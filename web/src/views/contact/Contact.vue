@@ -6,16 +6,8 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col xl="1" lg="2" md="2" sm="4" xs="4">
-        <v-img
-          :aspect-ratio="16 / 9"
-          max-height="200"
-          max-width="200"
-          min-width="120"
-          min-height="100"
-          src="@/assets/main-logo.png"
-          id="main_logo"
-        ></v-img>
+      <v-col xl="4" lg="4" md="4" sm="4" xs="4">
+        <v-img :aspect-ratio="16 / 9" src="@/assets/contact-us.svg" id="main_logo"></v-img>
       </v-col>
     </v-row>
     <v-row justify="center">

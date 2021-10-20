@@ -33,7 +33,7 @@ export default {
         path: '/about',
       },
       {
-        name: 'Time',
+        name: 'Equipe',
         path: '/team',
       },
       {

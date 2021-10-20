@@ -97,7 +97,7 @@
                 </v-avatar>
               </v-badge>
             </template>
-            <v-list>
+            <v-list dense>
               <v-list-item two-line>
                 <v-list-item-avatar>
                   <img :src="profilePicture" />
@@ -114,51 +114,49 @@
               <v-divider></v-divider>
               <v-list dense>
                 <v-list-item v-if="isAdmin">
-                  <v-list-item-icon>
-                    <v-icon>fas fa-user-cog</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small :to="{ name: 'AdminMain' }">Admin</v-btn>
+                    <v-btn depressed title text class="btn-contexto" :to="{ name: 'AdminMain' }">
+                      <v-icon class="mr-2">fas fa-user-cog</v-icon> Admin</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item v-if="platformTutor">
-                  <v-list-item-icon>
-                    <v-icon>fas fa-pencil-ruler</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small :to="{ name: 'DashboardMain' }">Painel</v-btn>
+                    <v-btn
+                      depressed
+                      title
+                      text
+                      class="btn-contexto"
+                      :to="{ name: 'DashboardMain' }"
+                    >
+                      <v-icon class="mr-2">fas fa-pencil-ruler</v-icon> Painel</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item>
-                  <v-list-item-icon>
-                    <v-badge
-                      v-if="parseInt(shoppingCartItemsNumber) > 0"
-                      color="primary"
-                      :content="shoppingCartItemsNumber"
+                  <v-list-item-content class="content-carrinho">
+                    <v-btn depressed title text class="btn-contexto" to="/cart">
+                      <v-badge
+                        v-if="parseInt(shoppingCartItemsNumber) > 0"
+                        color="primary"
+                        :content="shoppingCartItemsNumber"
+                      >
+                        <v-icon class="mr-2">fas fa-shopping-cart</v-icon>
+                      </v-badge>
+                      <v-icon class="mr-2" v-else>fas fa-shopping-cart</v-icon> Meu Carrinho</v-btn
                     >
-                      <v-icon>fas fa-shopping-cart</v-icon>
-                    </v-badge>
-                    <v-icon v-else>fas fa-shopping-cart</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-btn depressed small to="/cart">Meu Carrinho</v-btn>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
               <v-divider></v-divider>
-              <v-list dense>
+              <v-list>
                 <v-list-item v-for="item in items" :key="item.title">
-                  <v-list-item-icon>
-                    <v-icon>{{ item.icon }}</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small :to="item.url">{{ item.title }}</v-btn>
+                    <v-btn depressed title text class="btn-contexto" :to="item.url">
+                      <v-icon class="mr-2">{{ item.icon }}</v-icon> {{ item.title }}</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -176,41 +174,33 @@
               <v-divider></v-divider>
               <v-list dense>
                 <v-list-item v-if="currentUserProvider == 'custom'">
-                  <v-list-item-icon>
-                    <v-icon>fas fa-user</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small to="/account/personal">Minha Conta</v-btn>
+                    <v-btn depressed title text class="btn-contexto" to="/account/personal">
+                      <v-icon class="mr-2">fas fa-user</v-icon> Minha Conta</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item v-if="platformTutor">
-                  <v-list-item-icon>
-                    <v-icon>fas fa-graduation-cap</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small @click="changeToStudent">Estudar</v-btn>
+                    <v-btn depressed title text class="btn-contexto" @click="changeToStudent">
+                      <v-icon class="mr-2">fas fa-graduation-cap</v-icon> Estudar</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item v-else>
-                  <v-list-item-icon>
-                    <v-icon>fas fa-chalkboard-teacher</v-icon>
-                  </v-list-item-icon>
-
                   <v-list-item-content>
-                    <v-btn depressed small @click="changeToTutor">Ensinar</v-btn>
+                    <v-btn depressed title text class="btn-contexto" @click="changeToTutor">
+                      <v-icon class="mr-2">fas fa-chalkboard-teacher</v-icon> Ensinar</v-btn
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
               <v-divider></v-divider>
               <v-list-item @click="logout" class="mx-auto">
-                <v-list-item-icon>
-                  <v-icon>fas fa-sign-out-alt</v-icon>
-                </v-list-item-icon>
-
                 <v-list-item-content>
-                  <v-list-item-title>Deslogar</v-list-item-title>
+                  <v-btn depressed title text class="btn-contexto">
+                    <v-icon class="mr-2">fas fa-sign-out-alt</v-icon> Sair</v-btn
+                  >
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -338,5 +328,18 @@ export default {
 
 .Tutor-avatar {
   border: 3px solid #1e88e5;
+}
+
+.btn-contexto {
+  justify-content: initial;
+  padding: 2px;
+}
+
+.btn-contexto:hover {
+  border-bottom: 3px solid #2196f3;
+}
+
+.content-carrinho {
+  padding-top: 12px !important;
 }
 </style>
