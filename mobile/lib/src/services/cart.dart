@@ -1,12 +1,25 @@
+import 'package:find_a_tutor/src/ui/views/myCourses/myCourseBloc.dart';
 import 'package:flutter/material.dart';
 
 class CartService with ChangeNotifier {
   List cart;
   double total;
+  List userCourses;
 
   CartService() {
     cart = [];
     total = 0.0;
+    userCourses = [];
+  }
+
+  void getUserCourses() {
+    MyHomePageBloc myHomePageBloc = MyHomePageBloc();
+    myHomePageBloc.getMyCourses().then((courses) => {
+          courses.forEach((element) {
+            userCourses.add(element["id"]);
+          })
+        });
+    notifyListeners();
   }
 
   void addToCart(Map item) {

@@ -44,8 +44,6 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
         builder: (context) {
           return ListView(
             children: <Widget>[
-              createHeader(),
-              createSubTitle(),
               Consumer<CartService>(
                 builder: (context, cartService, child) => ListView.builder(
                   itemCount: cartService.cart.length,
@@ -91,9 +89,9 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                     cartService.cart[index]['name'],
                                     style: TextStyle(
                                       fontWeight: FontWeight.w300,
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       letterSpacing: 0.27,
-                                      color: AppTheme.darkerText,
+                                      color: Colors.black.withOpacity(0.7),
                                     ),
                                   ),
                                   Container(
@@ -107,7 +105,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                             fontWeight: FontWeight.w600,
                                             fontSize: 22,
                                             letterSpacing: 0.27,
-                                            color: AppTheme.darkerText,
+                                            color:
+                                                Colors.black.withOpacity(0.7),
                                           ),
                                         ),
                                       ],
@@ -167,28 +166,29 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 30),
-                child: Text(
-                  "Total:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                    letterSpacing: 0.27,
-                    color: AppTheme.darkerText,
-                  ),
-                ),
-              ),
+              Consumer<CartService>(
+                  builder: (context, cartService, child) => Container(
+                        margin: EdgeInsets.only(left: 30),
+                        child: Text(
+                          "Total (${cartService.cart.length}) :",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                            letterSpacing: 0.27,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+                      )),
               Consumer<CartService>(
                 builder: (context, cartService, child) => Container(
                   margin: EdgeInsets.only(right: 30),
                   child: Text(
                     "R\$${cartService.total.toStringAsFixed(2)}",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 24,
                       letterSpacing: 0.27,
-                      color: AppTheme.darkerText,
+                      color: Colors.black.withOpacity(0.7),
                     ),
                   ),
                 ),
@@ -199,35 +199,35 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             height: 30,
           ),
           Consumer<CartService>(
-            builder: (context, cartService, child) => RaisedButton(
-              onPressed: () async {
-                List cartIds = cartService.getCartIds();
-                String checkoutLink = await cartBloc.createPayment(
-                    cartIds, cartService.total.toString());
-                if (await canLaunch(checkoutLink)) {
-                  await launch(checkoutLink);
-                } else {
-                  throw 'Could not launch $checkoutLink';
-                }
-                cartService.clearCart();
-                Navigator.of(context).pop();
-              },
-              color: Colors.lightBlue,
-              padding:
-                  EdgeInsets.only(top: 12, left: 60, right: 60, bottom: 12),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(24))),
-              child: Text(
-                "Confirmar",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22,
-                  letterSpacing: 0.27,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+              builder: (context, cartService, child) => ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity,
+                          60), // double.infinity is the width and 30 is the height
+                    ),
+                    onPressed: cartService.cart.length > 0
+                        ? () async {
+                            List cartIds = cartService.getCartIds();
+                            String checkoutLink = await cartBloc.createPayment(
+                                cartIds, cartService.total.toString());
+                            if (await canLaunch(checkoutLink)) {
+                              await launch(checkoutLink);
+                            } else {
+                              throw 'Could not launch $checkoutLink';
+                            }
+                            cartService.clearCart();
+                            Navigator.of(context).pop();
+                          }
+                        : null,
+                    child: Text(
+                      "Confirmar",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        letterSpacing: 0.27,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )),
         ],
       ),
       margin: EdgeInsets.only(top: 10, bottom: 25),
@@ -243,7 +243,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           fontWeight: FontWeight.w600,
           fontSize: 22,
           letterSpacing: 0.27,
-          color: AppTheme.darkerText,
+          color: Colors.black.withOpacity(0.7),
         ),
       ),
       margin: EdgeInsets.only(left: 12, top: 12),
@@ -260,7 +260,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             fontWeight: FontWeight.w600,
             fontSize: 22,
             letterSpacing: 0.27,
-            color: AppTheme.darkerText,
+            color: Colors.black.withOpacity(0.7),
           ),
         ),
         margin: EdgeInsets.only(left: 12, top: 4),

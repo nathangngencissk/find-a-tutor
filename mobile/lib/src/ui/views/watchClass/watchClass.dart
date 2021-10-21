@@ -47,7 +47,7 @@ class _MyWatchClassState extends State<MyWatchClass> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             'Assistir Aulas',
             style: TextStyle(
               fontWeight: FontWeight.w600,

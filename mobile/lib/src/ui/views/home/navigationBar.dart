@@ -49,7 +49,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     MyHomePage(),
     MyCourses(),
     MyClass(),
-    CartScreen(),
   ];
 
   void onTappedBar(int index) {
@@ -77,16 +76,12 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               label: 'Home',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.bookmark),
+              icon: new Icon(Icons.school),
               label: 'Meus Cursos',
               backgroundColor: Colors.white),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.access_time_rounded),
+              icon: new Icon(Icons.people),
               label: 'Turmas',
-              backgroundColor: Colors.white),
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.shopping_cart_rounded),
-              label: 'Carrinho',
               backgroundColor: Colors.white),
         ],
       ),

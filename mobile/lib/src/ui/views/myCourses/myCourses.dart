@@ -63,7 +63,7 @@ class _MyCoursesState extends State<MyCourses> with TickerProviderStateMixin {
                   child: Scaffold(
                     appBar: AppBar(
                       backgroundColor: Colors.white,
-                      title: const Text(
+                      title: Text(
                         'Meus Cursos',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,

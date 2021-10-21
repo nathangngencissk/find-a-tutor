@@ -1,3 +1,4 @@
+import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,42 @@ class _HomeDrawerState extends State<HomeDrawer> {
         index: DrawerIndex.HOME,
         labelName: 'Home',
         icon: Icon(Icons.home),
+      ),
+      DrawerList(
+        index: DrawerIndex.Cart,
+        labelName: 'Carrinho',
+        icon: Stack(
+          children: <Widget>[
+            new Icon(Icons.shopping_cart),
+            new Positioned(
+              right: 0,
+              child: new Container(
+                padding: EdgeInsets.all(1),
+                decoration: new BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                constraints: BoxConstraints(
+                  minWidth: 12,
+                  minHeight: 12,
+                ),
+                child: Consumer<CartService>(
+                  builder: (context, cartService, child) {
+                    print(cartService.cart.length);
+                    return Text(
+                      cartService.cart.length.toString(),
+                      style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                      ),
+                      textAlign: TextAlign.center,
+                    );
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       DrawerList(
         index: DrawerIndex.Help,
@@ -165,7 +202,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
             children: <Widget>[
               ListTile(
                 title: Text(
-                  'Deslogar',
+                  'Sair',
                   style: TextStyle(
                     fontFamily: AppTheme.fontName,
                     fontWeight: FontWeight.w600,
@@ -221,10 +258,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   ? Colors.blue
                                   : AppTheme.nearlyBlack),
                         )
-                      : Icon(listData.icon.icon,
-                          color: widget.screenIndex == listData.index
-                              ? Colors.blue
-                              : AppTheme.nearlyBlack),
+                      : listData.icon,
                   const Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
@@ -293,6 +327,7 @@ enum DrawerIndex {
   Share,
   Invite,
   Profile,
+  Cart,
 }
 
 class DrawerList {
@@ -305,7 +340,7 @@ class DrawerList {
   });
 
   String labelName;
-  Icon icon;
+  Widget icon;
   bool isAssetsImage;
   String imageName;
   DrawerIndex index;

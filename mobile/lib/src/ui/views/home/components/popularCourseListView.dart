@@ -1,7 +1,10 @@
+import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass/watchClass.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class PopularCourseView extends StatelessWidget {
@@ -16,8 +19,6 @@ class PopularCourseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 320,
-      width: 450,
       child: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
         child: InkWell(
@@ -27,13 +28,25 @@ class PopularCourseView extends StatelessWidget {
           },
           child: new GestureDetector(
             onTap: () {
-              Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) =>
-                      CourseInfoScreen(id: popularCourseData['id']),
-                ),
-              );
+              final userCourses =
+                  Provider.of<CartService>(context, listen: false).userCourses;
+              if (userCourses.contains(popularCourseData['id'])) {
+                Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        MyWatchClass(id: popularCourseData['id']),
+                  ),
+                );
+              } else {
+                Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        CourseInfoScreen(id: popularCourseData['id']),
+                  ),
+                );
+              }
             },
             child: new Container(
               decoration: BoxDecoration(

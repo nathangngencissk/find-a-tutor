@@ -1,9 +1,13 @@
+import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
 import 'package:find_a_tutor/src/ui/views/home/myHomePage_bloc.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass/watchClass.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class CoursesHomeScreen extends StatefulWidget {
@@ -48,13 +52,26 @@ class _CoursesHomeScreenState extends State<CoursesHomeScreen> {
                   children: popularCourses.data.map<GestureDetector>((e) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push<dynamic>(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) =>
-                                CourseInfoScreen(id: e['id']),
-                          ),
-                        );
+                        final userCourses =
+                            Provider.of<CartService>(context, listen: false)
+                                .userCourses;
+                        if (userCourses.contains(e['id'])) {
+                          Navigator.push<dynamic>(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  MyWatchClass(id: e['id']),
+                            ),
+                          );
+                        } else {
+                          Navigator.push<dynamic>(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  CourseInfoScreen(id: e['id']),
+                            ),
+                          );
+                        }
                       },
                       child: new Container(
                         margin: const EdgeInsets.all(15.0),
