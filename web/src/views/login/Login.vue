@@ -119,9 +119,19 @@ export default {
     },
     loginGoogle() {
       Auth.federatedSignIn({ provider: 'Google' });
+      this.$router.push({ name: 'Home' }).catch((error) => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
     },
     loginFacebook() {
       Auth.federatedSignIn({ provider: 'Facebook' });
+      this.$router.push({ name: 'Home' }).catch((error) => {
+        if (error.name !== 'NavigationDuplicated') {
+          throw error;
+        }
+      });
     },
   },
 };
