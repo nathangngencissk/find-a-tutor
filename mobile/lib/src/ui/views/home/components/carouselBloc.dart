@@ -19,8 +19,6 @@ class CarouselBloc {
       Map<String, dynamic> result = jsonDecode(response.data);
 
       carouselImage = jsonDecode(result['getStudyingNow']);
-
-      print(carouselImage);
     } on ApiException catch (e) {
       print('Query failed: $e');
     }

@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   // 1
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  var _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +77,26 @@ class _LoginPageState extends State<LoginPage> {
         // Password TextField
         TextField(
           controller: _passwordController,
-          decoration:
-              InputDecoration(icon: Icon(Icons.lock_open), labelText: 'Senha'),
-          obscureText: true,
+          decoration: InputDecoration(
+            labelText: 'Senha',
+            hintText: 'Digite sua senha',
+            icon: Icon(Icons.lock_open),
+            // Here is key idea
+            suffixIcon: IconButton(
+              icon: Icon(
+                // Based on passwordVisible state choose the icon
+                _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () {
+                // Update the state i.e. toogle the state of passwordVisible variable
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            ),
+          ),
+          obscureText: _passwordVisible,
           keyboardType: TextInputType.visiblePassword,
         ),
         Container(
@@ -151,9 +169,6 @@ class _LoginPageState extends State<LoginPage> {
   void _login() {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
-
-    print('username: $username');
-    print('password: $password');
 
     final credentials =
         LoginCredentials(username: username, password: password);

@@ -1,3 +1,5 @@
+import 'package:find_a_tutor/src/services/cart.dart';
+import 'package:find_a_tutor/src/services/profile.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/drawer_user_controller.dart';
 import 'package:find_a_tutor/src/ui/shared/custom_drawer/home_drawer.dart';
@@ -6,7 +8,9 @@ import 'package:find_a_tutor/src/ui/views/help/help_screen.dart';
 import 'package:find_a_tutor/src/ui/views/home/navigationBar.dart';
 import 'package:find_a_tutor/src/ui/views/invite_friend/invite_friend_screen.dart';
 import 'package:find_a_tutor/src/ui/views/myProfile/profile.dart';
+import 'package:find_a_tutor/src/ui/views/shop_cart/cart_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   final VoidCallback shouldLogOut;
@@ -25,6 +29,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   void initState() {
     drawerIndex = DrawerIndex.HOME;
     screenView = MyBottomNavigationBar();
+    Provider.of<ProfileService>(context, listen: false).getUserInfo();
+    Provider.of<CartService>(context, listen: false).getUserCourses();
     super.initState();
   }
 
@@ -73,6 +79,10 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       } else if (drawerIndex == DrawerIndex.Profile) {
         setState(() {
           screenView = Profile();
+        });
+      } else if (drawerIndex == DrawerIndex.Cart) {
+        setState(() {
+          screenView = CartScreen();
         });
       }
     }

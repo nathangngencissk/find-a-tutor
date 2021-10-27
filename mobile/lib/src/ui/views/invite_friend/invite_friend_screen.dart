@@ -40,9 +40,9 @@ class _InviteFriendState extends State<InviteFriend> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 16),
                 child: const Text(
-                  'Convide seus amigos para conhecer o app!',
+                  'Convide seus amigos para conhecer o app e ganhe um cupom de R\$50 de desconto!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -51,11 +51,10 @@ class _InviteFriendState extends State<InviteFriend> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.only(top: 5),
                   child: Center(
                     child: Container(
-                      width: 120,
-                      height: 40,
+                      width: 240,
+                      height: 80,
                       decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius:
@@ -81,13 +80,14 @@ class _InviteFriendState extends State<InviteFriend> {
                                 Icon(
                                   Icons.share,
                                   color: Colors.white,
-                                  size: 22,
+                                  size: 30,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
                                     'Compartilhe',
                                     style: TextStyle(
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white,
                                     ),

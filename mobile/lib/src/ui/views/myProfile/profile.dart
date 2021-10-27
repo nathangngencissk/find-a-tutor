@@ -20,6 +20,9 @@ class _ProfileState extends State<Profile> {
   final _oldPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  var _oldPasswordVisible = false;
+  var _passwordVisible = false;
+  var _confirmPasswordVisible = false;
 
   Widget _previewImages() {
     return Consumer<ProfileService>(
@@ -27,6 +30,13 @@ class _ProfileState extends State<Profile> {
         backgroundImage: NetworkImage(atts.picture),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    _usernameController.text =
+        Provider.of<ProfileService>(context, listen: false).userName;
+    super.initState();
   }
 
   Widget _handlePreview() {
@@ -41,7 +51,7 @@ class _ProfileState extends State<Profile> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: AppTheme.white,
-            title: const Text(
+            title: Text(
               'Meu perfil',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -182,7 +192,7 @@ class _ProfileState extends State<Profile> {
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
-                            'Mudar nome',
+                            'Alterar nome',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 22,
@@ -199,28 +209,13 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Container(
-                          height: 15,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 10),
-                          child: ElevatedButton(
-                            child: Text(
-                              'Salvar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () {
-                              final name = _usernameController.text.trim();
-                              var profile = context.read<ProfileService>();
-                              profile.updateUserInfo('name', name);
-                              _usernameController.clear();
-                            },
-                          ),
+                          height: 20,
                         ),
                         Container(
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
-                            'Mudar senha',
+                            'Alterar senha',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 22,
@@ -234,8 +229,28 @@ class _ProfileState extends State<Profile> {
                           child: TextField(
                             controller: _oldPasswordController,
                             decoration: InputDecoration(
-                                icon: Icon(Icons.lock),
-                                labelText: 'Senha atual'),
+                              labelText: 'Senha atual',
+                              hintText: 'Senha atual',
+                              icon: Icon(Icons.lock_open),
+                              // Here is key idea
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  _oldPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  // Update the state i.e. toogle the state of passwordVisible variable
+                                  setState(() {
+                                    _oldPasswordVisible = !_oldPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            obscureText: _oldPasswordVisible,
+                            keyboardType: TextInputType.visiblePassword,
                           ),
                         ),
                         Container(
@@ -243,8 +258,28 @@ class _ProfileState extends State<Profile> {
                           child: TextField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                                icon: Icon(Icons.lock),
-                                labelText: 'Nova senha'),
+                              labelText: 'Nova senha',
+                              hintText: 'Nova senha',
+                              icon: Icon(Icons.lock_open),
+                              // Here is key idea
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  _passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  // Update the state i.e. toogle the state of passwordVisible variable
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            obscureText: _passwordVisible,
+                            keyboardType: TextInputType.visiblePassword,
                           ),
                         ),
                         Container(
@@ -252,25 +287,59 @@ class _ProfileState extends State<Profile> {
                           child: TextField(
                             controller: _confirmPasswordController,
                             decoration: InputDecoration(
-                                icon: Icon(Icons.lock),
-                                labelText: 'Confirme sua senha'),
+                              labelText: 'Confirme sua senha',
+                              hintText: 'Confirme sua senha',
+                              icon: Icon(Icons.lock_open),
+                              // Here is key idea
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  _confirmPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  // Update the state i.e. toogle the state of passwordVisible variable
+                                  setState(() {
+                                    _confirmPasswordVisible =
+                                        !_confirmPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            obscureText: _confirmPasswordVisible,
+                            keyboardType: TextInputType.visiblePassword,
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 10),
+                          margin: EdgeInsets.only(top: 25, bottom: 10),
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                textStyle: const TextStyle(fontSize: 25)),
                             child: Text(
                               'Salvar',
                               style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () async {
+                              final name = _usernameController.text.trim();
+
+                              if (name.length > 0) {
+                                var profile = context.read<ProfileService>();
+                                profile.updateUserInfo('name', name);
+                                _usernameController.clear();
+                              }
+
                               final oldPassword =
                                   _oldPasswordController.text.trim();
                               final password = _passwordController.text.trim();
                               final confirmPassword =
                                   _confirmPasswordController.text.trim();
 
-                              if (password != confirmPassword) {
+                              if (password != confirmPassword ||
+                                  oldPassword.length == 0) {
                                 return;
                               }
                               _oldPasswordController.clear();

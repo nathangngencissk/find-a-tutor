@@ -67,7 +67,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
       color: AppTheme.nearlyWhite,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Detalhes do curso',
+          title: Text('Detalhes do curso',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 22,
@@ -94,7 +94,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                         height: 350,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(course.data['picture']),
+                            image: NetworkImage(
+                                course.data['picture'].replaceAll('///', '//')),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -262,7 +263,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                                         child) =>
                                                     FlatButton(
                                                   onPressed: () {
-                                                    print(course.data['price']);
                                                     cartService.addToCart({
                                                       'id': id,
                                                       'price': double.parse(
@@ -323,7 +323,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                 ],
               );
             } else {
-              return new Stack();
+              return Center(
+                  child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.blue),
+                          strokeWidth: 5.0)));
             }
           },
         ),

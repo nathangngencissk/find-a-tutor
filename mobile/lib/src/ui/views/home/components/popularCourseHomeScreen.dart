@@ -5,6 +5,35 @@ import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
 
+class ColumnBuilder extends StatelessWidget {
+  final IndexedWidgetBuilder itemBuilder;
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextDirection textDirection;
+  final VerticalDirection verticalDirection;
+  final int itemCount;
+
+  const ColumnBuilder({
+    Key key,
+    @required this.itemBuilder,
+    @required this.itemCount,
+    this.mainAxisAlignment: MainAxisAlignment.start,
+    this.mainAxisSize: MainAxisSize.max,
+    this.crossAxisAlignment: CrossAxisAlignment.center,
+    this.textDirection,
+    this.verticalDirection: VerticalDirection.down,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: new List.generate(
+          this.itemCount, (index) => this.itemBuilder(context, index)).toList(),
+    );
+  }
+}
+
 class PopularCourseScreen extends StatefulWidget {
   @override
   _PopularCourseScreenState createState() => _PopularCourseScreenState();
@@ -51,11 +80,8 @@ class _PopularCourseScreenState extends State<PopularCourseScreen>
                 future: homepagebloc.getPopularCourse(),
                 builder: (BuildContext c, AsyncSnapshot<List> snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      shrinkWrap: true,
+                    return ColumnBuilder(
                       itemCount: snapshot.data.length,
-                      padding: const EdgeInsets.only(top: 8),
-                      scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
                         animationController.forward();
                         return PopularCourseView(

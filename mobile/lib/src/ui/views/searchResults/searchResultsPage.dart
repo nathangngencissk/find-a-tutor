@@ -1,12 +1,15 @@
 import 'dart:ui';
+import 'package:find_a_tutor/src/services/cart.dart';
 import 'package:find_a_tutor/src/ui/theme/courses_app_theme.dart';
 import 'package:find_a_tutor/src/models/more_courses.dart';
 import 'package:find_a_tutor/src/ui/theme/theme.dart';
 import 'package:find_a_tutor/src/ui/views/course_info/courseInfoPage.dart';
 import 'package:find_a_tutor/src/ui/views/searchResults/searchResultsBloc.dart';
+import 'package:find_a_tutor/src/ui/views/watchClass/watchClass.dart';
 import 'package:find_a_tutor/src/utils/imageFromS3.dart';
 import 'package:flutter/material.dart';
 import 'package:find_a_tutor/src/models/tabiconData.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class SearchResultsPage extends StatefulWidget {
@@ -55,13 +58,25 @@ class _SearchResultsPageState extends State<SearchResultsPage>
       searchResults.add(
         new GestureDetector(
           onTap: () {
-            Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) =>
-                    CourseInfoScreen(id: element['id']),
-              ),
-            );
+            final userCourses =
+                Provider.of<CartService>(context, listen: false).userCourses;
+            if (userCourses.contains(element['id'])) {
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      MyWatchClass(id: element['id']),
+                ),
+              );
+            } else {
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      CourseInfoScreen(id: element['id']),
+                ),
+              );
+            }
           },
           child: new Container(
             height: 320,
@@ -72,13 +87,26 @@ class _SearchResultsPageState extends State<SearchResultsPage>
               child: InkWell(
                 splashColor: Colors.transparent,
                 onTap: () {
-                  Navigator.push<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) =>
-                          CourseInfoScreen(id: element['id']),
-                    ),
-                  );
+                  final userCourses =
+                      Provider.of<CartService>(context, listen: false)
+                          .userCourses;
+                  if (userCourses.contains(element['id'])) {
+                    Navigator.push<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) =>
+                            MyWatchClass(id: element['id']),
+                      ),
+                    );
+                  } else {
+                    Navigator.push<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) =>
+                            CourseInfoScreen(id: element['id']),
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
